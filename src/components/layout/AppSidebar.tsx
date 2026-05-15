@@ -17,7 +17,7 @@ const navByRole: Record<Role, NavGroup[]> = {
     ]},
     { heading: "Clinical", items: [
       { to: "/patients",           label: "Patient Registry",  icon: Users },
-      { to: "/opd",                label: "OPD & Appointments",icon: Stethoscope },
+      { to: "/appointments",                label: "OPD & Appointments",icon: Stethoscope },
       { to: "/ipd",                label: "IPD Ward Mgmt",     icon: BedDouble },
       { to: "/radiology",          label: "Radiology",         icon: ScanLine },
     ]},
@@ -34,7 +34,7 @@ const navByRole: Record<Role, NavGroup[]> = {
     { heading: "Clinical", items: [
       { to: "/dashboard/doctor",   label: "My Dashboard",      icon: LayoutDashboard },
       { to: "/patients",           label: "Patient Registry",  icon: Users },
-      { to: "/opd",                label: "OPD Queue",         icon: Stethoscope },
+      { to: "/appointments",                label: "OPD Queue",         icon: Stethoscope },
       { to: "/ipd",                label: "My IPD Patients",   icon: BedDouble },
       { to: "/radiology",          label: "Radiology Orders",  icon: ScanLine },
     ]},
@@ -43,7 +43,7 @@ const navByRole: Record<Role, NavGroup[]> = {
     { heading: "Front Desk", items: [
       { to: "/dashboard/reception",label: "My Dashboard",      icon: LayoutDashboard },
       { to: "/patients",           label: "Patient Registry",  icon: Users },
-      { to: "/opd",                label: "Appointments",      icon: Stethoscope },
+      { to: "/appointments",                label: "Appointments",      icon: Stethoscope },
       { to: "/billing",            label: "Billing & Payments",icon: Receipt },
     ]},
   ],

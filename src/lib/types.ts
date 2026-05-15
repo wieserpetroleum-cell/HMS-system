@@ -73,6 +73,10 @@ export interface Appointment {
   time: string; // "09:30"
   status: AppointmentStatus;
   type: "OPD" | "Follow-up" | "Walk-in";
+  date?: string; // ISO date "YYYY-MM-DD"
+  complaint?: string;
+  notes?: string;
+  patientUid?: string;
 }
 
 export type BedStatus = "available" | "occupied" | "reserved" | "cleaning";
@@ -108,4 +112,57 @@ export interface StaffMember {
   department: string;
   onShift: boolean;
   shift?: string;
+}
+
+export interface Vitals {
+  bp?: string; // "120/80"
+  pulse?: number;
+  temp?: number; // celsius
+  spo2?: number; // %
+  respRate?: number;
+  weight?: number; // kg
+  height?: number; // cm
+  bmi?: number;
+}
+
+export interface RxItem {
+  id: string;
+  drug: string;
+  strength?: string;
+  form?: "Tablet" | "Capsule" | "Syrup" | "Injection" | "Drops" | "Ointment" | "Inhaler";
+  dose?: string;
+  frequency?: string; // "1-0-1", "BD", "TDS"
+  duration?: string; // "5 days"
+  route?: "PO" | "IV" | "IM" | "SC" | "Topical" | "Inhaled";
+  instructions?: string;
+}
+
+export interface DiagnosisEntry {
+  code: string;
+  text: string;
+  primary?: boolean;
+}
+
+export interface Consultation {
+  id: string;
+  appointmentId: string;
+  patientUid: string;
+  patientName: string;
+  doctor: string;
+  date: string; // ISO datetime
+  vitals: Vitals;
+  chiefComplaints: string[];
+  hpi?: string;
+  duration?: string;
+  examGeneral?: string;
+  examCvs?: string;
+  examRs?: string;
+  examAbdomen?: string;
+  examCns?: string;
+  diagnoses: DiagnosisEntry[];
+  rx: RxItem[];
+  advice?: string;
+  followUpDays?: number;
+  labOrders?: string;
+  status: "completed";
 }
