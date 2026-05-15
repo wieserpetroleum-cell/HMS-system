@@ -1,41 +1,13 @@
-// ─── Roles ────────────────────────────────────────────────────────────────────
-export type Role =
-  | "admin"
-  | "doctor"
-  | "receptionist"
-  | "nurse"
-  | "billing"
-  | "tpa"
-  | "radiologist"
-  | "radtech"
-  | "lab"
-  | "pharmacy";
+export type Role = "admin" | "doctor" | "receptionist" | "nurse" | "lab" | "pharmacy";
 
-// ─── Route map ────────────────────────────────────────────────────────────────
-export const ROLE_DASHBOARD: Record<Role, string> = {
-  admin:        "/dashboard",
-  doctor:       "/dashboard/doctor",
-  receptionist: "/dashboard/reception",
-  nurse:        "/dashboard/nurse",
-  billing:      "/dashboard/billing",
-  tpa:          "/dashboard/tpa",
-  radiologist:  "/dashboard/radiologist",
-  radtech:      "/dashboard/radtech",
-  lab:          "/dashboard",
-  pharmacy:     "/dashboard",
-};
-
-// ─── User ─────────────────────────────────────────────────────────────────────
 export interface User {
   id: string;
   name: string;
   email: string;
   role: Role;
   title?: string;
-  department?: string;
 }
 
-// ─── Patient ──────────────────────────────────────────────────────────────────
 export interface Patient {
   id: string;
   uid: string;
@@ -44,12 +16,46 @@ export interface Patient {
   age: string;
   allergies: string[];
   conditions: string[];
-  payerType?: "self" | "insurance" | "corporate" | "cghs" | "pmjay";
+  // Extended demographics (optional for backward compatibility)
+  title?: "Mr" | "Mrs" | "Ms" | "Dr" | "Master" | "Miss";
+  firstName?: string;
+  middleName?: string;
+  lastName?: string;
+  dob?: string; // ISO date
+  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-" | "Unknown";
+  maritalStatus?: "single" | "married" | "divorced" | "widowed" | "other";
+  // Contact
   mobile?: string;
-  bloodGroup?: string;
+  altMobile?: string;
+  email?: string;
+  address1?: string;
+  address2?: string;
+  city?: string;
+  state?: string;
+  pincode?: string;
+  country?: string;
+  // Identification
+  idType?: "Aadhaar" | "Passport" | "PAN" | "Other";
+  idNumber?: string;
+  nationality?: string;
+  // Emergency contact
+  emergencyName?: string;
+  emergencyRelation?: string;
+  emergencyPhone?: string;
+  notes?: string;
+  // Insurance
+  hasInsurance?: boolean;
+  insuranceProvider?: string;
+  policyNumber?: string;
+  tpaName?: string;
+  policyValidity?: string;
+  // Registration meta
+  registrationType?: "OPD" | "IPD" | "Emergency";
+  referredBy?: string;
+  registeredAt?: string; // ISO datetime
+  lastVisit?: string;
 }
 
-// ─── Appointment ──────────────────────────────────────────────────────────────
 export type AppointmentStatus =
   | "scheduled"
   | "checked-in"
@@ -64,12 +70,11 @@ export interface Appointment {
   doctor: string;
   department: string;
   room: string;
-  time: string;
+  time: string; // "09:30"
   status: AppointmentStatus;
   type: "OPD" | "Follow-up" | "Walk-in";
 }
 
-// ─── Ward / Bed ───────────────────────────────────────────────────────────────
 export type BedStatus = "available" | "occupied" | "reserved" | "cleaning";
 
 export interface WardBed {
@@ -83,7 +88,6 @@ export interface WardBed {
   alert?: "stable" | "watch" | "critical";
 }
 
-// ─── Bill ─────────────────────────────────────────────────────────────────────
 export type BillStatus = "paid" | "pending" | "overdue" | "tpa-pending";
 
 export interface Bill {
@@ -97,7 +101,6 @@ export interface Bill {
   createdAt: string;
 }
 
-// ─── Staff ────────────────────────────────────────────────────────────────────
 export interface StaffMember {
   id: string;
   name: string;
@@ -105,40 +108,4 @@ export interface StaffMember {
   department: string;
   onShift: boolean;
   shift?: string;
-}
-
-// ─── TPA / Claim ──────────────────────────────────────────────────────────────
-export type ClaimStatus =
-  | "pre-auth-pending"
-  | "pre-auth-approved"
-  | "queried"
-  | "claim-submitted"
-  | "settled"
-  | "denied";
-
-export interface TpaClaim {
-  id: string;
-  patient: string;
-  ipNo: string;
-  tpa: string;
-  policy: string;
-  admissionDate: string;
-  preAuth: string;
-  status: ClaimStatus;
-  days: number;
-  amount: number;
-}
-
-// ─── Radiology ────────────────────────────────────────────────────────────────
-export type RadPriority = "stat" | "urgent" | "routine";
-
-export interface RadOrder {
-  id: string;
-  patient: string;
-  uid: string;
-  test: string;
-  modality: string;
-  orderedBy: string;
-  completedAt: string;
-  priority: RadPriority;
 }
