@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/lib/auth-context";
+import { ROLE_DASHBOARD } from "@/lib/types";
 
 export const Route = createFileRoute("/login")({
   component: LoginPage,
@@ -22,13 +23,13 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 function LoginPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, dashboardRoute } = useAuth();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = React.useState(false);
 
   React.useEffect(() => {
-    if (isAuthenticated) navigate({ to: "/dashboard", replace: true });
-  }, [isAuthenticated, navigate]);
+    if (isAuthenticated) navigate({ to: dashboardRoute as "/dashboard", replace: true });
+  }, [isAuthenticated, dashboardRoute, navigate]);
 
   const {
     register,
@@ -42,9 +43,10 @@ function LoginPage() {
   const onSubmit = async (values: FormValues) => {
     setSubmitting(true);
     try {
-      await login(values.email, values.password);
-      toast.success("Signed in");
-      navigate({ to: "/dashboard", replace: true });
+      const user = await login(values.email, values.password);
+      toast.success(`Welcome, ${user.name.split(" ")[0]}`);
+      const dest = ROLE_DASHBOARD[user.role] ?? "/dashboard";
+      navigate({ to: dest as "/dashboard", replace: true });
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Sign in failed";
       toast.error(msg);
@@ -68,13 +70,34 @@ function LoginPage() {
             Clinical precision for every shift.
           </h1>
           <p className="max-w-md text-sm leading-relaxed text-slate-400">
-            Patient records, ward status, billing and TPA — coordinated in a single workspace
-            built for clinical teams.
+            Patient records, ward status, billing and TPA — coordinated in a
+            single workspace built for clinical teams.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-[11px] text-slate-500">
-          <span className="size-1.5 rounded-full bg-status-ok" />
-          All systems operational
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-[11px] text-slate-500">
+            <span className="size-1.5 rounded-full bg-status-ok" />
+            All systems operational
+          </div>
+          <div className="rounded-md border border-white/10 bg-white/5 p-3 text-[11px] text-slate-400">
+            <p className="mb-1.5 font-semibold text-slate-300">Demo credentials</p>
+            {[
+              ["Admin",        "admin@medicore.os",        "admin123"],
+              ["Doctor",       "doctor@medicore.os",       "doctor123"],
+              ["Reception",    "reception@medicore.os",    "reception123"],
+              ["Nurse",        "nurse@medicore.os",        "nurse123"],
+              ["Billing",      "billing@medicore.os",      "billing123"],
+              ["TPA",          "tpa@medicore.os",          "tpa123"],
+              ["Radiologist",  "radiologist@medicore.os",  "radio123"],
+              ["Rad Tech",     "radtech@medicore.os",      "radtech123"],
+            ].map(([role, email, pass]) => (
+              <div key={role} className="flex items-center gap-2 py-0.5">
+                <span className="w-20 text-slate-500">{role}</span>
+                <span className="font-mono">{email}</span>
+                <span className="text-slate-500">/ {pass}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -132,11 +155,6 @@ function LoginPage() {
               {submitting ? "Signing in…" : "Sign in"}
             </Button>
           </form>
-
-          <div className="rounded-md border border-border bg-muted/40 p-3 text-[11px] text-muted-foreground">
-            <span className="font-semibold text-foreground">Demo:</span>{" "}
-            admin@medicore.os / admin123
-          </div>
         </div>
       </div>
     </div>

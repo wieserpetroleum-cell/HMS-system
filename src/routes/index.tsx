@@ -7,12 +7,15 @@ export const Route = createFileRoute("/")({
 });
 
 function IndexRedirect() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, dashboardRoute } = useAuth();
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    navigate({ to: isAuthenticated ? "/dashboard" : "/login", replace: true });
-  }, [isAuthenticated, navigate]);
+    navigate({
+      to: isAuthenticated ? (dashboardRoute as "/dashboard") : "/login",
+      replace: true,
+    });
+  }, [isAuthenticated, dashboardRoute, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">

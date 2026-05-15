@@ -1,5 +1,6 @@
 import * as React from "react";
 import type { User } from "@/lib/types";
+import { ROLE_DASHBOARD } from "@/lib/types";
 import { mockUsers } from "@/lib/mock/users";
 
 const STORAGE_KEY = "hms_auth_user";
@@ -9,6 +10,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<User>;
   logout: () => void;
+  dashboardRoute: string;
 }
 
 const AuthContext = React.createContext<AuthContextValue | null>(null);
@@ -47,9 +49,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
   }, []);
 
+  const dashboardRoute = user ? (ROLE_DASHBOARD[user.role] ?? "/dashboard") : "/dashboard";
+
   const value = React.useMemo<AuthContextValue>(
-    () => ({ user, isAuthenticated: !!user, login, logout }),
-    [user, login, logout],
+    () => ({ user, isAuthenticated: !!user, login, logout, dashboardRoute }),
+    [user, login, logout, dashboardRoute],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,3 +1,4 @@
+// ─── Roles ────────────────────────────────────────────────────────────────────
 export type Role =
   | "admin"
   | "doctor"
@@ -6,8 +7,25 @@ export type Role =
   | "billing"
   | "tpa"
   | "radiologist"
-  | "radtech";
+  | "radtech"
+  | "lab"
+  | "pharmacy";
 
+// ─── Route map ────────────────────────────────────────────────────────────────
+export const ROLE_DASHBOARD: Record<Role, string> = {
+  admin:        "/dashboard",
+  doctor:       "/dashboard/doctor",
+  receptionist: "/dashboard/reception",
+  nurse:        "/dashboard/nurse",
+  billing:      "/dashboard/billing",
+  tpa:          "/dashboard/tpa",
+  radiologist:  "/dashboard/radiologist",
+  radtech:      "/dashboard/radtech",
+  lab:          "/dashboard",
+  pharmacy:     "/dashboard",
+};
+
+// ─── User ─────────────────────────────────────────────────────────────────────
 export interface User {
   id: string;
   name: string;
@@ -17,6 +35,7 @@ export interface User {
   department?: string;
 }
 
+// ─── Patient ──────────────────────────────────────────────────────────────────
 export interface Patient {
   id: string;
   uid: string;
@@ -30,56 +49,96 @@ export interface Patient {
   bloodGroup?: string;
 }
 
+// ─── Appointment ──────────────────────────────────────────────────────────────
+export type AppointmentStatus =
+  | "scheduled"
+  | "checked-in"
+  | "in-consultation"
+  | "completed"
+  | "cancelled";
+
 export interface Appointment {
   id: string;
-  token: string;
-  time: string;
-  patient: string;
-  uid: string;
+  patientId: string;
+  patientName: string;
   doctor: string;
-  dept: string;
-  type: "new" | "follow-up";
-  status: "scheduled" | "arrived" | "vitals-done" | "in-consultation" | "done" | "absent";
+  department: string;
+  room: string;
+  time: string;
+  status: AppointmentStatus;
+  type: "OPD" | "Follow-up" | "Walk-in";
 }
 
-export interface IpdPatient {
+// ─── Ward / Bed ───────────────────────────────────────────────────────────────
+export type BedStatus = "available" | "occupied" | "reserved" | "cleaning";
+
+export interface WardBed {
+  id: string;
+  ward: string;
+  bedNumber: string;
+  status: BedStatus;
+  patientName?: string;
+  patientId?: string;
+  vitalsDue?: boolean;
+  alert?: "stable" | "watch" | "critical";
+}
+
+// ─── Bill ─────────────────────────────────────────────────────────────────────
+export type BillStatus = "paid" | "pending" | "overdue" | "tpa-pending";
+
+export interface Bill {
+  id: string;
+  invoiceNo: string;
+  patientName: string;
+  amount: number;
+  status: BillStatus;
+  ageDays: number;
+  tpa?: string;
+  createdAt: string;
+}
+
+// ─── Staff ────────────────────────────────────────────────────────────────────
+export interface StaffMember {
   id: string;
   name: string;
-  uid: string;
-  bed: string;
-  ward: string;
-  doctor: string;
-  day: number;
-  diagnosis: string;
-  payer: "self" | "insurance" | "corporate" | "cghs" | "pmjay";
-  tasks: number;
-  preAuthStatus?: "approved" | "pending" | "queried";
+  role: Role;
+  department: string;
+  onShift: boolean;
+  shift?: string;
 }
 
-export interface BedStatus {
-  ward: string;
-  total: number;
-  occupied: number;
-  available: number;
-  cleaning: number;
-  maintenance: number;
-}
+// ─── TPA / Claim ──────────────────────────────────────────────────────────────
+export type ClaimStatus =
+  | "pre-auth-pending"
+  | "pre-auth-approved"
+  | "queried"
+  | "claim-submitted"
+  | "settled"
+  | "denied";
 
-export interface BillTransaction {
+export interface TpaClaim {
   id: string;
-  time: string;
-  billNo: string;
   patient: string;
-  type: "OPD" | "IPD";
-  mode: "Cash" | "Card" | "UPI" | "Payment Link" | "Insurance";
+  ipNo: string;
+  tpa: string;
+  policy: string;
+  admissionDate: string;
+  preAuth: string;
+  status: ClaimStatus;
+  days: number;
   amount: number;
-  collectedBy: string;
 }
 
-export interface PendingTask {
+// ─── Radiology ────────────────────────────────────────────────────────────────
+export type RadPriority = "stat" | "urgent" | "routine";
+
+export interface RadOrder {
+  id: string;
   patient: string;
-  bed: string;
-  task: string;
-  due: string;
-  overdue: boolean;
+  uid: string;
+  test: string;
+  modality: string;
+  orderedBy: string;
+  completedAt: string;
+  priority: RadPriority;
 }

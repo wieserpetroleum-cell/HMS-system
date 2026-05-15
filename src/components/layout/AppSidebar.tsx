@@ -1,130 +1,100 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard, Stethoscope, BedDouble, Users, Receipt,
-  ScanLine, ShieldCheck, Bell, Settings, LogOut, FileText,
+  ScanLine, ShieldCheck, Bell, Settings, LogOut,
 } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 import type { Role } from "@/lib/types";
 
-type NavItem = {
-  to: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-};
-
-type NavGroup = {
-  heading: string;
-  items: NavItem[];
-};
+type NavItem = { to: string; label: string; icon: React.ComponentType<{ className?: string }> };
+type NavGroup = { heading: string; items: NavItem[] };
 
 const navByRole: Record<Role, NavGroup[]> = {
   admin: [
-    {
-      heading: "Overview",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      ],
-    },
-    {
-      heading: "Clinical",
-      items: [
-        { to: "/patients", label: "Patient Registry", icon: Users },
-        { to: "/opd", label: "OPD & Appointments", icon: Stethoscope },
-        { to: "/ipd", label: "IPD Ward Management", icon: BedDouble },
-        { to: "/radiology", label: "Radiology", icon: ScanLine },
-      ],
-    },
-    {
-      heading: "Finance",
-      items: [
-        { to: "/billing", label: "Billing", icon: Receipt },
-        { to: "/tpa", label: "Insurance / TPA", icon: ShieldCheck },
-      ],
-    },
-    {
-      heading: "System",
-      items: [
-        { to: "/notifications", label: "Notifications", icon: Bell },
-        { to: "/admin", label: "Administration", icon: Settings },
-      ],
-    },
+    { heading: "Overview", items: [
+      { to: "/dashboard",          label: "Dashboard",         icon: LayoutDashboard },
+    ]},
+    { heading: "Clinical", items: [
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+      { to: "/opd",                label: "OPD & Appointments",icon: Stethoscope },
+      { to: "/ipd",                label: "IPD Ward Mgmt",     icon: BedDouble },
+      { to: "/radiology",          label: "Radiology",         icon: ScanLine },
+    ]},
+    { heading: "Finance", items: [
+      { to: "/billing",            label: "Billing",           icon: Receipt },
+      { to: "/tpa",                label: "Insurance / TPA",   icon: ShieldCheck },
+    ]},
+    { heading: "System", items: [
+      { to: "/notifications",      label: "Notifications",     icon: Bell },
+      { to: "/admin",              label: "Administration",    icon: Settings },
+    ]},
   ],
   doctor: [
-    {
-      heading: "Clinical",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-        { to: "/opd", label: "OPD Queue", icon: Stethoscope },
-        { to: "/ipd", label: "My IPD Patients", icon: BedDouble },
-        { to: "/radiology", label: "Radiology Orders", icon: ScanLine },
-      ],
-    },
+    { heading: "Clinical", items: [
+      { to: "/dashboard/doctor",   label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+      { to: "/opd",                label: "OPD Queue",         icon: Stethoscope },
+      { to: "/ipd",                label: "My IPD Patients",   icon: BedDouble },
+      { to: "/radiology",          label: "Radiology Orders",  icon: ScanLine },
+    ]},
   ],
   receptionist: [
-    {
-      heading: "Front Desk",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-        { to: "/opd", label: "Appointments & Queue", icon: Stethoscope },
-        { to: "/billing", label: "Billing & Payments", icon: Receipt },
-      ],
-    },
+    { heading: "Front Desk", items: [
+      { to: "/dashboard/reception",label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+      { to: "/opd",                label: "Appointments",      icon: Stethoscope },
+      { to: "/billing",            label: "Billing & Payments",icon: Receipt },
+    ]},
   ],
   nurse: [
-    {
-      heading: "Ward",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/ipd", label: "Ward & Beds", icon: BedDouble },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-        { to: "/radiology", label: "Radiology Orders", icon: ScanLine },
-      ],
-    },
+    { heading: "Ward", items: [
+      { to: "/dashboard/nurse",    label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/ipd",                label: "Ward & Beds",       icon: BedDouble },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
   ],
   billing: [
-    {
-      heading: "Finance",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/billing", label: "Billing", icon: Receipt },
-        { to: "/tpa", label: "Insurance / TPA", icon: ShieldCheck },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-      ],
-    },
+    { heading: "Finance", items: [
+      { to: "/dashboard/billing",  label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/billing",            label: "Billing",           icon: Receipt },
+      { to: "/tpa",                label: "Insurance / TPA",   icon: ShieldCheck },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
   ],
   tpa: [
-    {
-      heading: "Insurance",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/tpa", label: "TPA & Claims", icon: ShieldCheck },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-        { to: "/billing", label: "Billing", icon: Receipt },
-      ],
-    },
+    { heading: "Insurance", items: [
+      { to: "/dashboard/tpa",      label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/tpa",                label: "TPA & Claims",      icon: ShieldCheck },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+      { to: "/billing",            label: "Billing",           icon: Receipt },
+    ]},
   ],
   radiologist: [
-    {
-      heading: "Radiology",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/radiology", label: "Pending Reports", icon: ScanLine },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-      ],
-    },
+    { heading: "Radiology", items: [
+      { to: "/dashboard/radiologist", label: "My Dashboard",   icon: LayoutDashboard },
+      { to: "/radiology",          label: "Pending Reports",   icon: ScanLine },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
   ],
   radtech: [
-    {
-      heading: "Radiology",
-      items: [
-        { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-        { to: "/radiology", label: "Worklist", icon: ScanLine },
-        { to: "/patients", label: "Patient Registry", icon: Users },
-      ],
-    },
+    { heading: "Radiology", items: [
+      { to: "/dashboard/radtech",  label: "My Dashboard",      icon: LayoutDashboard },
+      { to: "/radiology",          label: "Worklist",          icon: ScanLine },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
+  ],
+  lab: [
+    { heading: "Laboratory", items: [
+      { to: "/dashboard",          label: "Dashboard",         icon: LayoutDashboard },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
+  ],
+  pharmacy: [
+    { heading: "Pharmacy", items: [
+      { to: "/dashboard",          label: "Dashboard",         icon: LayoutDashboard },
+      { to: "/patients",           label: "Patient Registry",  icon: Users },
+    ]},
   ],
 };
 
@@ -156,11 +126,7 @@ export function AppSidebar() {
   const groups = user ? (navByRole[user.role] ?? navByRole.admin) : navByRole.admin;
 
   const initials = user
-    ? user.name
-        .split(" ")
-        .map((p) => p[0])
-        .slice(0, 2)
-        .join("")
+    ? user.name.split(" ").map((p) => p[0]).slice(0, 2).join("")
     : "—";
 
   return (
@@ -175,7 +141,7 @@ export function AppSidebar() {
         </div>
       </div>
 
-      {/* Nav groups */}
+      {/* Nav */}
       <nav className="flex-1 space-y-5 overflow-y-auto p-4">
         {groups.map((group) => (
           <div key={group.heading}>
