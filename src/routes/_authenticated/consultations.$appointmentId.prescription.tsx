@@ -29,7 +29,7 @@ function PrescriptionPreview() {
             </Button>
             {appt && (
               <Button asChild>
-                <Link to=`{result}`>
+                <Link to={`{result}`}>
                   Open Consultation
                 </Link>
               </Button>

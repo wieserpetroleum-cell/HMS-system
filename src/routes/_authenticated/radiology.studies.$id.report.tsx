@@ -28,7 +28,7 @@ function ReportViewer() {
     <div className="p-8">
       <div className="mb-4 flex items-center justify-between print:hidden">
         <Button variant="ghost" size="sm" asChild>
-          <Link to=`{result}`>
+          <Link to={`{result}`}>
             <ArrowLeft className="mr-1 h-4 w-4" /> Back to workspace
           </Link>
         </Button>

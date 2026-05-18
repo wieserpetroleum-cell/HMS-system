@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, useSearch } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/forms/Field";
@@ -16,9 +16,8 @@ import { Save, ArrowRight, AlertTriangle } from "lucide-react";
     source: (s.source === "opd" || s.source === "ipd" || s.source === "walkin" ? s.source : undefined) as
       | "opd" | "ipd" | "walkin" | undefined,
     sourceId: typeof s.sourceId === "string" ? s.sourceId : undefined,
-  }),
 function NewRadiologyOrder() {
-  const search = useSearch({ from: "/_authenticated/radiology/orders/new" });
+  const search = ({ from: "/_authenticated/radiology/orders/new" });
   const navigate = useNavigate();
   const { patients } = usePatients();
   const { addOrder } = useRadiology();

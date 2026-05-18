@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useSearch } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
 import { Plus, Search } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -12,13 +12,9 @@ import type { InvoiceStatus } from "@/lib/types";
 
 const STATUSES: InvoiceStatus[] = ["draft", "pending", "partial", "paid", "tpa-pending", "overdue", "cancelled"];
 
-const searchSchema = z.object({
-  q: z.string().optional(),
-  status: z.string().optional(),
-  age: z.enum(["0-30", "31-60", "60+"]).optional(),
-function InvoicesList() {
+
   const { invoices } = useInvoices();
-  const search = useSearch({ from: "/_authenticated/billing/invoices/" });
+  const search = ({ from: "/_authenticated/billing/invoices/" });
   const [q, setQ] = React.useState(search.q ?? "");
   const [statusFilter, setStatusFilter] = React.useState<InvoiceStatus | "all">((search.status as InvoiceStatus) ?? "all");
 
@@ -82,7 +78,7 @@ function InvoicesList() {
             {filtered.map((i) => (
               <tr key={i.id} className="hover:bg-accent/30">
                 <td className="px-4 py-2.5">
-                  <Link to=`{result}` className="font-mono text-xs text-primary hover:underline">
+                  <Link to={`{result}`} className="font-mono text-xs text-primary hover:underline">
                     {i.invoiceNo}
                   </Link>
                 </td>

@@ -154,7 +154,7 @@ function FloorView() {
                       <TableCell className="text-right">
                         {adm ? (
                           <Button asChild size="sm" variant="outline">
-                            <Link to=`{result}`>
+                            <Link to={`{result}`}>
                               <Activity className="mr-1.5 h-3.5 w-3.5" /> Open Chart
                             </Link>
                           </Button>

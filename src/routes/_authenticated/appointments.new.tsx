@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, useSearch, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { z } from "zod";
 import { CalendarPlus, ArrowLeft, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -14,9 +14,7 @@ import { usePatients } from "@/lib/patients-store";
 import { useAppointments } from "@/lib/appointments-store";
 import { cn } from "@/lib/utils";
 
-const searchSchema = z.object({
-  patientUid: z.string().optional(),
-const DOCTORS = [
+
   { name: "Dr. Mehta", department: "Cardiology", room: "C-204" },
   { name: "Dr. Iyer", department: "General Medicine", room: "G-101" },
   { name: "Dr. Khan", department: "Orthopedics", room: "O-302" },
@@ -51,8 +49,7 @@ function NewAppointment() {
   const { patients } = usePatients();
   const { appointments, addAppointment } = useAppointments();
   const navigate = useNavigate();
-  const { patientUid } = useSearch({ from: "/_authenticated/appointments/new" });
-
+  
   const today = new Date().toISOString().slice(0, 10);
   const [selectedUid, setSelectedUid] = React.useState<string | undefined>(patientUid);
   const [doctor, setDoctor] = React.useState<string>(DOCTORS[0].name);

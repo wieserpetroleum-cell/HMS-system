@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useNavigate, useParams, useSearch } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowLeft, FileText, CreditCard, ShieldCheck, History, Printer, Trash2, Plus, Save, Pencil, X } from "lucide-react";
@@ -25,12 +25,9 @@ import { tpaClaimSchema } from "@/lib/validation/invoice";
 const TABS = ["charges", "payments", "tpa", "timeline", "print"] as const;
 type Tab = typeof TABS[number];
 
-const searchSchema = z.object({
-  tab: z.enum(TABS).optional(),
-function InvoiceWorkspace() {
+
   const { id } = useParams({ from: `/_authenticated/billing/invoices/${id}` });
-  const { tab: initialTab } = useSearch({ from: `/_authenticated/billing/invoices/${id}` });
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const { getById, replaceItems, updateInvoice, addPayment, updateTpaClaim, cancelInvoice } = useInvoices();
   const { patients } = usePatients();
 

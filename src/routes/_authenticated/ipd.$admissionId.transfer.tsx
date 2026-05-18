@@ -46,7 +46,7 @@ function TransferBed() {
   return (
     <div className="space-y-6 p-8">
       <Link
-        to=`{result}`
+        to={`{result}`}
         className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-3 w-3" /> Back to chart

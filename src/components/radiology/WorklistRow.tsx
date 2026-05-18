@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import type { RadiologyOrder } from "@/lib/types";
 import { OrderStatusPill, PriorityBadge } from "./StatusPill";
 import { ModalityIcon } from "./ModalityIcon";

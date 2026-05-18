@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, useSearch, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { z } from "zod";
 import { ArrowLeft, FilePlus2, FileX2 } from "lucide-react";
 import { toast } from "sonner";
@@ -14,13 +14,7 @@ import { findCatalog } from "@/lib/mock/charge-catalog";
 import type { InvoiceItem } from "@/lib/types";
 import { money } from "@/lib/money";
 
-const searchSchema = z.object({
-  patientUid: z.string().optional(),
-  source: z.enum(["opd", "ipd"]).optional(),
-  sourceId: z.string().optional(),
-function lineFromCatalog(code: string, qty = 1, override?: Partial<InvoiceItem>): InvoiceItem {
-  const c = findCatalog(code)!;
-  return {
+
     id: `tmp-${code}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     category: c.category, code: c.code, description: c.description,
     qty, unitPrice: c.unitPrice, amount: qty * c.unitPrice, taxable: c.taxable,
@@ -30,8 +24,7 @@ function lineFromCatalog(code: string, qty = 1, override?: Partial<InvoiceItem>)
 
 function NewInvoice() {
   const navigate = useNavigate();
-  const { patientUid: preUid, source: preSource, sourceId: preSourceId } = useSearch({ from: "/_authenticated/billing/invoices/new" });
-  const { patients } = usePatients();
+    const { patients } = usePatients();
   const { consultations } = useConsultations();
   const { admissions } = useAdmissions();
   const { addInvoice } = useInvoices();

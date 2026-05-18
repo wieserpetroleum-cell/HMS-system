@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import * as React from "react";
-import { Link, useNavigate, useSearch } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { ArrowLeft, LogOut, Printer, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -23,8 +23,7 @@ const CONDITIONS: DischargeCondition[] = ["Stable", "Improved", "Critical", "LAM
 
 function DischargePage() {
   const { admissionId } = useParams();
-  const { print } = useSearch({ from: `/_authenticated/ipd/${admissionId}/discharge` });
-  const { getById, discharge } = useAdmissions();
+    const { getById, discharge } = useAdmissions();
   const { user } = useAuth();
   const navigate = useNavigate();
   const adm = getById(admissionId);
@@ -104,7 +103,7 @@ function DischargePage() {
   return (
     <div className="p-8">
       <Link
-        to=`{result}`
+        to={`{result}`}
         className="mb-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground print:hidden"
       >
         <ArrowLeft className="h-3 w-3" /> Back to chart
@@ -176,7 +175,7 @@ function DischargePage() {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" asChild>
-              <Link to=`{result}`>Cancel</Link>
+              <Link to={`{result}`}>Cancel</Link>
             </Button>
             <Button onClick={submit}>
               <LogOut className="mr-1.5 h-4 w-4" /> Discharge & Print

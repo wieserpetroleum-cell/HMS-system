@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link, useNavigate, useSearch } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { BedDouble, ArrowLeft, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -32,8 +32,7 @@ function AdmitPatient() {
   const { patients, getPatient } = usePatients();
   const { addAdmission } = useAdmissions();
   const navigate = useNavigate();
-  const { patientUid } = useSearch({ from: "/_authenticated/ipd/admit" });
-
+  
   const [selectedUid, setSelectedUid] = React.useState<string | undefined>(patientUid);
   const [bed, setBed] = React.useState<WardBed | undefined>();
   const [doctor, setDoctor] = React.useState(DOCTORS[0].name);
