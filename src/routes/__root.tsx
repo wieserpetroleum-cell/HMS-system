@@ -8,6 +8,7 @@ import { AdmissionsProvider } from "@/lib/admissions-store";
 import { InvoicesProvider } from "@/lib/invoices-store";
 import { RadiologyProvider } from "@/lib/radiology-store";
 import { NotificationsProvider } from "@/lib/notifications-store";
+import { AdminProvider } from "@/lib/admin-store";
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -23,8 +24,10 @@ function RootLayout() {
               <InvoicesProvider>
                 <RadiologyProvider>
                   <NotificationsProvider>
-                    <Outlet />
-                    <Toaster position="top-right" />
+                    <AdminProvider>
+                      <Outlet />
+                      <Toaster position="top-right" />
+                    </AdminProvider>
                   </NotificationsProvider>
                 </RadiologyProvider>
               </InvoicesProvider>
