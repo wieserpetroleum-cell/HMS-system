@@ -1,116 +1,60 @@
-@import "tailwindcss" source(none);
-@source "../src";
-@import "tw-animate-css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@custom-variant dark (&:is(.dark *));
-
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-
-  /* HMS clinical status tokens */
-  --color-allergy: var(--allergy);
-  --color-allergy-foreground: var(--allergy-foreground);
-  --color-condition: var(--condition);
-  --color-condition-foreground: var(--condition-foreground);
-  --color-status-ok: var(--status-ok);
-  --color-status-ok-foreground: var(--status-ok-foreground);
-  --color-status-info: var(--status-info);
-  --color-status-info-foreground: var(--status-info-foreground);
-
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-}
-
-:root {
-  --radius: 0.5rem;
-
-  /* Clinical surfaces */
-  --background: oklch(0.985 0.005 240);     /* #f8fafc clinical gray */
-  --foreground: oklch(0.205 0.04 264);      /* slate-900 */
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.205 0.04 264);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.205 0.04 264);
-
-  /* Primary = clinical blue (#0ea5e9 sky-500) */
-  --primary: oklch(0.685 0.15 230);
-  --primary-foreground: oklch(0.99 0 0);
-
-  --secondary: oklch(0.965 0.01 240);
-  --secondary-foreground: oklch(0.205 0.04 264);
-  --muted: oklch(0.965 0.01 240);
-  --muted-foreground: oklch(0.55 0.025 256);
-  --accent: oklch(0.95 0.02 230);
-  --accent-foreground: oklch(0.3 0.08 240);
-
-  --destructive: oklch(0.62 0.22 27);
-  --destructive-foreground: oklch(0.99 0 0);
-
-  --border: oklch(0.92 0.012 250);
-  --input: oklch(0.92 0.012 250);
-  --ring: oklch(0.685 0.15 230);
-
-  /* Clinical status semantics */
-  --allergy: oklch(0.62 0.22 27);            /* red */
-  --allergy-foreground: oklch(0.99 0 0);
-  --condition: oklch(0.76 0.16 75);          /* amber */
-  --condition-foreground: oklch(0.25 0.06 75);
-  --status-ok: oklch(0.7 0.16 160);          /* emerald */
-  --status-ok-foreground: oklch(0.99 0 0);
-  --status-info: oklch(0.685 0.15 230);      /* blue */
-  --status-info-foreground: oklch(0.99 0 0);
-
-  /* Sidebar = deep slate (#0f172a) */
-  --sidebar: oklch(0.21 0.04 264);
-  --sidebar-foreground: oklch(0.98 0.003 247);
-  --sidebar-primary: oklch(0.685 0.15 230);
-  --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.27 0.04 260);
-  --sidebar-accent-foreground: oklch(0.98 0.003 247);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.685 0.15 230);
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    
+    /* Clinical surfaces - Exact Lovable colors */
+    --background: 0 0% 97.5%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Primary = clinical blue (#0ea5e9 sky-500) */
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 199 95% 74%;
+    --accent-foreground: 222 47% 11%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 199 89% 48%;
+    
+    /* Clinical status */
+    --status-ok: 142 76% 36%;
+    --status-ok-foreground: 0 0% 100%;
+    
+    /* Sidebar = deep slate (#0f172a) */
+    --sidebar: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 25% 27%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 215 25% 27%;
+    --sidebar-ring: 199 89% 48%;
+  }
 }
 
 @layer base {
   * {
-    border-color: var(--color-border);
+    @apply border-border;
   }
-
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
-    font-family: var(--font-sans);
+    @apply bg-background text-foreground;
+    font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
