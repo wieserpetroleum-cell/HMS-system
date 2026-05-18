@@ -1,4 +1,15 @@
-export type Role = "admin" | "doctor" | "receptionist" | "nurse" | "lab" | "pharmacy";
+export type Role = "admin" | "doctor" | "receptionist" | "nurse" | "billing" | "tpa" | "radiologist" | "radtech";
+
+export const ROLE_DASHBOARD: Record<Role, string> = {
+  admin: "/dashboard",
+  doctor: "/dashboard/doctor",
+  receptionist: "/dashboard/reception",
+  nurse: "/dashboard/nurse",
+  billing: "/dashboard/billing",
+  tpa: "/dashboard/tpa",
+  radiologist: "/dashboard/radiologist",
+  radtech: "/dashboard/radtech",
+};
 
 export interface User {
   id: string;

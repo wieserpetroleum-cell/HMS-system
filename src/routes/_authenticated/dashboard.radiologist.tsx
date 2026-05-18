@@ -3,7 +3,7 @@ import { ScanLine, Clock, CheckCircle2, Pen } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { mockRadOrders } from "@/lib/mock/radiology";
+import { mockOrders } from "@/lib/mock/radiology";
 import { cn } from "@/lib/utils";
 import type { RadPriority } from "@/lib/types";
 
@@ -18,8 +18,8 @@ const priorityStyle: Record<RadPriority, string> = {
 };
 
 function RadiologistDashboard() {
-  const stat    = mockRadOrders.filter(r => r.priority === "stat").length;
-  const urgent  = mockRadOrders.filter(r => r.priority === "urgent").length;
+  const stat    = mockOrders.filter(r => r.priority === "stat").length;
+  const urgent  = mockOrders.filter(r => r.priority === "urgent").length;
 
   return (
     <div className="space-y-6 p-8">
@@ -30,7 +30,7 @@ function RadiologistDashboard() {
       />
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-        <KpiCard label="Pending Reports" value={mockRadOrders.length} tone={stat > 0 ? "danger" : "warn"} />
+        <KpiCard label="Pending Reports" value={mockOrders.length} tone={stat > 0 ? "danger" : "warn"} />
         <KpiCard label="STAT"            value={stat}   tone="danger" />
         <KpiCard label="Urgent"          value={urgent} tone="warn" />
         <KpiCard label="Reported Today"  value={6}      tone="ok" />
@@ -38,7 +38,7 @@ function RadiologistDashboard() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
         <div className="space-y-3 lg:col-span-3">
-          {mockRadOrders.map(r => (
+          {mockOrders.map(r => (
             <div
               key={r.id}
               className={cn(

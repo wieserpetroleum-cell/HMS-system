@@ -3,7 +3,7 @@ import { ScanLine, Calendar, Activity, FileText } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { QuickActions } from "@/components/dashboard/QuickActions";
-import { mockRadOrders } from "@/lib/mock/radiology";
+import { mockOrders } from "@/lib/mock/radiology";
 import { cn } from "@/lib/utils";
 import type { RadPriority } from "@/lib/types";
 
@@ -28,9 +28,9 @@ function RadtechDashboard() {
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         <KpiCard label="Scheduled Today" value={8}                          tone="info" />
-        <KpiCard label="Scans Done"      value={mockRadOrders.length}       tone="ok" />
+        <KpiCard label="Scans Done"      value={mockOrders.length}       tone="ok" />
         <KpiCard label="In Progress"     value={1}                          tone="warn" />
-        <KpiCard label="Awaiting Report" value={mockRadOrders.length}       tone="default" />
+        <KpiCard label="Awaiting Report" value={mockOrders.length}       tone="default" />
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
@@ -49,7 +49,7 @@ function RadtechDashboard() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {mockRadOrders.map(r => (
+              {mockOrders.map(r => (
                 <tr key={r.id} className="hover:bg-muted/20">
                   <td className="px-4 py-3">
                     <span className={cn("rounded px-1.5 py-0.5 text-[10px] font-bold uppercase", priorityStyle[r.priority])}>
