@@ -369,3 +369,93 @@ export interface Invoice {
   tpaClaim?: TpaClaim;
   auditLog: AuditEvent[];
 }
+
+// ---- Radiology ----
+
+export type Modality = "xray" | "ct" | "mri" | "usg" | "mammo" | "dexa";
+
+export type RadiologyPriority = "routine" | "urgent" | "stat";
+
+export type RadiologyOrderStatus =
+  | "ordered"
+  | "scheduled"
+  | "in-acquisition"
+  | "acquired"
+  | "reporting"
+  | "verified"
+  | "delivered"
+  | "cancelled";
+
+export interface RadiologyOrder {
+  id: string;
+  orderNo: string; // RAD-YYYY-NNNNN
+  patientUid: string;
+  patientName: string;
+  sourceType: "opd" | "ipd" | "walkin";
+  sourceId?: string;
+  modality: Modality;
+  studyCode: string;
+  studyName: string;
+  bodyPart: string;
+  clinicalIndication: string;
+  priority: RadiologyPriority;
+  contrast: boolean;
+  pregnancy?: boolean;
+  orderedBy: string;
+  orderedAt: string;
+  scheduledAt?: string;
+  assignedRadiologist?: string;
+  status: RadiologyOrderStatus;
+}
+
+export interface RadiologySeries {
+  id: string;
+  description: string;
+  imageCount: number;
+  thumbnailHint: string;
+}
+
+export interface RadiologyStudy {
+  id: string;
+  orderId: string;
+  accessionNo: string;
+  series: RadiologySeries[];
+  acquiredAt?: string;
+  acquiredBy?: string;
+  technologist?: string;
+  notes?: string;
+}
+
+export interface ReportSection {
+  heading: string;
+  text: string;
+}
+
+export interface RadiologyReport {
+  id: string;
+  studyId: string;
+  templateId?: string;
+  sections: ReportSection[];
+  criticalFinding: boolean;
+  draftedBy?: string;
+  draftedAt?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
+  amendedFrom?: string;
+  amendmentReason?: string;
+  version: number;
+}
+
+export interface ReportTemplate {
+  id: string;
+  modality: Modality;
+  name: string;
+  sections: { heading: string; defaultText: string }[];
+}
+
+export interface RadiologyEvent {
+  at: string;
+  by: string;
+  action: string;
+  detail?: string;
+}

@@ -6,6 +6,7 @@ import { AppointmentsProvider } from "@/lib/appointments-store";
 import { ConsultationsProvider } from "@/lib/consultations-store";
 import { AdmissionsProvider } from "@/lib/admissions-store";
 import { InvoicesProvider } from "@/lib/invoices-store";
+import { RadiologyProvider } from "@/lib/radiology-store";
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -19,8 +20,10 @@ function RootLayout() {
           <ConsultationsProvider>
             <AdmissionsProvider>
               <InvoicesProvider>
-                <Outlet />
-                <Toaster position="top-right" />
+                <RadiologyProvider>
+                  <Outlet />
+                  <Toaster position="top-right" />
+                </RadiologyProvider>
               </InvoicesProvider>
             </AdmissionsProvider>
           </ConsultationsProvider>
