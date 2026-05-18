@@ -9,6 +9,7 @@ import { InvoicesProvider } from "@/lib/invoices-store";
 import { RadiologyProvider } from "@/lib/radiology-store";
 import { NotificationsProvider } from "@/lib/notifications-store";
 import { AdminProvider } from "@/lib/admin-store";
+import "@/styles.css";
 
 function NotFound() {
   return (
