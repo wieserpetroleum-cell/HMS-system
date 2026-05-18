@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { AlertTriangle, FilePlus2, ListChecks } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -10,7 +10,6 @@ import { findStudy, modalityLabels } from "@/lib/mock/radiology-catalog";
 import { TatGauge } from "@/components/radiology/TatGauge";
 import type { Modality } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/radiology/")({
   component: RadiologyDashboard,
 });
 
@@ -170,4 +169,4 @@ function RadiologyDashboard() {
       </div>
     </div>
   );
-}
+}export default RadiologyDashboard;

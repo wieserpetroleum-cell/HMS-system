@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Activity, Pill, AlertTriangle, ClipboardList } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -7,7 +7,6 @@ import { bedsByWard, mockBeds } from "@/lib/mock/wards";
 import { cn } from "@/lib/utils";
 import type { WardBed } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/dashboard/nurse")({
   component: NurseDashboard,
 });
 
@@ -106,4 +105,4 @@ function NurseDashboard() {
       </div>
     </div>
   );
-}
+}export default NurseDashboard;

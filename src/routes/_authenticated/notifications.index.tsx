@@ -1,6 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { redirect } from "react-router-dom";
 
-export const Route = createFileRoute("/_authenticated/notifications/")({
   beforeLoad: () => {
     throw redirect({ to: "/notifications/log" });
   },

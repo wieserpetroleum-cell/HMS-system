@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { FilePlus2, ShieldCheck, Wallet, Receipt } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -7,7 +7,6 @@ import { mockBills, billsSummary, ageingBuckets } from "@/lib/mock/bills";
 import { cn } from "@/lib/utils";
 import type { Bill } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/dashboard/billing")({
   component: BillingDashboard,
 });
 
@@ -128,4 +127,4 @@ function BillingDashboard() {
       </div>
     </div>
   );
-}
+}export default BillingDashboard;

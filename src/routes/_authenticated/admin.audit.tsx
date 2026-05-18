@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Search, Printer, Download, X } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { SectionCard } from "@/components/admin/SectionCard";
@@ -12,7 +12,6 @@ import { PERMISSION_MODULES } from "@/lib/mock/admin";
 
 type Search = { userId?: string };
 
-export const Route = createFileRoute("/_authenticated/admin/audit")({
   validateSearch: (s: Record<string, unknown>): Search => ({ userId: typeof s.userId === "string" ? s.userId : undefined }),
   component: AuditPage,
 });
@@ -170,4 +169,4 @@ function AuditPage() {
       </Sheet>
     </div>
   );
-}
+}export default AuditPage;

@@ -1,16 +1,16 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Printer, ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAppointments } from "@/lib/appointments-store";
 import { useConsultations } from "@/lib/consultations-store";
 import { usePatients } from "@/lib/patients-store";
 
-export const Route = createFileRoute("/_authenticated/consultations/$appointmentId/prescription")({
   component: PrescriptionPreview,
 });
 
 function PrescriptionPreview() {
-  const { appointmentId } = Route.useParams();
+  const { appointmentId } = useParams();
   const { getById } = useAppointments();
   const { getByAppointment } = useConsultations();
   const { patients } = usePatients();
@@ -223,3 +223,4 @@ function PrescriptionPreview() {
     </div>
   );
 }
+export default PrescriptionPreview;

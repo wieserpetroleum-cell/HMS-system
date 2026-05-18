@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Eye, Save } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { SectionCard } from "@/components/admin/SectionCard";
@@ -12,7 +12,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAdmin } from "@/lib/admin-store";
 import type { HospitalProfile } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/admin/hospital")({
   component: HospitalProfilePage,
 });
 
@@ -205,4 +204,4 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       {children}
     </div>
   );
-}
+}export default HospitalProfilePage;

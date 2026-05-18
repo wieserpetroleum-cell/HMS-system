@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, useNavigate, useSearch, Link } from "@tanstack/react-router";
+import { useNavigate, useSearch, Link } from "react-router-dom";
 import { z } from "zod";
 import { CalendarPlus, ArrowLeft, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -18,7 +18,6 @@ const searchSchema = z.object({
   patientUid: z.string().optional(),
 });
 
-export const Route = createFileRoute("/_authenticated/appointments/new")({
   component: NewAppointment,
   validateSearch: (search) => searchSchema.parse(search),
 });
@@ -108,7 +107,7 @@ function NewAppointment() {
     toast.success("Appointment booked", {
       description: `${selectedPatient.name} · ${doctor} · ${date} ${time}`,
     });
-    navigate({ to: "/appointments" });
+    navigate("/appointments");
     void appt;
   };
 
@@ -298,7 +297,7 @@ function NewAppointment() {
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-card/95 backdrop-blur">
         <div className="flex items-center justify-end gap-2 px-8 py-3">
-          <Button variant="outline" onClick={() => navigate({ to: "/appointments" })}>
+          <Button variant="outline" onClick={() => navigate("/appointments")}>
             Cancel
           </Button>
           <Button onClick={submit}>
@@ -310,3 +309,4 @@ function NewAppointment() {
     </div>
   );
 }
+export default NewAppointment;

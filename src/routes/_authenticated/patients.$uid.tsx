@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, AlertTriangle, Activity, CalendarPlus, BedDouble, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -8,12 +9,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePatients } from "@/lib/patients-store";
 import type { Patient } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/patients/$uid")({
   component: PatientProfile,
 });
 
 function PatientProfile() {
-  const { uid } = Route.useParams();
+  const { uid } = useParams();
   const { getPatient } = usePatients();
   const navigate = useNavigate();
   const patient = getPatient(uid);
@@ -22,7 +22,7 @@ function PatientProfile() {
     return (
       <div className="flex flex-col items-center justify-center gap-3 p-16 text-center">
         <p className="text-sm text-muted-foreground">No patient found with UID {uid}.</p>
-        <Button variant="outline" onClick={() => navigate({ to: "/patients" })}>
+        <Button variant="outline" onClick={() => navigate("/patients")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to registry
         </Button>
       </div>
@@ -258,3 +258,4 @@ function PlaceholderPanel({ title, body }: { title: string; body: string }) {
     </div>
   );
 }
+export default PatientProfile;

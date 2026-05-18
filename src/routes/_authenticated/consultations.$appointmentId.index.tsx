@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import * as React from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Activity, Stethoscope, ClipboardList, FileSearch, Pill, ListChecks,
   ArrowLeft, Save, CheckCircle2, Plus, Sparkles,
@@ -21,7 +22,6 @@ import { calcBmi, flagBp, flagSpo2, flagPulse, flagTemp, type VitalFlag } from "
 import type { DiagnosisEntry, RxItem, Vitals } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/consultations/$appointmentId/")({
   component: ConsultationWorkspace,
 });
 
@@ -45,7 +45,7 @@ const diagnosisOptions = mockDiagnoses.map((d) => ({
 }));
 
 function ConsultationWorkspace() {
-  const { appointmentId } = Route.useParams();
+  const { appointmentId } = useParams();
   const navigate = useNavigate();
   const { getById, updateStatus } = useAppointments();
   const { addConsultation } = useConsultations();
@@ -177,7 +177,7 @@ function ConsultationWorkspace() {
     });
     updateStatus(appt.id, "completed");
     toast.success("Visit completed", { description: "Prescription generated." });
-    navigate({ to: "/consultations/$appointmentId/prescription", params: { appointmentId: appt.id } });
+    navigate("/consultations/$appointmentId/prescription", params: { appointmentId: appt.id });
   };
 
   const flag = (f: VitalFlag) =>
@@ -570,3 +570,4 @@ function Section({
     </section>
   );
 }
+export default ConsultationWorkspace;

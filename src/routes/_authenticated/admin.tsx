@@ -1,7 +1,6 @@
-import { createFileRoute, Outlet, Link, useRouterState } from "@tanstack/react-router";
+import { Outlet, Link, useRouterState } from "react-router-dom";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminLayout,
 });
 
@@ -45,4 +44,4 @@ function AdminLayout() {
       </div>
     </div>
   );
-}
+}export default AdminLayout;

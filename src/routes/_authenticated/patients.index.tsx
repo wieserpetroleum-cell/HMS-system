@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { Search, Plus, AlertTriangle, Activity } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Input } from "@/components/ui/input";
@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { usePatients } from "@/lib/patients-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/patients/")({
   component: PatientRegistry,
 });
 
@@ -110,7 +109,7 @@ function PatientRegistry() {
               filtered.map((p) => (
                 <tr
                   key={p.id}
-                  onClick={() => navigate({ to: "/patients/$uid", params: { uid: p.uid } })}
+                  onClick={() => navigate("/patients/$uid", params: { uid: p.uid })}
                   className="cursor-pointer border-b border-border/50 transition-colors hover:bg-accent/40"
                 >
                   <td className="px-4 py-3 font-mono text-[11px] text-muted-foreground">{p.uid}</td>
@@ -194,3 +193,4 @@ function FilterSelect({
     </label>
   );
 }
+export default PatientRegistry;

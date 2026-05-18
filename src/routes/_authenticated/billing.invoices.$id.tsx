@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate, useParams, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useParams, useSearch } from "react-router-dom";
 import { z } from "zod";
 import { toast } from "sonner";
 import { ArrowLeft, FileText, CreditCard, ShieldCheck, History, Printer, Trash2, Plus, Save, Pencil, X } from "lucide-react";
@@ -29,7 +29,6 @@ const searchSchema = z.object({
   tab: z.enum(TABS).optional(),
 });
 
-export const Route = createFileRoute("/_authenticated/billing/invoices/$id")({
   validateSearch: (s) => searchSchema.parse(s),
   component: InvoiceWorkspace,
 });
@@ -439,3 +438,4 @@ function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["in
     </div>
   );
 }
+export default InvoiceWorkspace;

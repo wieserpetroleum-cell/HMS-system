@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Stethoscope, BedDouble, NotebookPen, Activity } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -6,7 +6,6 @@ import { RecentList, type RecentRow } from "@/components/dashboard/RecentList";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
 
-export const Route = createFileRoute("/_authenticated/dashboard/doctor")({
   component: DoctorDashboard,
 });
 
@@ -64,4 +63,4 @@ function DoctorDashboard() {
       </div>
     </div>
   );
-}
+}export default DoctorDashboard;

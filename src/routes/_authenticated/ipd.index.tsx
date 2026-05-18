@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { BedDouble, Activity, AlertTriangle, Plus, LayoutGrid, Rows } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -12,7 +12,6 @@ import { mockBeds, wardSummary, bedsByWard } from "@/lib/mock/wards";
 import { useAdmissions } from "@/lib/admissions-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/ipd/")({
   component: FloorView,
 });
 
@@ -31,7 +30,7 @@ function FloorView() {
 
   const goToBed = (bedId: string) => {
     const adm = activeAdmissions.find((a) => a.bedId === bedId);
-    if (adm) navigate({ to: "/ipd/$admissionId", params: { admissionId: adm.id } });
+    if (adm) navigate("/ipd/$admissionId", params: { admissionId: adm.id });
   };
 
   return (
@@ -188,4 +187,4 @@ function FloorView() {
       )}
     </div>
   );
-}
+}export default FloorView;

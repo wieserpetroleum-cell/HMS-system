@@ -1,11 +1,10 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
+import { Link, useParams } from "react-router-dom";
 import { Printer, ArrowLeft, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRadiology } from "@/lib/radiology-store";
 import { usePatients } from "@/lib/patients-store";
 import { modalityLabel } from "@/components/radiology/ModalityIcon";
 
-export const Route = createFileRoute("/_authenticated/radiology/studies/$id/report")({
   component: ReportViewer,
 });
 
@@ -103,4 +102,4 @@ function ReportViewer() {
       </div>
     </div>
   );
-}
+}export default ReportViewer;

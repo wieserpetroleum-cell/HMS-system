@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { UserPlus, ClipboardCheck, CalendarPlus, BedDouble } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -7,7 +7,6 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
 import { wardSummary } from "@/lib/mock/wards";
 
-export const Route = createFileRoute("/_authenticated/dashboard/reception")({
   component: ReceptionDashboard,
 });
 
@@ -64,4 +63,4 @@ function ReceptionDashboard() {
       </div>
     </div>
   );
-}
+}export default ReceptionDashboard;

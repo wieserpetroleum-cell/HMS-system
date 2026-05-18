@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { FilePlus2, ShieldCheck, ListChecks } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -9,7 +9,6 @@ import { InvoiceStatusPill, TpaStatusPill } from "@/components/billing/StatusPil
 import { money, ageDays } from "@/lib/money";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/_authenticated/billing/")({
   component: BillingDashboard,
 });
 
@@ -68,7 +67,7 @@ function BillingDashboard() {
             <button
               key={b}
               type="button"
-              onClick={() => navigate({ to: "/billing/invoices", search: { age: b } as never })}
+              onClick={() => navigate("/billing/invoices", search: { age: b } as never)}
               className="rounded border border-border bg-card px-2 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-accent/40"
             >Filter {b}d</button>
           ))}
@@ -136,3 +135,4 @@ function BillingDashboard() {
     </div>
   );
 }
+export default BillingDashboard;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { CheckCircle2, FileText, ArrowLeft } from "lucide-react";
 import { PatientSummaryRail } from "@/components/consultation/PatientSummaryRail";
 import { OrderStatusPill, PriorityBadge } from "@/components/radiology/StatusPill";
@@ -18,7 +18,6 @@ import { verifySchema } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import type { ReportSection } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/radiology/studies/$id")({
   component: StudyWorkspace,
 });
 
@@ -36,7 +35,7 @@ function StudyWorkspace() {
       <div className="p-8">
         <div className="rounded-lg border border-border bg-card p-8 text-center">
           <div className="text-sm text-muted-foreground">Order not found.</div>
-          <Button variant="outline" className="mt-3" onClick={() => navigate({ to: "/radiology/worklist" })}>
+          <Button variant="outline" className="mt-3" onClick={() => navigate("/radiology/worklist")}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to worklist
           </Button>
         </div>
@@ -117,7 +116,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
     saveReportDraft(study.id, sections, user?.name ?? "Radiologist", critical, templateId);
     verifyReport(study.id, user?.name ?? "Radiologist");
     toast.success("Report verified");
-    navigate({ to: "/radiology/studies/$id/report", params: { id: order.id } });
+    navigate("/radiology/studies/$id/report", params: { id: order.id });
   }
 
   function handleStartAcquisition() {
@@ -268,4 +267,4 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
       </div>
     </div>
   );
-}
+}export default StudyWorkspace;

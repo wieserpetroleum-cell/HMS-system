@@ -1,6 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { redirect } from "react-router-dom";
 
-export const Route = createFileRoute("/_authenticated/admin/")({
   beforeLoad: () => {
     throw redirect({ to: "/admin/hospital" });
   },

@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Activity, ClipboardList, Stethoscope, Pill, Droplet, FileText,
   ArrowRightLeft, FilePlus2, FlaskConical, LogOut, Plus, BedDouble, Sparkles,
@@ -21,7 +22,6 @@ import { useAuth } from "@/lib/auth-context";
 import type { NursingNoteCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/ipd/$admissionId/")({
   component: WardChart,
 });
 
@@ -31,7 +31,7 @@ function dayOfStay(admittedAt: string) {
 }
 
 function WardChart() {
-  const { admissionId } = Route.useParams();
+  const { admissionId } = useParams();
   const { getById, vitals, notes, rounds, mar, io, addVital, addNote, addRound, markMar, addIo } = useAdmissions();
   const { getPatient } = usePatients();
   const { user } = useAuth();
@@ -56,7 +56,7 @@ function WardChart() {
     return (
       <div className="flex flex-col items-center justify-center gap-3 p-16 text-center">
         <p className="text-sm text-muted-foreground">Admission {admissionId} not found.</p>
-        <Button variant="outline" onClick={() => navigate({ to: "/ipd" })}>
+        <Button variant="outline" onClick={() => navigate("/ipd")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to floor view
         </Button>
       </div>
@@ -468,4 +468,4 @@ function IoAdder({ onAdd }: { onAdd: (i: { type: "intake" | "output"; source: "O
       </Button>
     </div>
   );
-}
+}export default WardChart;

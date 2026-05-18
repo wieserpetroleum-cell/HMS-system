@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { ShieldCheck, Clock, AlertTriangle, TrendingDown, FileText, ArrowRight } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -7,7 +7,6 @@ import { mockTpaClaims } from "@/lib/mock/tpa";
 import { cn } from "@/lib/utils";
 import type { ClaimStatus } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/dashboard/tpa")({
   component: TpaDashboard,
 });
 
@@ -137,3 +136,4 @@ function TpaDashboard() {
     </div>
   );
 }
+export default TpaDashboard;

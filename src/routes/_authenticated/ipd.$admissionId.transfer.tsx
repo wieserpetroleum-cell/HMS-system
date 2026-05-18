@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import * as React from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, ArrowRightLeft } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -11,12 +12,11 @@ import { useAdmissions } from "@/lib/admissions-store";
 import { useAuth } from "@/lib/auth-context";
 import type { WardBed } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/ipd/$admissionId/transfer")({
   component: TransferBed,
 });
 
 function TransferBed() {
-  const { admissionId } = Route.useParams();
+  const { admissionId } = useParams();
   const { getById, transferBed } = useAdmissions();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ function TransferBed() {
     return (
       <div className="flex flex-col items-center justify-center gap-3 p-16 text-center">
         <p className="text-sm text-muted-foreground">Admission not found.</p>
-        <Button variant="outline" onClick={() => navigate({ to: "/ipd" })}>
+        <Button variant="outline" onClick={() => navigate("/ipd")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Floor view
         </Button>
       </div>
@@ -44,7 +44,7 @@ function TransferBed() {
     if (!reason.trim() || reason.trim().length < 4) return setError("Reason required");
     transferBed(adm.id, target.id, reason.trim(), user?.name ?? "Clinician");
     toast.success(`Transferred to ${target.bedNumber}`);
-    navigate({ to: "/ipd/$admissionId", params: { admissionId: adm.id } });
+    navigate("/ipd/$admissionId", params: { admissionId: adm.id });
   };
 
   return (
@@ -92,4 +92,4 @@ function TransferBed() {
       </div>
     </div>
   );
-}
+}export default TransferBed;

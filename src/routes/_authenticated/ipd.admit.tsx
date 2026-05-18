@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "react-router-dom";
 import { z } from "zod";
 import { BedDouble, ArrowLeft, UserPlus } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +20,6 @@ import type { DietType, WardBed } from "@/lib/types";
 
 const searchSchema = z.object({ patientUid: z.string().optional() });
 
-export const Route = createFileRoute("/_authenticated/ipd/admit")({
   component: AdmitPatient,
   validateSearch: (search) => searchSchema.parse(search),
 });
@@ -94,7 +93,7 @@ function AdmitPatient() {
       isolation,
     });
     toast.success(`Admitted ${patient.name} → ${bed.bedNumber}`);
-    navigate({ to: "/ipd/$admissionId", params: { admissionId: adm.id } });
+    navigate("/ipd/$admissionId", params: { admissionId: adm.id });
   }, [patient, bed, doctor, doctorMeta.department, reason, diet, isolation, diagnosisCode, addAdmission, navigate]);
 
   React.useEffect(() => {
@@ -236,4 +235,4 @@ function AdmitPatient() {
       </div>
     </div>
   );
-}
+}export default AdmitPatient;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Copy, Plus, Send } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,6 @@ import { VariablePicker } from "@/components/notifications/VariablePicker";
 import { useNotifications } from "@/lib/notifications-store";
 import type { MessageTemplate, NotificationChannel, TemplateTrigger } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/notifications/templates")({
   component: TemplateManagerPage,
 });
 
@@ -231,4 +230,4 @@ function TemplateManagerPage() {
       </Sheet>
     </div>
   );
-}
+}export default TemplateManagerPage;

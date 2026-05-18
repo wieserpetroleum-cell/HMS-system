@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { Plus, Pencil, Trash2, KeyRound, History, Shield } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { useAdmin } from "@/lib/admin-store";
 import { PermissionMatrix } from "@/components/admin/PermissionMatrix";
 import type { AppUser, RoleDef } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/admin/users")({
   component: UsersPage,
 });
 
@@ -167,4 +166,4 @@ function UsersPage() {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <div className="space-y-1"><Label className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</Label>{children}</div>;
-}
+}export default UsersPage;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { FilePlus2, Search } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ import type { Modality, RadiologyOrderStatus, RadiologyPriority } from "@/lib/ty
 import { modalityLabels } from "@/lib/mock/radiology-catalog";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/_authenticated/radiology/worklist")({
   component: Worklist,
 });
 
@@ -126,4 +125,4 @@ function Worklist() {
       </div>
     </div>
   );
-}
+}export default Worklist;

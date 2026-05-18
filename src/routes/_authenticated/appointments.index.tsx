@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { CalendarPlus, Search, LayoutGrid, Rows3, Clock, FileText, Play, ClipboardCheck } from "lucide-react";
 import { useAppointments } from "@/lib/appointments-store";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Appointment, AppointmentStatus } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/appointments/")({
   component: AppointmentsQueue,
 });
 
@@ -86,11 +85,11 @@ function AppointmentsQueue() {
       updateStatus(a.id, "checked-in");
     } else if (a.status === "checked-in") {
       updateStatus(a.id, "in-consultation");
-      navigate({ to: "/consultations/$appointmentId", params: { appointmentId: a.id } });
+      navigate("/consultations/$appointmentId", params: { appointmentId: a.id });
     } else if (a.status === "in-consultation") {
-      navigate({ to: "/consultations/$appointmentId", params: { appointmentId: a.id } });
+      navigate("/consultations/$appointmentId", params: { appointmentId: a.id });
     } else if (a.status === "completed") {
-      navigate({ to: "/consultations/$appointmentId/prescription", params: { appointmentId: a.id } });
+      navigate("/consultations/$appointmentId/prescription", params: { appointmentId: a.id });
     }
   };
 
@@ -292,3 +291,4 @@ function AppointmentsQueue() {
     </div>
   );
 }
+export default AppointmentsQueue;

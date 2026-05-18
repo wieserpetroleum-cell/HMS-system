@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { UserPlus, CalendarPlus, UserCog, FileBarChart } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -11,7 +11,6 @@ import { mockBills, billsSummary } from "@/lib/mock/bills";
 import { mockStaff } from "@/lib/mock/staff";
 import { wardSummary, bedsByWard } from "@/lib/mock/wards";
 
-export const Route = createFileRoute("/_authenticated/dashboard/")({
   component: AdminDashboard,
 });
 
@@ -106,3 +105,4 @@ function AdminDashboard() {
     </div>
   );
 }
+export default AdminDashboard;

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { ArrowLeft, ShieldCheck } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { useInvoices } from "@/lib/invoices-store";
@@ -7,7 +7,6 @@ import { TpaPipeline } from "@/components/billing/TpaPipeline";
 import { TpaStatusPill } from "@/components/billing/StatusPill";
 import { money, ageDays } from "@/lib/money";
 
-export const Route = createFileRoute("/_authenticated/billing/tpa")({
   component: TpaQueue,
 });
 
@@ -77,3 +76,4 @@ function TpaQueue() {
     </div>
   );
 }
+export default TpaQueue;

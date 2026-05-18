@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import { RefreshCw, Search, X } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
@@ -11,7 +11,6 @@ import { ChannelBadge } from "@/components/notifications/ChannelBadge";
 import { NotificationStatusPill } from "@/components/notifications/StatusPill";
 import type { NotificationChannel, NotificationEntry, NotificationStatus, NotificationType } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/notifications/log")({
   component: NotificationLogPage,
 });
 
@@ -237,4 +236,4 @@ function NotificationLogPage() {
       </Sheet>
     </div>
   );
-}
+}export default NotificationLogPage;

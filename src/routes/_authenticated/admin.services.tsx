@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute } from "@tanstack/react-router";
+
 import { Plus, Pencil, Trash2, Upload, Download, Search } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { SectionCard } from "@/components/admin/SectionCard";
@@ -12,7 +12,6 @@ import { useAdmin } from "@/lib/admin-store";
 import type { Modality, ServiceCategory, ServiceItem } from "@/lib/types";
 import { money } from "@/lib/money";
 
-export const Route = createFileRoute("/_authenticated/admin/services")({
   component: ServicesPage,
 });
 
@@ -206,4 +205,4 @@ function ServicesPage() {
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <div className="space-y-1"><Label className="text-[10px] uppercase tracking-wide text-muted-foreground">{label}</Label>{children}</div>;
-}
+}export default ServicesPage;

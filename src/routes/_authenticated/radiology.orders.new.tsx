@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, useNavigate, useSearch } from "@tanstack/react-router";
+import { useNavigate, useSearch } from "react-router-dom";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/forms/Field";
@@ -13,7 +13,6 @@ import { newOrderSchema, pregnancyRule } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import { Save, ArrowRight, AlertTriangle } from "lucide-react";
 
-export const Route = createFileRoute("/_authenticated/radiology/orders/new")({
   validateSearch: (s: Record<string, unknown>) => ({
     patientUid: typeof s.patientUid === "string" ? s.patientUid : undefined,
     source: (s.source === "opd" || s.source === "ipd" || s.source === "walkin" ? s.source : undefined) as
@@ -96,7 +95,7 @@ function NewRadiologyOrder() {
       setScheduledAt("");
       setErrors({});
     } else {
-      navigate({ to: "/radiology/worklist" });
+      navigate("/radiology/worklist");
     }
   }
 
@@ -242,4 +241,4 @@ function NewRadiologyOrder() {
       </div>
     </div>
   );
-}
+}export default NewRadiologyOrder;

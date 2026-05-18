@@ -1,5 +1,6 @@
+import { useParams } from "react-router-dom";
 import * as React from "react";
-import { createFileRoute, Link, useNavigate, useSearch } from "@tanstack/react-router";
+import { Link, useNavigate, useSearch } from "react-router-dom";
 import { z } from "zod";
 import { ArrowLeft, LogOut, Printer, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +21,6 @@ import type { DiagnosisEntry, DischargeCondition, RxItem } from "@/lib/types";
 
 const searchSchema = z.object({ print: z.string().optional() });
 
-export const Route = createFileRoute("/_authenticated/ipd/$admissionId/discharge")({
   component: DischargePage,
   validateSearch: (s) => searchSchema.parse(s),
 });
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/ipd/$admissionId/discharge
 const CONDITIONS: DischargeCondition[] = ["Stable", "Improved", "Critical", "LAMA", "Expired"];
 
 function DischargePage() {
-  const { admissionId } = Route.useParams();
+  const { admissionId } = useParams();
   const { print } = useSearch({ from: "/_authenticated/ipd/$admissionId/discharge" });
   const { getById, discharge } = useAdmissions();
   const { user } = useAuth();
@@ -52,7 +52,7 @@ function DischargePage() {
     return (
       <div className="flex flex-col items-center justify-center gap-3 p-16 text-center">
         <p className="text-sm text-muted-foreground">Admission not found.</p>
-        <Button variant="outline" onClick={() => navigate({ to: "/ipd" })}>
+        <Button variant="outline" onClick={() => navigate("/ipd")}>
           <ArrowLeft className="mr-2 h-4 w-4" /> Floor view
         </Button>
       </div>
@@ -93,7 +93,7 @@ function DischargePage() {
       signedBy: user?.name ?? "Clinician",
     });
     toast.success("Discharge summary saved");
-    navigate({ to: "/ipd/$admissionId/discharge", params: { admissionId: adm.id }, search: { print: "1" } });
+    navigate("/ipd/$admissionId/discharge", params: { admissionId: adm.id }, search: { print: "1" });
   };
 
   const previewSummary = {
@@ -337,4 +337,4 @@ function Row({ k, v }: { k: string; v: string }) {
       <dd className="text-[12px]">{v}</dd>
     </div>
   );
-}
+}export default DischargePage;

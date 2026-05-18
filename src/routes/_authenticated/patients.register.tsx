@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { useNavigate, Link } from "react-router-dom";
 import { ArrowLeft, Save, Plus, Camera } from "lucide-react";
 import { toast } from "sonner";
 
@@ -17,7 +17,6 @@ import { usePatients } from "@/lib/patients-store";
 import { ageFromDob } from "@/lib/age";
 import { patientFormSchema, type PatientFormValues } from "@/lib/validation/patient";
 
-export const Route = createFileRoute("/_authenticated/patients/register")({
   component: RegisterPatient,
 });
 
@@ -132,7 +131,7 @@ function RegisterPatient() {
     });
     toast.success(`Patient registered · ${patient.uid}`);
     if (mode === "open") {
-      navigate({ to: "/patients/$uid", params: { uid: patient.uid } });
+      navigate("/patients/$uid", params: { uid: patient.uid });
     } else {
       setValues(blankForm);
       setErrors({});
@@ -558,7 +557,7 @@ function RegisterPatient() {
             <span className="font-mono font-semibold text-primary">{previewUid}</span> on save.
           </p>
           <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => navigate({ to: "/patients" })}>
+            <Button variant="ghost" onClick={() => navigate("/patients")}>
               Cancel
             </Button>
             <Button variant="outline" onClick={() => submit("new")}>
@@ -613,3 +612,4 @@ function NativeSelect({
     </select>
   );
 }
+export default RegisterPatient;

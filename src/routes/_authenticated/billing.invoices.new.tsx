@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, useNavigate, useSearch, Link } from "@tanstack/react-router";
+import { useNavigate, useSearch, Link } from "react-router-dom";
 import { z } from "zod";
 import { ArrowLeft, FilePlus2, FileX2 } from "lucide-react";
 import { toast } from "sonner";
@@ -20,7 +20,6 @@ const searchSchema = z.object({
   sourceId: z.string().optional(),
 });
 
-export const Route = createFileRoute("/_authenticated/billing/invoices/new")({
   validateSearch: (s) => searchSchema.parse(s),
   component: NewInvoice,
 });
@@ -69,7 +68,7 @@ function NewInvoice() {
       dueAt: new Date(Date.now() + 30 * 86400000).toISOString(),
     });
     toast.success(`Invoice ${inv.invoiceNo} created`);
-    navigate({ to: "/billing/invoices/$id", params: { id: inv.id } });
+    navigate("/billing/invoices/$id", params: { id: inv.id });
   };
 
   React.useEffect(() => {
@@ -195,3 +194,4 @@ function NewInvoice() {
     </div>
   );
 }
+export default NewInvoice;

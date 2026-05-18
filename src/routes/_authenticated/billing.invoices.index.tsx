@@ -1,5 +1,5 @@
 import * as React from "react";
-import { createFileRoute, Link, useSearch } from "@tanstack/react-router";
+import { Link, useSearch } from "react-router-dom";
 import { z } from "zod";
 import { Plus, Search } from "lucide-react";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -18,7 +18,6 @@ const searchSchema = z.object({
   age: z.enum(["0-30", "31-60", "60+"]).optional(),
 });
 
-export const Route = createFileRoute("/_authenticated/billing/invoices/")({
   validateSearch: (s) => searchSchema.parse(s),
   component: InvoicesList,
 });
@@ -123,3 +122,4 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     >{children}</button>
   );
 }
+export default InvoicesList;

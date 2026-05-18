@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+
 import { ScanLine, Clock, CheckCircle2, Pen } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -7,7 +7,6 @@ import { mockOrders } from "@/lib/mock/radiology";
 import { cn } from "@/lib/utils";
 import type { RadPriority } from "@/lib/types";
 
-export const Route = createFileRoute("/_authenticated/dashboard/radiologist")({
   component: RadiologistDashboard,
 });
 
@@ -78,3 +77,4 @@ function RadiologistDashboard() {
     </div>
   );
 }
+export default RadiologistDashboard;

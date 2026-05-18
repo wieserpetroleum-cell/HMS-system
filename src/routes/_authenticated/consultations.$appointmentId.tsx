@@ -1,5 +1,4 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Outlet } from "react-router-dom";
 
-export const Route = createFileRoute("/_authenticated/consultations/$appointmentId")({
   component: () => <Outlet />,
 });

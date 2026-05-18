@@ -1,9 +1,9 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { Outlet } from "react-router-dom";
 
-export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardLayout,
 });
 
 function DashboardLayout() {
   return <Outlet />;
 }
+export default DashboardLayout;
