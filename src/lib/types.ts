@@ -273,3 +273,99 @@ export interface IntakeOutput {
   volumeMl: number;
   by: string;
 }
+
+// ---- Billing & TPA ----
+
+export type InvoiceStatus =
+  | "draft"
+  | "pending"
+  | "partial"
+  | "paid"
+  | "tpa-pending"
+  | "overdue"
+  | "cancelled";
+
+export type InvoiceItemCategory =
+  | "consultation"
+  | "procedure"
+  | "room"
+  | "pharmacy"
+  | "lab"
+  | "radiology"
+  | "misc";
+
+export interface InvoiceItem {
+  id: string;
+  category: InvoiceItemCategory;
+  code?: string;
+  description: string;
+  qty: number;
+  unitPrice: number;
+  amount: number;
+  taxable?: boolean;
+}
+
+export type PaymentMode = "cash" | "card" | "upi" | "bank" | "tpa";
+
+export interface Payment {
+  id: string;
+  at: string;
+  mode: PaymentMode;
+  amount: number;
+  reference?: string;
+  collectedBy: string;
+}
+
+export type TpaClaimStatus =
+  | "draft"
+  | "pre-auth"
+  | "submitted"
+  | "query"
+  | "approved"
+  | "settled"
+  | "rejected";
+
+export interface TpaClaim {
+  provider: string;
+  policyNumber: string;
+  tpaName: string;
+  preAuthNo?: string;
+  claimNo?: string;
+  claimedAmount: number;
+  approvedAmount?: number;
+  status: TpaClaimStatus;
+  submittedAt?: string;
+  lastUpdateAt: string;
+  notes?: string;
+}
+
+export interface AuditEvent {
+  at: string;
+  by: string;
+  action: string;
+  detail?: string;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNo: string;
+  patientUid: string;
+  patientName: string;
+  sourceType: "opd" | "ipd" | "walkin";
+  sourceId?: string;
+  items: InvoiceItem[];
+  subtotal: number;
+  discount: number;
+  discountReason?: string;
+  taxRate: number;
+  taxAmount: number;
+  total: number;
+  paid: number;
+  balance: number;
+  status: InvoiceStatus;
+  createdAt: string;
+  dueAt?: string;
+  payments: Payment[];
+  tpaClaim?: TpaClaim;
+  auditLog: AuditEvent[];
+}
