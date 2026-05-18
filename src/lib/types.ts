@@ -459,3 +459,280 @@ export interface RadiologyEvent {
   action: string;
   detail?: string;
 }
+
+// ---- Notifications ----
+
+export type NotificationChannel = "whatsapp" | "sms" | "email";
+export type NotificationType =
+  | "appointment"
+  | "report"
+  | "payment"
+  | "discharge"
+  | "preauth"
+  | "other";
+export type NotificationStatus = "delivered" | "failed" | "pending";
+
+export type TemplateTrigger =
+  | "appointment_booked"
+  | "appointment_reminder"
+  | "consult_complete"
+  | "report_ready"
+  | "ipd_admission"
+  | "ipd_bill_alert"
+  | "discharge"
+  | "payment_due"
+  | "payment_received"
+  | "preauth_update";
+
+export type TemplateStatus = "active" | "inactive" | "pending-meta" | "rejected";
+
+export interface NotificationEntry {
+  id: string;
+  at: string;
+  patientUid: string;
+  patientName: string;
+  type: NotificationType;
+  channel: NotificationChannel;
+  templateId?: string;
+  preview: string;
+  body: string;
+  status: NotificationStatus;
+  deliveredAt?: string;
+  failureReason?: string;
+}
+
+export interface MessageTemplate {
+  id: string;
+  name: string;
+  trigger: TemplateTrigger;
+  channels: NotificationChannel[];
+  language: string; // ISO-ish code or label
+  body: string;
+  variables: string[];
+  status: TemplateStatus;
+  metaApprovalAt?: string;
+  updatedAt: string;
+}
+
+// ---- Admin & Configuration ----
+
+export interface HospitalProfile {
+  name: string;
+  tagline?: string;
+  type: "single" | "multi" | "super";
+  logoUrl?: string;
+  // Contact
+  address1: string;
+  address2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+  phones: string[];
+  emails: string[];
+  website?: string;
+  // Statutory
+  cerNumber?: string;
+  gstin?: string;
+  pndtNumber?: string;
+  aerbNumber?: string;
+  nabhNumber?: string;
+  nabhExpiry?: string;
+  nablNumber?: string;
+  nablExpiry?: string;
+  // Billing
+  invoicePrefix: string;
+  invoiceStartingNumber: number;
+  fyStartMonth: number; // 1-12
+  invoiceFooter?: string;
+  gstType: "regular" | "composition";
+  // Branding
+  primaryColor: string; // hex
+  reportHeader?: string;
+  reportFooter?: string;
+  // Modules
+  modules: {
+    opd: true;
+    ipd: boolean;
+    radiology: boolean;
+    tpa: boolean;
+    whatsapp: boolean;
+    sms: boolean;
+    paymentLinks: boolean;
+  };
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  headDoctorId?: string;
+  opdActive: boolean;
+  ipdActive: boolean;
+  status: "active" | "inactive";
+}
+
+export type DoctorType = "full-time" | "visiting" | "consultant";
+export type RevenueShareModel = "pct-opd" | "pct-ipd" | "fixed-per-consult";
+
+export interface DoctorLeave {
+  id: string;
+  startDate: string;
+  endDate: string;
+  type: "personal" | "conference" | "holiday" | "training";
+}
+
+export interface DoctorSchedule {
+  daysActive: number[]; // 0=Sun..6=Sat
+  startTime: string;
+  endTime: string;
+  slotMinutes: 10 | 15 | 20 | 30;
+  opdLocation: string;
+  maxPatients: number;
+  bufferMinutes: number;
+  lunchStart?: string;
+  lunchEnd?: string;
+}
+
+export interface DoctorProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  speciality: string;
+  departmentId: string;
+  type: DoctorType;
+  mciNumber: string;
+  mciExpiry?: string;
+  qualification: string;
+  mobile?: string;
+  email?: string;
+  revenueShareModel: RevenueShareModel;
+  revenueSharePct: number;
+  isRadiologist: boolean;
+  isPathologist: boolean;
+  signatureUrl?: string;
+  status: "active" | "inactive";
+  schedule: DoctorSchedule;
+  leaves: DoctorLeave[];
+}
+
+export interface Ward {
+  id: string;
+  name: string;
+  floor: number;
+  gender: "mixed" | "male" | "female";
+  status: "active" | "inactive";
+}
+
+export interface BedCategory {
+  id: string;
+  name: string;
+  defaultDailyRate: number;
+}
+
+export interface ConfiguredBed {
+  id: string;
+  wardId: string;
+  bedNumber: string;
+  categoryId: string;
+  dailyRate: number;
+  equipment: string[];
+  active: boolean;
+}
+
+export type ServiceCategory =
+  | "consultation"
+  | "procedure"
+  | "radiology"
+  | "nursing"
+  | "bed"
+  | "misc";
+
+export interface ServiceItem {
+  id: string;
+  code: string;
+  name: string;
+  category: ServiceCategory;
+  departmentId?: string;
+  hsnSac?: string;
+  gstRate: 0 | 5 | 12 | 18;
+  defaultRate: number;
+  isRadiology: boolean;
+  modality?: Modality;
+  tatHours?: number;
+  status: "active" | "inactive";
+}
+
+export type PayerType = "self" | "corporate" | "insurance" | "govt" | "camp";
+
+export interface RatePlan {
+  id: string;
+  name: string;
+  payerType: PayerType;
+  active: boolean;
+  description?: string;
+  rates: Record<string, number>; // serviceId -> rate
+}
+
+export interface AppUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone?: string;
+  role: string; // role id
+  departmentId?: string;
+  employeeId?: string;
+  status: "active" | "inactive";
+  lastLogin?: string;
+  createdAt: string;
+}
+
+export type PermissionModule =
+  | "patient"
+  | "appointments"
+  | "opd"
+  | "ipd"
+  | "radiology"
+  | "billing"
+  | "tpa"
+  | "notifications"
+  | "reports"
+  | "admin"
+  | "audit";
+
+export interface RoleDef {
+  id: string;
+  name: string;
+  systemRole: boolean;
+  permissions: Record<PermissionModule, Record<string, boolean>>;
+}
+
+export type AuditAction =
+  | "login"
+  | "logout"
+  | "created"
+  | "edited"
+  | "deleted"
+  | "viewed"
+  | "approved"
+  | "rejected"
+  | "exported"
+  | "other";
+
+export interface AuditRecord {
+  id: string;
+  at: string;
+  userId: string;
+  userName: string;
+  role: string;
+  action: AuditAction;
+  module: PermissionModule;
+  recordType: string;
+  recordId: string;
+  patientName?: string;
+  ip: string;
+  userAgent: string;
+  beforeJson?: unknown;
+  afterJson?: unknown;
+  endpoint?: string;
+  method?: string;
+}
