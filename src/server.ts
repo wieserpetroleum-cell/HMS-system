@@ -73,11 +73,16 @@ export default {
       const response = await handler.fetch(request, env, ctx);
       const normalized = await normalizeCatastrophicSsrResponse(response);
       
-      // Inject DOCTYPE if missing
+      // Only inject DOCTYPE for initial HTML requests (not API/data requests)
       const contentType = normalized.headers.get("content-type") || "";
-      if (contentType.includes("text/html")) {
+      const isHtmlPage = contentType.includes("text/html") && 
+                         !request.url.includes("/api/") &&
+                         request.method === "GET";
+      
+      if (isHtmlPage) {
         const html = await normalized.text();
-        if (!html.trimStart().toLowerCase().startsWith("<!doctype")) {
+        // Only inject if DOCTYPE is completely missing
+        if (!html.toLowerCase().includes("<!doctype")) {
           const fixedHtml = "<!DOCTYPE html>\n" + html;
           return new Response(fixedHtml, {
             status: normalized.status,
@@ -85,12 +90,6 @@ export default {
             headers: normalized.headers,
           });
         }
-        // Return original if DOCTYPE already present
-        return new Response(html, {
-          status: normalized.status,
-          statusText: normalized.statusText,
-          headers: normalized.headers,
-        });
       }
       
       return normalized;
