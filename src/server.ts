@@ -71,7 +71,29 @@ export default {
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
+      const normalized = await normalizeCatastrophicSsrResponse(response);
+      
+      // Inject DOCTYPE if missing
+      const contentType = normalized.headers.get("content-type") || "";
+      if (contentType.includes("text/html")) {
+        const html = await normalized.text();
+        if (!html.trimStart().toLowerCase().startsWith("<!doctype")) {
+          const fixedHtml = "<!DOCTYPE html>\n" + html;
+          return new Response(fixedHtml, {
+            status: normalized.status,
+            statusText: normalized.statusText,
+            headers: normalized.headers,
+          });
+        }
+        // Return original if DOCTYPE already present
+        return new Response(html, {
+          status: normalized.status,
+          statusText: normalized.statusText,
+          headers: normalized.headers,
+        });
+      }
+      
+      return normalized;
     } catch (error) {
       console.error(error);
       return brandedErrorResponse();
