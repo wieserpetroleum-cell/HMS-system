@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { PatientsProvider } from "@/lib/patients-store";
 import { AppointmentsProvider } from "@/lib/appointments-store";
 import { ConsultationsProvider } from "@/lib/consultations-store";
+import { AdmissionsProvider } from "@/lib/admissions-store";
 
 export const Route = createRootRoute({
   component: RootLayout,
@@ -15,8 +16,10 @@ function RootLayout() {
       <PatientsProvider>
         <AppointmentsProvider>
           <ConsultationsProvider>
-            <Outlet />
-            <Toaster position="top-right" />
+            <AdmissionsProvider>
+              <Outlet />
+              <Toaster position="top-right" />
+            </AdmissionsProvider>
           </ConsultationsProvider>
         </AppointmentsProvider>
       </PatientsProvider>

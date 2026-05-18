@@ -166,3 +166,110 @@ export interface Consultation {
   labOrders?: string;
   status: "completed";
 }
+
+// ---- IPD / Ward Management ----
+
+export type AdmissionStatus = "active" | "discharged";
+export type DietType = "Regular" | "Diabetic" | "Soft" | "Liquid" | "NPO";
+export type DischargeCondition = "Stable" | "Improved" | "Critical" | "LAMA" | "Expired";
+
+export interface DischargeSummary {
+  finalDiagnosis: DiagnosisEntry[];
+  procedures?: string;
+  hospitalCourse: string;
+  condition: DischargeCondition;
+  dischargeMeds: RxItem[];
+  followUpInstructions?: string;
+  followUpDate?: string;
+  signedBy: string;
+}
+
+export interface Admission {
+  id: string;
+  admissionNo: string; // IPD-YYYY-NNNN
+  patientUid: string;
+  patientName: string;
+  bedId: string;
+  ward: string;
+  bedNumber: string;
+  primaryDoctor: string;
+  department: string;
+  admittedAt: string; // ISO
+  reason: string;
+  provisionalDiagnosis?: DiagnosisEntry;
+  diet: DietType;
+  isolation?: boolean;
+  status: AdmissionStatus;
+  dischargedAt?: string;
+  dischargeSummary?: DischargeSummary;
+}
+
+export interface VitalReading {
+  id: string;
+  admissionId: string;
+  recordedAt: string;
+  recordedBy: string;
+  bp?: string;
+  pulse?: number;
+  temp?: number;
+  spo2?: number;
+  respRate?: number;
+  painScore?: number;
+}
+
+export type NursingNoteCategory = "observation" | "medication" | "procedure" | "handover";
+
+export interface NursingNote {
+  id: string;
+  admissionId: string;
+  at: string;
+  by: string;
+  category: NursingNoteCategory;
+  text: string;
+}
+
+export interface RoundNote {
+  id: string;
+  admissionId: string;
+  at: string;
+  doctor: string;
+  subjective: string;
+  objective: string;
+  assessment: string;
+  plan: string;
+}
+
+export type MarStatus = "given" | "missed" | "refused";
+
+export interface MarAdministration {
+  scheduledFor: string; // ISO
+  administeredAt?: string;
+  by?: string;
+  status: MarStatus | "due";
+  note?: string;
+}
+
+export interface MarEntry {
+  id: string;
+  admissionId: string;
+  drug: string;
+  strength?: string;
+  dose?: string;
+  route?: string;
+  frequencyLabel: string; // e.g. "Every 8 hours"
+  schedule: MarAdministration[];
+  startedAt: string;
+}
+
+export type IoType = "intake" | "output";
+export type IoSource = "Oral" | "IV" | "Tube feed" | "Urine" | "Drain" | "Vomit" | "Stool";
+
+export interface IntakeOutput {
+  id: string;
+  admissionId: string;
+  at: string;
+  type: IoType;
+  source: IoSource;
+  volumeMl: number;
+  by: string;
+}

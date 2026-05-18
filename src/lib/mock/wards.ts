@@ -18,6 +18,16 @@ export const mockBeds: WardBed[] = [
   { id: "b15", ward: "Pediatric", bedNumber: "PD-03", status: "available" },
 ];
 
+export function setBedStatus(bedId: string, patch: Partial<WardBed>) {
+  const idx = mockBeds.findIndex((b) => b.id === bedId);
+  if (idx === -1) return;
+  mockBeds[idx] = { ...mockBeds[idx], ...patch };
+}
+
+export function getBed(bedId: string) {
+  return mockBeds.find((b) => b.id === bedId);
+}
+
 export function wardSummary() {
   const total = mockBeds.length;
   const occupied = mockBeds.filter((b) => b.status === "occupied").length;
