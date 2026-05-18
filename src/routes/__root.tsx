@@ -10,8 +10,20 @@ import { RadiologyProvider } from "@/lib/radiology-store";
 import { NotificationsProvider } from "@/lib/notifications-store";
 import { AdminProvider } from "@/lib/admin-store";
 
+function NotFound() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold">404</h1>
+        <p className="mt-2 text-muted-foreground">Page not found</p>
+      </div>
+    </div>
+  );
+}
+
 export const Route = createRootRoute({
   component: RootLayout,
+  notFoundComponent: NotFound,
 });
 
 function RootLayout() {
