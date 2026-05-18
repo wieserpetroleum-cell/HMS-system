@@ -134,7 +134,7 @@ export function AppSidebar() {
       {/* Logo */}
       <div className="border-b border-white/10 p-6">
         <div className="text-xl font-bold tracking-tight text-white">
-          MEDICORE<span className="text-primary">.OS</span>
+          Hospitrix
         </div>
         <div className="mt-0.5 text-[10px] font-medium uppercase tracking-widest text-slate-500">
           Hospital Management

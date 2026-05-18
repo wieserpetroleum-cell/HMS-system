@@ -60,7 +60,7 @@ function LoginPage() {
       {/* Brand panel */}
       <div className="hidden w-1/2 flex-col justify-between bg-sidebar p-12 text-white lg:flex">
         <div className="text-2xl font-bold tracking-tight">
-          MEDICORE<span className="text-primary">.OS</span>
+          Hospitrix
         </div>
         <div className="space-y-3">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
