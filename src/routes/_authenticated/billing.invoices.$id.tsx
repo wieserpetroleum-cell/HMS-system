@@ -28,8 +28,8 @@ type Tab = typeof TABS[number];
 const searchSchema = z.object({
   tab: z.enum(TABS).optional(),
 function InvoiceWorkspace() {
-  const { id } = useParams({ from: "/_authenticated/billing/invoices/$id" });
-  const { tab: initialTab } = useSearch({ from: "/_authenticated/billing/invoices/$id" });
+  const { id } = useParams({ from: `/_authenticated/billing/invoices/${id}` });
+  const { tab: initialTab } = useSearch({ from: `/_authenticated/billing/invoices/${id}` });
   const navigate = useNavigate();
   const { getById, replaceItems, updateInvoice, addPayment, updateTpaClaim, cancelInvoice } = useInvoices();
   const { patients } = usePatients();

@@ -62,7 +62,7 @@ function NewInvoice() {
       dueAt: new Date(Date.now() + 30 * 86400000).toISOString(),
     });
     toast.success(`Invoice ${inv.invoiceNo} created`);
-    navigate("/billing/invoices/$id", params: { id: inv.id });
+    navigate(`/billing/invoices/${inv.id}`);
   };
 
   React.useEffect(() => {

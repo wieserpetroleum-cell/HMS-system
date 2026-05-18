@@ -82,7 +82,7 @@ function InvoicesList() {
             {filtered.map((i) => (
               <tr key={i.id} className="hover:bg-accent/30">
                 <td className="px-4 py-2.5">
-                  <Link to="/billing/invoices/$id" params={{ id: i.id }} className="font-mono text-xs text-primary hover:underline">
+                  <Link to=`{result}` className="font-mono text-xs text-primary hover:underline">
                     {i.invoiceNo}
                   </Link>
                 </td>

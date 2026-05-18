@@ -173,7 +173,7 @@ function ConsultationWorkspace() {
     });
     updateStatus(appt.id, "completed");
     toast.success("Visit completed", { description: "Prescription generated." });
-    navigate("/consultations/$appointmentId/prescription", params: { appointmentId: appt.id });
+    navigate(`/consultations/${appt.id}/prescription`);
   };
 
   const flag = (f: VitalFlag) =>

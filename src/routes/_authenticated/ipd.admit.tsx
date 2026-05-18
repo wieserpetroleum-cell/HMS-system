@@ -18,7 +18,6 @@ import { admissionSchema } from "@/lib/validation/admission";
 import { mockDiagnoses } from "@/lib/mock/diagnoses";
 import type { DietType, WardBed } from "@/lib/types";
 
-const searchSchema = z.object({ patientUid: z.string().optional() });
 const DOCTORS = [
   { name: "Dr. Mehta", department: "Cardiology" },
   { name: "Dr. Iyer", department: "General Medicine" },
@@ -88,7 +87,7 @@ function AdmitPatient() {
       isolation,
     });
     toast.success(`Admitted ${patient.name} → ${bed.bedNumber}`);
-    navigate("/ipd/$admissionId", params: { admissionId: adm.id });
+    navigate(`/ipd/${adm.id}`);
   }, [patient, bed, doctor, doctorMeta.department, reason, diet, isolation, diagnosisCode, addAdmission, navigate]);
 
   React.useEffect(() => {

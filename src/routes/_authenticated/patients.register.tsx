@@ -127,7 +127,7 @@ function RegisterPatient() {
     });
     toast.success(`Patient registered · ${patient.uid}`);
     if (mode === "open") {
-      navigate("/patients/$uid", params: { uid: patient.uid });
+      navigate(`/patients/${patient.uid}`);
     } else {
       setValues(blankForm);
       setErrors({});

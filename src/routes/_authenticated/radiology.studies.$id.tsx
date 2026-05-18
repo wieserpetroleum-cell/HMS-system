@@ -18,7 +18,7 @@ import { verifySchema } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import type { ReportSection } from "@/lib/types";
 function StudyWorkspace() {
-  const { id } = useParams({ from: "/_authenticated/radiology/studies/$id" });
+  const { id } = useParams({ from: `/_authenticated/radiology/studies/${id}` });
   const navigate = useNavigate();
   const { user } = useAuth();
   const { getOrder, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders } = useRadiology();
@@ -112,7 +112,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
     saveReportDraft(study.id, sections, user?.name ?? "Radiologist", critical, templateId);
     verifyReport(study.id, user?.name ?? "Radiologist");
     toast.success("Report verified");
-    navigate("/radiology/studies/$id/report", params: { id: order.id });
+    navigate(`/radiology/studies/${order.id}/report`);
   }
 
   function handleStartAcquisition() {
@@ -180,7 +180,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
           )}
           {verified ? (
             <Button size="sm" variant="outline" asChild>
-              <Link to="/radiology/studies/$id/report" params={{ id: order.id }}>
+              <Link to=`{result}`>
                 <FileText className="mr-2 h-4 w-4" /> View report
               </Link>
             </Button>

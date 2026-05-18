@@ -84,12 +84,12 @@ function WardChart() {
         </Link>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link to="/ipd/$admissionId/transfer" params={{ admissionId: adm.id }}>
+            <Link to=`{result}`>
               <ArrowRightLeft className="mr-1.5 h-3.5 w-3.5" /> Transfer
             </Link>
           </Button>
           <Button size="sm" asChild>
-            <Link to="/ipd/$admissionId/discharge" params={{ admissionId: adm.id }}>
+            <Link to=`{result}`>
               <LogOut className="mr-1.5 h-3.5 w-3.5" /> Discharge
             </Link>
           </Button>

@@ -19,12 +19,11 @@ import { mockDiagnoses } from "@/lib/mock/diagnoses";
 import { dischargeSchema } from "@/lib/validation/admission";
 import type { DiagnosisEntry, DischargeCondition, RxItem } from "@/lib/types";
 
-const searchSchema = z.object({ print: z.string().optional() });
 const CONDITIONS: DischargeCondition[] = ["Stable", "Improved", "Critical", "LAMA", "Expired"];
 
 function DischargePage() {
   const { admissionId } = useParams();
-  const { print } = useSearch({ from: "/_authenticated/ipd/$admissionId/discharge" });
+  const { print } = useSearch({ from: `/_authenticated/ipd/${admissionId}/discharge` });
   const { getById, discharge } = useAdmissions();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -88,7 +87,7 @@ function DischargePage() {
       signedBy: user?.name ?? "Clinician",
     });
     toast.success("Discharge summary saved");
-    navigate("/ipd/$admissionId/discharge", params: { admissionId: adm.id }, search: { print: "1" });
+    navigate(`/ipd/${adm.id}/discharge`);
   };
 
   const previewSummary = {
@@ -105,8 +104,7 @@ function DischargePage() {
   return (
     <div className="p-8">
       <Link
-        to="/ipd/$admissionId"
-        params={{ admissionId: adm.id }}
+        to=`{result}`
         className="mb-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground print:hidden"
       >
         <ArrowLeft className="h-3 w-3" /> Back to chart
@@ -178,7 +176,7 @@ function DischargePage() {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" asChild>
-              <Link to="/ipd/$admissionId" params={{ admissionId: adm.id }}>Cancel</Link>
+              <Link to=`{result}`>Cancel</Link>
             </Button>
             <Button onClick={submit}>
               <LogOut className="mr-1.5 h-4 w-4" /> Discharge & Print

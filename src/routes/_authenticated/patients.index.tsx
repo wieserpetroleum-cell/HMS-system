@@ -105,7 +105,7 @@ function PatientRegistry() {
               filtered.map((p) => (
                 <tr
                   key={p.id}
-                  onClick={() => navigate("/patients/$uid", params: { uid: p.uid })}
+                  onClick={() => navigate(`/patients/${p.uid}`)}
                   className="cursor-pointer border-b border-border/50 transition-colors hover:bg-accent/40"
                 >
                   <td className="px-4 py-3 font-mono text-[11px] text-muted-foreground">{p.uid}</td>

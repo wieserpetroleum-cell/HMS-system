@@ -26,7 +26,7 @@ function FloorView() {
 
   const goToBed = (bedId: string) => {
     const adm = activeAdmissions.find((a) => a.bedId === bedId);
-    if (adm) navigate("/ipd/$admissionId", params: { admissionId: adm.id });
+    if (adm) navigate(`/ipd/${adm.id}`);
   };
 
   return (
@@ -154,7 +154,7 @@ function FloorView() {
                       <TableCell className="text-right">
                         {adm ? (
                           <Button asChild size="sm" variant="outline">
-                            <Link to="/ipd/$admissionId" params={{ admissionId: adm.id }}>
+                            <Link to=`{result}`>
                               <Activity className="mr-1.5 h-3.5 w-3.5" /> Open Chart
                             </Link>
                           </Button>

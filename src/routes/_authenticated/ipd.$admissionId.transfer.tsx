@@ -40,14 +40,13 @@ function TransferBed() {
     if (!reason.trim() || reason.trim().length < 4) return setError("Reason required");
     transferBed(adm.id, target.id, reason.trim(), user?.name ?? "Clinician");
     toast.success(`Transferred to ${target.bedNumber}`);
-    navigate("/ipd/$admissionId", params: { admissionId: adm.id });
+    navigate(`/ipd/${adm.id}`);
   };
 
   return (
     <div className="space-y-6 p-8">
       <Link
-        to="/ipd/$admissionId"
-        params={{ admissionId: adm.id }}
+        to=`{result}`
         className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-3 w-3" /> Back to chart

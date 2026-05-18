@@ -29,7 +29,7 @@ function PrescriptionPreview() {
             </Button>
             {appt && (
               <Button asChild>
-                <Link to="/consultations/$appointmentId" params={{ appointmentId }}>
+                <Link to=`{result}`>
                   Open Consultation
                 </Link>
               </Button>

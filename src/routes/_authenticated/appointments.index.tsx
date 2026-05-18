@@ -81,11 +81,11 @@ function AppointmentsQueue() {
       updateStatus(a.id, "checked-in");
     } else if (a.status === "checked-in") {
       updateStatus(a.id, "in-consultation");
-      navigate("/consultations/$appointmentId", params: { appointmentId: a.id });
+      navigate(`/consultations/${a.id}`);
     } else if (a.status === "in-consultation") {
-      navigate("/consultations/$appointmentId", params: { appointmentId: a.id });
+      navigate(`/consultations/${a.id}`);
     } else if (a.status === "completed") {
-      navigate("/consultations/$appointmentId/prescription", params: { appointmentId: a.id });
+      navigate(`/consultations/${a.id}/prescription`);
     }
   };
 

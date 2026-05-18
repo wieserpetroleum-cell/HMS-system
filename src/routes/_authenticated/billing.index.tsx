@@ -63,7 +63,7 @@ function BillingDashboard() {
             <button
               key={b}
               type="button"
-              onClick={() => navigate("/billing/invoices", search: { age: b } as never)}
+              onClick={() => navigate("/billing/invoices")}
               className="rounded border border-border bg-card px-2 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-accent/40"
             >Filter {b}d</button>
           ))}
@@ -89,7 +89,7 @@ function BillingDashboard() {
               {recent.map((b) => (
                 <tr key={b.id} className="hover:bg-accent/30">
                   <td className="px-5 py-2.5">
-                    <Link to="/billing/invoices/$id" params={{ id: b.id }} className="font-mono text-xs text-primary hover:underline">
+                    <Link to=`{result}` className="font-mono text-xs text-primary hover:underline">
                       {b.invoiceNo}
                     </Link>
                   </td>
@@ -112,7 +112,7 @@ function BillingDashboard() {
             {tpaTop.length === 0 && <li className="px-5 py-6 text-center text-sm text-muted-foreground">No open claims</li>}
             {tpaTop.map((inv) => (
               <li key={inv.id} className="px-5 py-3">
-                <Link to="/billing/invoices/$id" params={{ id: inv.id }} search={{ tab: "tpa" } as never} className="block">
+                <Link to=`{result}` search={{ tab: "tpa" } as never} className="block">
                   <div className="flex items-baseline justify-between">
                     <div className="font-mono text-xs">{inv.invoiceNo}</div>
                     <TpaStatusPill status={inv.tpaClaim!.status} />

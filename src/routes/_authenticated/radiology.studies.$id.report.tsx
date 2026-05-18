@@ -5,7 +5,7 @@ import { useRadiology } from "@/lib/radiology-store";
 import { usePatients } from "@/lib/patients-store";
 import { modalityLabel } from "@/components/radiology/ModalityIcon";
 function ReportViewer() {
-  const { id } = useParams({ from: "/_authenticated/radiology/studies/$id/report" });
+  const { id } = useParams({ from: `/_authenticated/radiology/studies/${id}/report` });
   const { getOrder, getStudyByOrderId, getReportByStudyId } = useRadiology();
   const { patients } = usePatients();
 
@@ -28,7 +28,7 @@ function ReportViewer() {
     <div className="p-8">
       <div className="mb-4 flex items-center justify-between print:hidden">
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/radiology/studies/$id" params={{ id: order.id }}>
+          <Link to=`{result}`>
             <ArrowLeft className="mr-1 h-4 w-4" /> Back to workspace
           </Link>
         </Button>
