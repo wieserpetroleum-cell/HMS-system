@@ -10,10 +10,6 @@ import { useNotifications } from "@/lib/notifications-store";
 import { ChannelBadge } from "@/components/notifications/ChannelBadge";
 import { NotificationStatusPill } from "@/components/notifications/StatusPill";
 import type { NotificationChannel, NotificationEntry, NotificationStatus, NotificationType } from "@/lib/types";
-
-  component: NotificationLogPage,
-});
-
 const CHANNELS: NotificationChannel[] = ["whatsapp", "sms", "email"];
 const TYPES: NotificationType[] = ["appointment", "report", "payment", "discharge", "preauth", "other"];
 const STATUSES: NotificationStatus[] = ["delivered", "failed", "pending"];

@@ -16,12 +16,6 @@ import { cn } from "@/lib/utils";
 
 const searchSchema = z.object({
   patientUid: z.string().optional(),
-});
-
-  component: NewAppointment,
-  validateSearch: (search) => searchSchema.parse(search),
-});
-
 const DOCTORS = [
   { name: "Dr. Mehta", department: "Cardiology", room: "C-204" },
   { name: "Dr. Iyer", department: "General Medicine", room: "G-101" },

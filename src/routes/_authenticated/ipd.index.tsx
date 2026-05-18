@@ -11,10 +11,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { mockBeds, wardSummary, bedsByWard } from "@/lib/mock/wards";
 import { useAdmissions } from "@/lib/admissions-store";
 import { cn } from "@/lib/utils";
-
-  component: FloorView,
-});
-
 const WARDS = ["All", "ICU", "General A", "General B", "Pediatric"];
 
 function FloorView() {

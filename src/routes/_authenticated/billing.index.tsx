@@ -8,10 +8,6 @@ import { AgeingBar } from "@/components/billing/AgeingBar";
 import { InvoiceStatusPill, TpaStatusPill } from "@/components/billing/StatusPill";
 import { money, ageDays } from "@/lib/money";
 import { Button } from "@/components/ui/button";
-
-  component: BillingDashboard,
-});
-
 function BillingDashboard() {
   const { invoices } = useInvoices();
   const navigate = useNavigate();

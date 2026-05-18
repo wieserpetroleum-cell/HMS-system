@@ -16,12 +16,6 @@ const searchSchema = z.object({
   q: z.string().optional(),
   status: z.string().optional(),
   age: z.enum(["0-30", "31-60", "60+"]).optional(),
-});
-
-  validateSearch: (s) => searchSchema.parse(s),
-  component: InvoicesList,
-});
-
 function InvoicesList() {
   const { invoices } = useInvoices();
   const search = useSearch({ from: "/_authenticated/billing/invoices/" });

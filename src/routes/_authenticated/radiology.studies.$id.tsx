@@ -17,10 +17,6 @@ import { templatesFor, getTemplate } from "@/lib/mock/radiology-templates";
 import { verifySchema } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import type { ReportSection } from "@/lib/types";
-
-  component: StudyWorkspace,
-});
-
 function StudyWorkspace() {
   const { id } = useParams({ from: "/_authenticated/radiology/studies/$id" });
   const navigate = useNavigate();

@@ -21,10 +21,6 @@ import { mockDiagnoses } from "@/lib/mock/diagnoses";
 import { calcBmi, flagBp, flagSpo2, flagPulse, flagTemp, type VitalFlag } from "@/lib/vitals";
 import type { DiagnosisEntry, RxItem, Vitals } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-  component: ConsultationWorkspace,
-});
-
 const SECTIONS = [
   { key: "vitals", label: "Vitals", icon: Activity },
   { key: "complaints", label: "Complaints", icon: ClipboardList },

@@ -19,11 +19,6 @@ import { mockDiagnoses } from "@/lib/mock/diagnoses";
 import type { DietType, WardBed } from "@/lib/types";
 
 const searchSchema = z.object({ patientUid: z.string().optional() });
-
-  component: AdmitPatient,
-  validateSearch: (search) => searchSchema.parse(search),
-});
-
 const DOCTORS = [
   { name: "Dr. Mehta", department: "Cardiology" },
   { name: "Dr. Iyer", department: "General Medicine" },

@@ -11,10 +11,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAdmin } from "@/lib/admin-store";
 import type { PayerType, RatePlan } from "@/lib/types";
 import { money } from "@/lib/money";
-
-  component: RatesPage,
-});
-
 function RatesPage() {
   const { plans, services, savePlan, removePlan, updateRate, bulkAdjustPlan, copyRatesFrom } = useAdmin();
   const [activeId, setActiveId] = React.useState<string>(plans[0]?.id ?? "");

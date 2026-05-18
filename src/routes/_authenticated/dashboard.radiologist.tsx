@@ -6,10 +6,6 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { mockOrders } from "@/lib/mock/radiology";
 import { cn } from "@/lib/utils";
 import type { RadPriority } from "@/lib/types";
-
-  component: RadiologistDashboard,
-});
-
 const priorityStyle: Record<RadPriority, string> = {
   stat:    "bg-allergy text-white",
   urgent:  "bg-condition/15 text-condition",

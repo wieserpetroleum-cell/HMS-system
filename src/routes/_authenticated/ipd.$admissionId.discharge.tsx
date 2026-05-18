@@ -20,11 +20,6 @@ import { dischargeSchema } from "@/lib/validation/admission";
 import type { DiagnosisEntry, DischargeCondition, RxItem } from "@/lib/types";
 
 const searchSchema = z.object({ print: z.string().optional() });
-
-  component: DischargePage,
-  validateSearch: (s) => searchSchema.parse(s),
-});
-
 const CONDITIONS: DischargeCondition[] = ["Stable", "Improved", "Critical", "LAMA", "Expired"];
 
 function DischargePage() {

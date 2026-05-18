@@ -11,11 +11,6 @@ import type { AuditAction, AuditRecord, PermissionModule } from "@/lib/types";
 import { PERMISSION_MODULES } from "@/lib/mock/admin";
 
 type Search = { userId?: string };
-
-  validateSearch: (s: Record<string, unknown>): Search => ({ userId: typeof s.userId === "string" ? s.userId : undefined }),
-  component: AuditPage,
-});
-
 const ACTIONS: AuditAction[] = ["login", "logout", "created", "edited", "deleted", "viewed", "approved", "rejected", "exported", "other"];
 
 function AuditPage() {

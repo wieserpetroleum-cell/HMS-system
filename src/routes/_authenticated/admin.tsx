@@ -1,9 +1,5 @@
 import { Outlet, Link, useRouterState } from "react-router-dom";
 import { cn } from "@/lib/utils";
-
-  component: AdminLayout,
-});
-
 const TABS = [
   { to: "/admin/hospital", label: "Hospital" },
   { to: "/admin/departments", label: "Departments & Doctors" },

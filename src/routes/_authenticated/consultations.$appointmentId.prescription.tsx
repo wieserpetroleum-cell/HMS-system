@@ -5,10 +5,6 @@ import { Button } from "@/components/ui/button";
 import { useAppointments } from "@/lib/appointments-store";
 import { useConsultations } from "@/lib/consultations-store";
 import { usePatients } from "@/lib/patients-store";
-
-  component: PrescriptionPreview,
-});
-
 function PrescriptionPreview() {
   const { appointmentId } = useParams();
   const { getById } = useAppointments();

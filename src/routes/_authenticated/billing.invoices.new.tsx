@@ -18,12 +18,6 @@ const searchSchema = z.object({
   patientUid: z.string().optional(),
   source: z.enum(["opd", "ipd"]).optional(),
   sourceId: z.string().optional(),
-});
-
-  validateSearch: (s) => searchSchema.parse(s),
-  component: NewInvoice,
-});
-
 function lineFromCatalog(code: string, qty = 1, override?: Partial<InvoiceItem>): InvoiceItem {
   const c = findCatalog(code)!;
   return {

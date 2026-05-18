@@ -4,10 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useRadiology } from "@/lib/radiology-store";
 import { usePatients } from "@/lib/patients-store";
 import { modalityLabel } from "@/components/radiology/ModalityIcon";
-
-  component: ReportViewer,
-});
-
 function ReportViewer() {
   const { id } = useParams({ from: "/_authenticated/radiology/studies/$id/report" });
   const { getOrder, getStudyByOrderId, getReportByStudyId } = useRadiology();

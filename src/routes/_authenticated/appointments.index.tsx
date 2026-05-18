@@ -8,10 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Appointment, AppointmentStatus } from "@/lib/types";
-
-  component: AppointmentsQueue,
-});
-
 const STATUS_LABEL: Record<AppointmentStatus, string> = {
   scheduled: "Scheduled",
   "checked-in": "Checked-in",

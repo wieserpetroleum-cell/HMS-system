@@ -5,10 +5,6 @@ import { QuickActions } from "@/components/dashboard/QuickActions";
 import { RecentList, type RecentRow } from "@/components/dashboard/RecentList";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
-
-  component: DoctorDashboard,
-});
-
 function DoctorDashboard() {
   const seen = mockAppointments.filter((a) => a.status === "completed").length;
   const pending = mockAppointments.filter((a) =>

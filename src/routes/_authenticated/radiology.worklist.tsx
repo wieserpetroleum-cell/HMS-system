@@ -9,10 +9,6 @@ import { WorklistRow } from "@/components/radiology/WorklistRow";
 import type { Modality, RadiologyOrderStatus, RadiologyPriority } from "@/lib/types";
 import { modalityLabels } from "@/lib/mock/radiology-catalog";
 import { cn } from "@/lib/utils";
-
-  component: Worklist,
-});
-
 const STATUSES: { value: RadiologyOrderStatus | "all"; label: string }[] = [
   { value: "all", label: "All" },
   { value: "ordered", label: "Ordered" },

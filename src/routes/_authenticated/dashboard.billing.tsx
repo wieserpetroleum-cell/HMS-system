@@ -6,10 +6,6 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockBills, billsSummary, ageingBuckets } from "@/lib/mock/bills";
 import { cn } from "@/lib/utils";
 import type { Bill } from "@/lib/types";
-
-  component: BillingDashboard,
-});
-
 const statusStyles: Record<Bill["status"], string> = {
   paid: "bg-status-ok/10 text-status-ok",
   pending: "bg-condition/15 text-condition",

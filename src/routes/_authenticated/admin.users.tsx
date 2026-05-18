@@ -10,10 +10,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAdmin } from "@/lib/admin-store";
 import { PermissionMatrix } from "@/components/admin/PermissionMatrix";
 import type { AppUser, RoleDef } from "@/lib/types";
-
-  component: UsersPage,
-});
-
 function randomPassword() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789!@#";
   let p = "";

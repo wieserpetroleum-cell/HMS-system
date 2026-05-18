@@ -6,10 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { usePatients } from "@/lib/patients-store";
 import { cn } from "@/lib/utils";
-
-  component: PatientRegistry,
-});
-
 function PatientRegistry() {
   const { patients } = usePatients();
   const navigate = useNavigate();

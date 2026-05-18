@@ -11,10 +11,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAdmin } from "@/lib/admin-store";
 import type { Modality, ServiceCategory, ServiceItem } from "@/lib/types";
 import { money } from "@/lib/money";
-
-  component: ServicesPage,
-});
-
 const CATEGORIES: ServiceCategory[] = ["consultation", "procedure", "radiology", "nursing", "bed", "misc"];
 const MODALITIES: Modality[] = ["xray", "ct", "mri", "usg", "mammo", "dexa"];
 

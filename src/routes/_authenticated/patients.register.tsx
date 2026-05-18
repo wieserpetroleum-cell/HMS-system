@@ -16,10 +16,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { usePatients } from "@/lib/patients-store";
 import { ageFromDob } from "@/lib/age";
 import { patientFormSchema, type PatientFormValues } from "@/lib/validation/patient";
-
-  component: RegisterPatient,
-});
-
 const blankForm: PatientFormValues = {
   title: "Mr",
   firstName: "",

@@ -6,10 +6,6 @@ import { useInvoices } from "@/lib/invoices-store";
 import { TpaPipeline } from "@/components/billing/TpaPipeline";
 import { TpaStatusPill } from "@/components/billing/StatusPill";
 import { money, ageDays } from "@/lib/money";
-
-  component: TpaQueue,
-});
-
 function TpaQueue() {
   const { invoices } = useInvoices();
   const [view, setView] = React.useState<"pipeline" | "table">("pipeline");

@@ -27,12 +27,6 @@ type Tab = typeof TABS[number];
 
 const searchSchema = z.object({
   tab: z.enum(TABS).optional(),
-});
-
-  validateSearch: (s) => searchSchema.parse(s),
-  component: InvoiceWorkspace,
-});
-
 function InvoiceWorkspace() {
   const { id } = useParams({ from: "/_authenticated/billing/invoices/$id" });
   const { tab: initialTab } = useSearch({ from: "/_authenticated/billing/invoices/$id" });

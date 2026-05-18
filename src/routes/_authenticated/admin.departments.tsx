@@ -9,10 +9,6 @@ import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useAdmin } from "@/lib/admin-store";
 import type { Department, DoctorProfile } from "@/lib/types";
-
-  component: DeptDoctorsPage,
-});
-
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function DeptDoctorsPage() {

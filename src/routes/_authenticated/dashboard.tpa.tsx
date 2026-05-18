@@ -6,10 +6,6 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockTpaClaims } from "@/lib/mock/tpa";
 import { cn } from "@/lib/utils";
 import type { ClaimStatus } from "@/lib/types";
-
-  component: TpaDashboard,
-});
-
 const statusStyle: Record<ClaimStatus, string> = {
   "pre-auth-approved": "bg-status-ok/10 text-status-ok",
   "queried":           "bg-condition/15 text-condition",

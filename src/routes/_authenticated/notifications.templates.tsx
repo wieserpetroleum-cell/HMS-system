@@ -13,10 +13,6 @@ import { ChannelBadge } from "@/components/notifications/ChannelBadge";
 import { VariablePicker } from "@/components/notifications/VariablePicker";
 import { useNotifications } from "@/lib/notifications-store";
 import type { MessageTemplate, NotificationChannel, TemplateTrigger } from "@/lib/types";
-
-  component: TemplateManagerPage,
-});
-
 const TRIGGER_LABELS: Record<TemplateTrigger, string> = {
   appointment_booked: "Appointment booked",
   appointment_reminder: "Appointment reminder",

@@ -6,10 +6,6 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { bedsByWard, mockBeds } from "@/lib/mock/wards";
 import { cn } from "@/lib/utils";
 import type { WardBed } from "@/lib/types";
-
-  component: NurseDashboard,
-});
-
 const statusStyles: Record<WardBed["status"], string> = {
   occupied: "border-primary/40 bg-primary/5",
   available: "border-status-ok/40 bg-status-ok/5",

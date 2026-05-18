@@ -11,10 +11,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useAdmin } from "@/lib/admin-store";
 import type { HospitalProfile } from "@/lib/types";
-
-  component: HospitalProfilePage,
-});
-
 function HospitalProfilePage() {
   const { hospital, saveHospital } = useAdmin();
   const [form, setForm] = React.useState<HospitalProfile>(hospital);

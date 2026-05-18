@@ -9,10 +9,6 @@ import { ModalityIcon, modalityLabel } from "@/components/radiology/ModalityIcon
 import { findStudy, modalityLabels } from "@/lib/mock/radiology-catalog";
 import { TatGauge } from "@/components/radiology/TatGauge";
 import type { Modality } from "@/lib/types";
-
-  component: RadiologyDashboard,
-});
-
 function RadiologyDashboard() {
   const { orders, reports } = useRadiology();
   const today = new Date();

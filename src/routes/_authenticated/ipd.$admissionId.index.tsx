@@ -21,10 +21,6 @@ import { usePatients } from "@/lib/patients-store";
 import { useAuth } from "@/lib/auth-context";
 import type { NursingNoteCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-  component: WardChart,
-});
-
 function dayOfStay(admittedAt: string) {
   const ms = Date.now() - new Date(admittedAt).getTime();
   return Math.max(1, Math.floor(ms / 86400000) + 1);

@@ -6,10 +6,6 @@ import { RecentList, type RecentRow } from "@/components/dashboard/RecentList";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
 import { wardSummary } from "@/lib/mock/wards";
-
-  component: ReceptionDashboard,
-});
-
 function ReceptionDashboard() {
   const ward = wardSummary();
   const checkedIn = mockAppointments.filter((a) => a.status === "checked-in");

@@ -8,10 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePatients } from "@/lib/patients-store";
 import type { Patient } from "@/lib/types";
-
-  component: PatientProfile,
-});
-
 function PatientProfile() {
   const { uid } = useParams();
   const { getPatient } = usePatients();

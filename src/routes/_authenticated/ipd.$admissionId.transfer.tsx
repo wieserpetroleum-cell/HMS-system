@@ -11,10 +11,6 @@ import { StatusPill } from "@/components/ipd/StatusPill";
 import { useAdmissions } from "@/lib/admissions-store";
 import { useAuth } from "@/lib/auth-context";
 import type { WardBed } from "@/lib/types";
-
-  component: TransferBed,
-});
-
 function TransferBed() {
   const { admissionId } = useParams();
   const { getById, transferBed } = useAdmissions();

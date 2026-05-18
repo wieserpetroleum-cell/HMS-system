@@ -10,10 +10,6 @@ import { mockAppointments } from "@/lib/mock/appointments";
 import { mockBills, billsSummary } from "@/lib/mock/bills";
 import { mockStaff } from "@/lib/mock/staff";
 import { wardSummary, bedsByWard } from "@/lib/mock/wards";
-
-  component: AdminDashboard,
-});
-
 function AdminDashboard() {
   const { user } = useAuth();
   const ward = wardSummary();

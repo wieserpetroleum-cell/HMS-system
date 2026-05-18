@@ -11,10 +11,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sh
 import { useAdmin } from "@/lib/admin-store";
 import type { BedCategory, ConfiguredBed, Ward } from "@/lib/types";
 import { money } from "@/lib/money";
-
-  component: BedsPage,
-});
-
 function BedsPage() {
   const { wards, beds, bedCategories, saveWard, removeWard, saveBedCategory, removeBedCategory, saveBed, removeBed, bulkAddBeds } = useAdmin();
   const [expanded, setExpanded] = React.useState<string | null>(wards[0]?.id ?? null);
