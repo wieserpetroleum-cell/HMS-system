@@ -15,6 +15,7 @@ import { useAppointments } from "@/lib/appointments-store";
 import { cn } from "@/lib/utils";
 
 
+const DOCTORS = [
   { name: "Dr. Mehta", department: "Cardiology", room: "C-204" },
   { name: "Dr. Iyer", department: "General Medicine", room: "G-101" },
   { name: "Dr. Khan", department: "Orthopedics", room: "O-302" },

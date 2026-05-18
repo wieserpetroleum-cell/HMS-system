@@ -26,8 +26,9 @@ const TABS = ["charges", "payments", "tpa", "timeline", "print"] as const;
 type Tab = typeof TABS[number];
 
 
-  const { id } = useParams({ from: `/_authenticated/billing/invoices/${id}` });
-    const navigate = useNavigate();
+function InvoiceWorkspace() {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const { getById, replaceItems, updateInvoice, addPayment, updateTpaClaim, cancelInvoice } = useInvoices();
   const { patients } = usePatients();
 

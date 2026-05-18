@@ -15,7 +15,6 @@ const ACTIONS: AuditAction[] = ["login", "logout", "created", "edited", "deleted
 
 function AuditPage() {
   const { records } = useAudit();
-  const search = Route.();
   const [days, setDays] = React.useState(7);
   const [q, setQ] = React.useState("");
   const [action, setAction] = React.useState<AuditAction | "all">("all");

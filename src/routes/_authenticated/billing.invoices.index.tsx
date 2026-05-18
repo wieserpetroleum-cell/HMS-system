@@ -13,14 +13,15 @@ import type { InvoiceStatus } from "@/lib/types";
 const STATUSES: InvoiceStatus[] = ["draft", "pending", "partial", "paid", "tpa-pending", "overdue", "cancelled"];
 
 
+function InvoicesList() {
   const { invoices } = useInvoices();
-  const search = ({ from: "/_authenticated/billing/invoices/" });
-  const [q, setQ] = React.useState(search.q ?? "");
-  const [statusFilter, setStatusFilter] = React.useState<InvoiceStatus | "all">((search.status as InvoiceStatus) ?? "all");
+  const [q, setQ] = React.useState("");
+  const [statusFilter, setStatusFilter] = React.useState<InvoiceStatus | "all">("all");
+  // const search = ({ from: "/_authenticated/billing/invoices/" });
 
   const filtered = invoices.filter((i) => {
     if (statusFilter !== "all" && i.status !== statusFilter) return false;
-    if (search.age && ageBucket(ageDays(i.createdAt)) !== search.age) return false;
+    if (null && ageBucket(ageDays(i.createdAt)) !== null) return false;
     if (q) {
       const ql = q.toLowerCase();
       if (![i.invoiceNo, i.patientName, i.patientUid].some((s) => s.toLowerCase().includes(ql))) return false;
@@ -52,8 +53,8 @@ const STATUSES: InvoiceStatus[] = ["draft", "pending", "partial", "paid", "tpa-p
             <Chip key={s} active={statusFilter === s} onClick={() => setStatusFilter(s)}>{s}</Chip>
           ))}
         </div>
-        {search.age && (
-          <span className="rounded border border-primary/30 bg-primary/10 px-2 py-1 text-xs text-primary">Age: {search.age}d</span>
+        {null && (
+          <span className="rounded border border-primary/30 bg-primary/10 px-2 py-1 text-xs text-primary">Age: {null}d</span>
         )}
       </div>
 

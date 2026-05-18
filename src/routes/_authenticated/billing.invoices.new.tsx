@@ -15,6 +15,9 @@ import type { InvoiceItem } from "@/lib/types";
 import { money } from "@/lib/money";
 
 
+function lineFromCatalog(code: string, qty = 1, override?: Partial<InvoiceItem>): InvoiceItem {
+  const c = findCatalog(code)!;
+  return {
     id: `tmp-${code}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
     category: c.category, code: c.code, description: c.description,
     qty, unitPrice: c.unitPrice, amount: qty * c.unitPrice, taxable: c.taxable,

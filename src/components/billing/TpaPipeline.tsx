@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link } from "react-router-dom";
 import type { Invoice, TpaClaimStatus } from "@/lib/types";
 import { money, ageDays } from "@/lib/money";
 import { TpaStatusPill } from "./StatusPill";

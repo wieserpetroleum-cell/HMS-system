@@ -12,12 +12,7 @@ import type { Modality, RadiologyPriority } from "@/lib/types";
 import { newOrderSchema, pregnancyRule } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import { Save, ArrowRight, AlertTriangle } from "lucide-react";
-    patientUid: typeof s.patientUid === "string" ? s.patientUid : undefined,
-    source: (s.source === "opd" || s.source === "ipd" || s.source === "walkin" ? s.source : undefined) as
-      | "opd" | "ipd" | "walkin" | undefined,
-    sourceId: typeof s.sourceId === "string" ? s.sourceId : undefined,
 function NewRadiologyOrder() {
-  const search = ({ from: "/_authenticated/radiology/orders/new" });
   const navigate = useNavigate();
   const { patients } = usePatients();
   const { addOrder } = useRadiology();
