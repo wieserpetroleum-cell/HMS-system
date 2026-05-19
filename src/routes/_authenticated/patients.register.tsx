@@ -81,7 +81,13 @@ function RegisterPatient() {
       if (k && !next[k]) next[k] = issue.message;
     }
     setErrors(next);
-    toast.error("Please fix the highlighted fields");
+    const errorFields = Object.keys(next).join(", ");
+    toast.error(`Please fix: ${errorFields}`);
+    // Scroll to first error
+    setTimeout(() => {
+      const firstError = document.querySelector('[data-error="true"]');
+      if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
     return null;
   };
 

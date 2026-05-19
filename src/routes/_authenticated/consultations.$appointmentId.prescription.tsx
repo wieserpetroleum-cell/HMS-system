@@ -29,7 +29,7 @@ function PrescriptionPreview() {
             </Button>
             {appt && (
               <Button asChild>
-                <Link to={`{result}`}>
+                <Link to="/ipd">
                   Open Consultation
                 </Link>
               </Button>
@@ -64,7 +64,8 @@ function PrescriptionPreview() {
         {/* Header */}
         <div className="flex items-start justify-between border-b-2 border-foreground pb-4">
           <div>
-            <div className="text-xl font-bold tracking-tight">MEDICORE.OS Hospital</div>
+            <div className="text-xl font-bold tracking-tight">City Hospital</div>
+            <div className="text-[9px] text-muted-foreground" style={{marginTop: '1px'}}>Powered by Hospitrix</div>
             <div className="text-[11px] text-muted-foreground">
               45 Wellness Avenue · Mumbai · MH 400001 · +91 22 4000 0000
             </div>

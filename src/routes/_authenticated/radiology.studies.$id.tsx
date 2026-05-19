@@ -180,7 +180,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
           )}
           {verified ? (
             <Button size="sm" variant="outline" asChild>
-              <Link to={`{result}`}>
+              <Link to="/ipd">
                 <FileText className="mr-2 h-4 w-4" /> View report
               </Link>
             </Button>

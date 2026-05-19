@@ -103,7 +103,7 @@ function DischargePage() {
   return (
     <div className="p-8">
       <Link
-        to={`{result}`}
+        to={`/ipd/${admissionId}`}
         className="mb-4 inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground print:hidden"
       >
         <ArrowLeft className="h-3 w-3" /> Back to chart
@@ -175,7 +175,7 @@ function DischargePage() {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" asChild>
-              <Link to={`{result}`}>Cancel</Link>
+              <Link to={`/ipd/${admissionId}`}>Cancel</Link>
             </Button>
             <Button onClick={submit}>
               <LogOut className="mr-1.5 h-4 w-4" /> Discharge & Print
