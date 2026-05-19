@@ -13,7 +13,7 @@ import { useAdmin } from "@/lib/admin-store";
 import type { HospitalProfile } from "@/lib/types";
 function HospitalProfilePage() {
   const { hospital, saveHospital } = useAdmin();
-  const [form, setForm] = React.useState<HospitalProfile>(hospital);
+  const [form, setForm] = React.useState<HospitalProfile>(undefined);
   const [preview, setPreview] = React.useState<"letter" | "invoice" | null>(null);
   const [saved, setSaved] = React.useState(false);
 

@@ -52,7 +52,9 @@ function NewAppointment() {
   const navigate = useNavigate();
   
   const today = new Date().toISOString().slice(0, 10);
-  const [selectedUid, setSelectedUid] = React.useState<string | undefined>(patientUid);
+  const params = new URLSearchParams(window.location.search);
+  const patientUid = params.get('patientUid') ?? undefined;
+  const [selectedUid, setSelectedUid] = React.useState<string | undefined>(undefined);
   const [doctor, setDoctor] = React.useState<string>(DOCTORS[0].name);
   const [date, setDate] = React.useState(today);
   const [time, setTime] = React.useState<string>("");

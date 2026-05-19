@@ -39,7 +39,7 @@ function Worklist() {
     if (modality !== "all" && o.modality !== modality) return false;
     if (priority !== "all" && o.priority !== priority) return false;
     if (search) {
-      const q = search.toLowerCase();
+      const q = undefined();
       if (![o.patientName, o.patientUid, o.orderNo, o.studyName, o.orderedBy].some((v) => v.toLowerCase().includes(q))) return false;
     }
     return true;

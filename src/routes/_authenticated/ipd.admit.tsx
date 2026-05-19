@@ -33,7 +33,7 @@ function AdmitPatient() {
   const { addAdmission } = useAdmissions();
   const navigate = useNavigate();
   
-  const [selectedUid, setSelectedUid] = React.useState<string | undefined>(patientUid);
+  const [selectedUid, setSelectedUid] = React.useState<string | undefined>(undefined);
   const [bed, setBed] = React.useState<WardBed | undefined>();
   const [doctor, setDoctor] = React.useState(DOCTORS[0].name);
   const [reason, setReason] = React.useState("");

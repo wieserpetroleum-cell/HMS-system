@@ -18,7 +18,7 @@ import { verifySchema } from "@/lib/validation/radiology";
 import { toast } from "sonner";
 import type { ReportSection } from "@/lib/types";
 function StudyWorkspace() {
-  const { id } = useParams({ from: `/_authenticated/radiology/studies/${id}` });
+  const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const { getOrder, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders } = useRadiology();
@@ -69,7 +69,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
     { heading: "Recommendations", text: "" },
   ];
 
-  const [sections, setSections] = React.useState<ReportSection[]>(defaultSections);
+  const [sections, setSections] = React.useState<ReportSection[]>(undefined);
   const [templateId, setTemplateId] = React.useState<string | undefined>(existingReport?.templateId);
   const [critical, setCritical] = React.useState<boolean>(existingReport?.criticalFinding ?? false);
   const [saveState, setSaveState] = React.useState<"idle" | "saving" | "saved" | "dirty">("idle");

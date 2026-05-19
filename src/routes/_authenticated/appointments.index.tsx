@@ -45,7 +45,7 @@ function AppointmentsQueue() {
     if (date && a.date !== date) return false;
     if (doctor && a.doctor !== doctor) return false;
     if (search) {
-      const q = search.toLowerCase();
+      const q = undefined();
       if (!a.patientName.toLowerCase().includes(q) && !(a.patientUid ?? "").toLowerCase().includes(q)) {
         return false;
       }

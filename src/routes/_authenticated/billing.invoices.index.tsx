@@ -17,7 +17,7 @@ function InvoicesList() {
   const { invoices } = useInvoices();
   const [q, setQ] = React.useState("");
   const [statusFilter, setStatusFilter] = React.useState<InvoiceStatus | "all">("all");
-  // const search = ({ from: "/_authenticated/billing/invoices/" });
+  // const search = ();
 
   const filtered = invoices.filter((i) => {
     if (statusFilter !== "all" && i.status !== statusFilter) return false;

@@ -58,7 +58,7 @@ type Errors = Partial<Record<keyof PatientFormValues, string>>;
 function RegisterPatient() {
   const { addPatient, nextUid } = usePatients();
   const navigate = useNavigate();
-  const [values, setValues] = React.useState<PatientFormValues>(blankForm);
+  const [values, setValues] = React.useState<PatientFormValues>(undefined);
   const [errors, setErrors] = React.useState<Errors>({});
   const previewUid = React.useMemo(() => nextUid(), [nextUid]);
 

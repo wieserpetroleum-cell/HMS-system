@@ -5,7 +5,7 @@ import { useRadiology } from "@/lib/radiology-store";
 import { usePatients } from "@/lib/patients-store";
 import { modalityLabel } from "@/components/radiology/ModalityIcon";
 function ReportViewer() {
-  const { id } = useParams({ from: `/_authenticated/radiology/studies/${id}/report` });
+  const { id } = useParams();
   const { getOrder, getStudyByOrderId, getReportByStudyId } = useRadiology();
   const { patients } = usePatients();
 

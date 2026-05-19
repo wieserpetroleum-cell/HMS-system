@@ -19,7 +19,7 @@ function AuditPage() {
   const [q, setQ] = React.useState("");
   const [action, setAction] = React.useState<AuditAction | "all">("all");
   const [module, setModule] = React.useState<PermissionModule | "all">("all");
-  const [userQ, setUserQ] = React.useState(search.userId ?? "");
+  const [userQ, setUserQ] = React.useState(undefined ?? "");
   const [active, setActive] = React.useState<AuditRecord | null>(null);
 
   const cutoff = React.useMemo(() => Date.now() - days * 86400000, [days]);

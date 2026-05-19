@@ -18,7 +18,7 @@ function NewRadiologyOrder() {
   const { addOrder } = useRadiology();
   const { user } = useAuth();
 
-  const [patientUid, setPatientUid] = React.useState<string | undefined>(search.patientUid);
+  const [patientUid, setPatientUid] = React.useState<string | undefined>(undefined);
   const [modality, setModality] = React.useState<Modality>("xray");
   const [studyCode, setStudyCode] = React.useState<string | undefined>(undefined);
   const [indication, setIndication] = React.useState("");
@@ -64,8 +64,8 @@ function NewRadiologyOrder() {
       pregnancy: needsPregnancy ? pregnancy : undefined,
       orderedBy: user?.name ?? "Doctor",
       scheduledAt: scheduledAt || undefined,
-      sourceType: search.source ?? "opd",
-      sourceId: search.sourceId,
+      sourceType: undefined ?? "opd",
+      sourceId: undefined,
     });
     if (!parsed.success) {
       toast.error("Validation failed");
@@ -136,9 +136,9 @@ function NewRadiologyOrder() {
             />
           </Field>
 
-          {search.source && (
+          {undefined && (
             <div className="rounded border border-status-info/30 bg-status-info/10 px-3 py-2 text-[11px] text-status-info">
-              Linked to {search.source.toUpperCase()} encounter {search.sourceId ?? ""}
+              Linked to {undefined.toUpperCase()} encounter {undefined ?? ""}
             </div>
           )}
         </div>
