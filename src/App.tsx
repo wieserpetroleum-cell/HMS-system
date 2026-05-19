@@ -68,6 +68,7 @@ import HospitalProfilePage from '@/routes/_authenticated/admin.hospital';
 import RatesPage from '@/routes/_authenticated/admin.rates';
 import ServicesPage from '@/routes/_authenticated/admin.services';
 import UsersPage from '@/routes/_authenticated/admin.users';
+import AdminLayout from '@/routes/_authenticated/admin';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -133,14 +134,16 @@ function AppRoutes() {
         <Route path="/notifications/templates" element={<TemplateManagerPage />} />
 
         {/* Admin */}
-        <Route path="/admin" element={<AuditPage />} />
-        <Route path="/admin/audit" element={<AuditPage />} />
-        <Route path="/admin/beds" element={<BedsPage />} />
-        <Route path="/admin/departments" element={<DeptDoctorsPage />} />
-        <Route path="/admin/hospital" element={<HospitalProfilePage />} />
-        <Route path="/admin/rates" element={<RatesPage />} />
-        <Route path="/admin/services" element={<ServicesPage />} />
-        <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AuditPage />} />
+          <Route path="audit" element={<AuditPage />} />
+          <Route path="beds" element={<BedsPage />} />
+          <Route path="departments" element={<DeptDoctorsPage />} />
+          <Route path="hospital" element={<HospitalProfilePage />} />
+          <Route path="rates" element={<RatesPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="users" element={<UsersPage />} />
+        </Route>
       </Route>
 
       <Route path="*" element={

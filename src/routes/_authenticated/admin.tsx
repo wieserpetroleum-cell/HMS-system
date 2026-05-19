@@ -1,4 +1,4 @@
-import { Outlet, Link, useRouterState } from "react-router-dom";
+import { Outlet, Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 const TABS = [
   { to: "/admin/hospital", label: "Hospital" },
@@ -11,7 +11,7 @@ const TABS = [
 ] as const;
 
 function AdminLayout() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
   return (
     <div className="flex h-full flex-col">
       <div className="border-b bg-card">
@@ -40,4 +40,5 @@ function AdminLayout() {
       </div>
     </div>
   );
-}export default AdminLayout;
+}
+export default AdminLayout;
