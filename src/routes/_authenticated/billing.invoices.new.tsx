@@ -27,6 +27,10 @@ function lineFromCatalog(code: string, qty = 1, override?: Partial<InvoiceItem>)
 
 function NewInvoice() {
   const navigate = useNavigate();
+  const params = new URLSearchParams(window.location.search);
+  const preUid = params.get('patientUid') ?? '';
+  const preSource = params.get('source') ?? undefined;
+  const preSourceId = params.get('sourceId') ?? undefined;
     const { patients } = usePatients();
   const { consultations } = useConsultations();
   const { admissions } = useAdmissions();
