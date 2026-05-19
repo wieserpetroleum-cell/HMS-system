@@ -29,6 +29,8 @@ type Tab = typeof TABS[number];
 function InvoiceWorkspace() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTab = (urlParams.get('tab') as Tab) ?? 'charges';
   const { getById, replaceItems, updateInvoice, addPayment, updateTpaClaim, cancelInvoice } = useInvoices();
   const { patients } = usePatients();
 
