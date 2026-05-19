@@ -1,34 +1,33 @@
 import * as React from "react";
-
-export type AuditEntry = {
-  id: string;
-  action: string;
-  module: string;
-  user: string;
-  details: string;
-  timestamp: string;
-};
+import { AuditRecord } from "@/lib/types";
+import { mockAuditRecords } from "@/lib/mock/admin";
 
 type AuditContextType = {
-  entries: AuditEntry[];
-  addEntry: (entry: Omit<AuditEntry, "id" | "timestamp">) => void;
+  records: AuditRecord[];
+  addRecord: (record: Omit<AuditRecord, "id" | "at">) => void;
 };
 
 const AuditContext = React.createContext<AuditContextType>({
-  entries: [],
-  addEntry: () => {},
+  records: [],
+  addRecord: () => {},
 });
 
 export function AuditProvider({ children }: { children: React.ReactNode }) {
-  const [entries, setEntries] = React.useState<AuditEntry[]>([]);
-  const addEntry = (entry: Omit<AuditEntry, "id" | "timestamp">) => {
-    setEntries(prev => [{
-      ...entry,
+  const [records, setRecords] = React.useState<AuditRecord[]>(mockAuditRecords);
+
+  const addRecord = React.useCallback((record: Omit<AuditRecord, "id" | "at">) => {
+    setRecords(prev => [{
+      ...record,
       id: Math.random().toString(36).slice(2),
-      timestamp: new Date().toISOString(),
+      at: new Date().toISOString(),
     }, ...prev]);
-  };
-  return <AuditContext.Provider value={{ entries, addEntry }}>{children}</AuditContext.Provider>;
+  }, []);
+
+  return (
+    <AuditContext.Provider value={{ records, addRecord }}>
+      {children}
+    </AuditContext.Provider>
+  );
 }
 
 export function useAudit() {
