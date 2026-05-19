@@ -379,8 +379,8 @@ function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["in
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #0f172a', paddingBottom: '8px', marginBottom: '8px' }}>
         <div>
-          <div style={{ fontSize: '18px', fontWeight: 'bold', letterSpacing: '-0.5px' }}>Hospitrix</div>
-          <div style={{ fontSize: '10px', color: '#64748b' }}>Hospital Management System</div>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', letterSpacing: '-0.5px' }}>City Hospital</div>
+          <div style={{ fontSize: '8px', color: '#94a3b8', letterSpacing: '0.5px' }}>Powered by Hospitrix</div>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>Tax Invoice</div>
