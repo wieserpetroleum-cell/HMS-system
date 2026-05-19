@@ -484,8 +484,4 @@ function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["in
     </div>
   );
 }
-      </div>
-    </div>
-  );
-}
 export default InvoiceWorkspace;
