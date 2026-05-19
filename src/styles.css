@@ -69,6 +69,14 @@
     /* Clinical status */
     --status-ok: 142 76% 36%;
     --status-ok-foreground: 0 0% 100%;
+    --status-info: 199 89% 48%;
+    --status-warn: 38 92% 50%;
+    --status-error: 0 84% 60%;
+    --allergy: 0 84% 60%;
+    --allergy-foreground: 0 0% 100%;
+    --condition: 38 92% 50%;
+    --condition-foreground: 0 0% 10%;
+    --status-ok-foreground: 0 0% 100%;
     
     /* Sidebar = deep slate (#0f172a) */
     --sidebar: 222 47% 11%;
