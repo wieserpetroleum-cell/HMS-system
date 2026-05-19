@@ -364,70 +364,126 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["invoices"][number] }) {
   return (
-    <div className="mx-auto max-w-3xl bg-white p-8 text-sm text-slate-900">
-      <div className="flex items-start justify-between border-b-2 border-slate-900 pb-4">
+    <div style={{
+      width: '210mm',
+      minHeight: '148mm',
+      maxHeight: '148mm',
+      padding: '12mm 14mm',
+      background: 'white',
+      color: '#0f172a',
+      fontSize: '11px',
+      fontFamily: 'Arial, sans-serif',
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+    }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #0f172a', paddingBottom: '8px', marginBottom: '8px' }}>
         <div>
-          <div className="text-2xl font-bold tracking-tight">MEDICORE.OS</div>
-          <div className="text-xs text-slate-600">Medicore Hospital · 123 Care Avenue · Mumbai 400001</div>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', letterSpacing: '-0.5px' }}>Hospitrix</div>
+          <div style={{ fontSize: '10px', color: '#64748b' }}>Hospital Management System</div>
         </div>
-        <div className="text-right">
-          <div className="text-xs uppercase tracking-widest text-slate-500">Tax Invoice</div>
-          <div className="mt-1 font-mono text-sm">{invoice.invoiceNo}</div>
-          <div className="text-xs text-slate-600">Date: {new Date(invoice.createdAt).toLocaleDateString()}</div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>Tax Invoice</div>
+          <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 'bold' }}>{invoice.invoiceNo}</div>
+          <div style={{ fontSize: '9px', color: '#64748b' }}>Date: {new Date(invoice.createdAt).toLocaleDateString('en-IN')}</div>
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-6 text-xs">
+      {/* Billing Info */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
         <div>
-          <div className="font-semibold uppercase text-slate-500">Billed to</div>
-          <div className="mt-1 text-sm font-medium">{invoice.patientName}</div>
-          <div className="font-mono">{invoice.patientUid}</div>
+          <div style={{ fontSize: '9px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Billed To</div>
+          <div style={{ fontSize: '12px', fontWeight: '600', marginTop: '2px' }}>{invoice.patientName}</div>
+          <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#475569' }}>{invoice.patientUid}</div>
         </div>
-        <div className="text-right">
-          <div className="font-semibold uppercase text-slate-500">Status</div>
-          <div className="mt-1 uppercase">{invoice.status}</div>
-          {invoice.tpaClaim && <div className="mt-1 text-xs text-slate-600">TPA: {invoice.tpaClaim.tpaName} ({invoice.tpaClaim.status})</div>}
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: '9px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Status</div>
+          <div style={{
+            display: 'inline-block',
+            marginTop: '2px',
+            padding: '2px 8px',
+            borderRadius: '4px',
+            fontSize: '10px',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            background: invoice.status === 'paid' ? '#dcfce7' : '#fef9c3',
+            color: invoice.status === 'paid' ? '#166534' : '#854d0e',
+          }}>{invoice.status}</div>
+          <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>Due: {new Date(invoice.dueAt).toLocaleDateString('en-IN')}</div>
         </div>
       </div>
 
-      <table className="mt-6 w-full text-xs">
+      {/* Items Table */}
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px', marginBottom: '8px' }}>
         <thead>
-          <tr className="border-b border-slate-300 text-left uppercase text-slate-500">
-            <th className="py-2">#</th>
-            <th>Description</th>
-            <th className="text-right">Qty</th>
-            <th className="text-right">Unit ₹</th>
-            <th className="text-right">Amount</th>
+          <tr style={{ borderBottom: '1px solid #cbd5e1', color: '#64748b' }}>
+            <th style={{ textAlign: 'left', padding: '4px 2px' }}>#</th>
+            <th style={{ textAlign: 'left', padding: '4px 2px' }}>Description</th>
+            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Qty</th>
+            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Unit ₹</th>
+            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Amount</th>
           </tr>
         </thead>
         <tbody>
-          {invoice.items.map((it, i) => (
-            <tr key={it.id} className="border-b border-slate-100">
-              <td className="py-2">{i + 1}</td>
-              <td>{it.description} {it.code && <span className="text-slate-400">({it.code})</span>}</td>
-              <td className="text-right tabular-nums">{it.qty}</td>
-              <td className="text-right tabular-nums">{it.unitPrice.toLocaleString()}</td>
-              <td className="text-right tabular-nums">{it.amount.toLocaleString()}</td>
+          {(invoice.items ?? []).map((it, i) => (
+            <tr key={it.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+              <td style={{ padding: '3px 2px' }}>{i + 1}</td>
+              <td style={{ padding: '3px 2px' }}>
+                {it.description}
+                {it.code && <span style={{ color: '#94a3b8', fontSize: '9px' }}> ({it.code})</span>}
+              </td>
+              <td style={{ padding: '3px 2px', textAlign: 'right' }}>{it.qty}</td>
+              <td style={{ padding: '3px 2px', textAlign: 'right' }}>₹{it.unitPrice?.toLocaleString('en-IN') ?? 0}</td>
+              <td style={{ padding: '3px 2px', textAlign: 'right', fontWeight: '500' }}>₹{it.amount?.toLocaleString('en-IN') ?? 0}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <div className="mt-4 flex justify-end">
-        <table className="w-72 text-sm">
+      {/* Totals */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
+        <table style={{ width: '200px', fontSize: '10px' }}>
           <tbody>
-            <tr><td className="py-1 text-slate-600">Subtotal</td><td className="text-right tabular-nums">{money(invoice.subtotal)}</td></tr>
-            <tr><td className="py-1 text-slate-600">Discount</td><td className="text-right tabular-nums">- {money(invoice.discount)}</td></tr>
-            <tr><td className="py-1 text-slate-600">Tax ({Math.round(invoice.taxRate * 100)}%)</td><td className="text-right tabular-nums">{money(invoice.taxAmount)}</td></tr>
-            <tr className="border-t border-slate-300"><td className="py-1 font-semibold">Total</td><td className="text-right font-semibold tabular-nums">{money(invoice.total)}</td></tr>
-            <tr><td className="py-1 text-slate-600">Paid</td><td className="text-right tabular-nums">{money(invoice.paid)}</td></tr>
-            <tr><td className="py-1 font-semibold">Balance Due</td><td className="text-right font-bold tabular-nums">{money(invoice.balance)}</td></tr>
+            <tr>
+              <td style={{ padding: '2px 0', color: '#64748b' }}>Subtotal</td>
+              <td style={{ textAlign: 'right' }}>₹{invoice.subtotal?.toLocaleString('en-IN') ?? 0}</td>
+            </tr>
+            {invoice.discount > 0 && (
+              <tr>
+                <td style={{ padding: '2px 0', color: '#64748b' }}>Discount</td>
+                <td style={{ textAlign: 'right', color: '#16a34a' }}>- ₹{invoice.discount?.toLocaleString('en-IN') ?? 0}</td>
+              </tr>
+            )}
+            <tr>
+              <td style={{ padding: '2px 0', color: '#64748b' }}>Tax ({Math.round((invoice.taxRate ?? 0) * 100)}%)</td>
+              <td style={{ textAlign: 'right' }}>₹{invoice.taxAmount?.toLocaleString('en-IN') ?? 0}</td>
+            </tr>
+            <tr style={{ borderTop: '1px solid #cbd5e1' }}>
+              <td style={{ padding: '3px 0', fontWeight: 'bold' }}>Total</td>
+              <td style={{ textAlign: 'right', fontWeight: 'bold' }}>₹{invoice.total?.toLocaleString('en-IN') ?? 0}</td>
+            </tr>
+            <tr>
+              <td style={{ padding: '2px 0', color: '#64748b' }}>Paid</td>
+              <td style={{ textAlign: 'right', color: '#16a34a' }}>₹{invoice.paid?.toLocaleString('en-IN') ?? 0}</td>
+            </tr>
+            <tr>
+              <td style={{ padding: '2px 0', fontWeight: 'bold' }}>Balance Due</td>
+              <td style={{ textAlign: 'right', fontWeight: 'bold', color: invoice.balance > 0 ? '#dc2626' : '#16a34a' }}>
+                ₹{invoice.balance?.toLocaleString('en-IN') ?? 0}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
 
-      <div className="mt-10 text-center text-[10px] text-slate-500">
-        This is a computer-generated invoice. For queries, contact billing@medicore.os.
+      {/* Footer */}
+      <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '6px', display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#94a3b8' }}>
+        <span>Computer-generated invoice. No signature required.</span>
+        <span>Hospitrix HMS · hospitrix.app</span>
+      </div>
+    </div>
+  );
+}
       </div>
     </div>
   );

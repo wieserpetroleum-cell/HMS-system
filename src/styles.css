@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@media print {
+  body * { visibility: hidden; }
+  .print-area, .print-area * { visibility: visible; }
+  .print-area {
+    display: block !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 210mm;
+  }
+  .no-print { display: none !important; }
+  @page {
+    size: A5 landscape;
+    margin: 0;
+  }
+}
+
 @layer base {
   :root {
     --radius: 0.5rem;
