@@ -151,7 +151,7 @@ export function AppSidebar() {
             <div className="truncate text-[10px] capitalize text-slate-400">{user?.role ?? ""}</div>
           </div>
           <button
-            onClick={logout}
+            onClick={() => setTimeout(logout, 0)}
             aria-label="Sign out"
             className="rounded p-1 text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
           >
