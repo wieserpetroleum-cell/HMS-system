@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { ShieldCheck, Clock, AlertTriangle, TrendingDown, FileText, ArrowRight } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -25,6 +26,7 @@ const statusLabel: Record<ClaimStatus, string> = {
 };
 
 function TpaDashboard() {
+  const navigate = useNavigate();
   const pending  = mockTpaClaims.filter(c => c.status === "pre-auth-pending").length;
   const queried  = mockTpaClaims.filter(c => c.status === "queried").length;
   const submitted = mockTpaClaims.filter(c => c.status === "claim-submitted").length;

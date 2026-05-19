@@ -1,5 +1,6 @@
 
 import { UserPlus, CalendarPlus, UserCog, FileBarChart } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/lib/auth-context";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -12,6 +13,7 @@ import { mockStaff } from "@/lib/mock/staff";
 import { wardSummary, bedsByWard } from "@/lib/mock/wards";
 function AdminDashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const ward = wardSummary();
   const bills = billsSummary();
   const staffOnDuty = mockStaff.filter((s) => s.onShift).length;
@@ -89,10 +91,10 @@ function AdminDashboard() {
         <div className="space-y-6">
           <QuickActions
             actions={[
-              { label: "Register Patient", icon: UserPlus },
-              { label: "New Appointment", icon: CalendarPlus },
-              { label: "Add User", icon: UserCog },
-              { label: "View Reports", icon: FileBarChart },
+              { label: "Register Patient", icon: UserPlus, onClick: () => navigate("/patients/register") },
+              { label: "New Appointment", icon: CalendarPlus, onClick: () => navigate("/appointments/new") },
+              { label: "Add User", icon: UserCog, onClick: () => navigate("/admin/users") },
+              { label: "View Reports", icon: FileBarChart, onClick: () => navigate("/billing") },
             ]}
           />
           <RecentList title="System Alerts" rows={alerts} />

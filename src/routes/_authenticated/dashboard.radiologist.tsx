@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { ScanLine, Clock, CheckCircle2, Pen } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -13,6 +14,7 @@ const priorityStyle: Record<RadPriority, string> = {
 };
 
 function RadiologistDashboard() {
+  const navigate = useNavigate();
   const stat    = mockOrders.filter(r => r.priority === "stat").length;
   const urgent  = mockOrders.filter(r => r.priority === "urgent").length;
 

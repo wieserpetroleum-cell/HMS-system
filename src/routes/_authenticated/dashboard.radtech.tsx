@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { ScanLine, Calendar, Activity, FileText } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { PageHeader } from "@/components/dashboard/PageHeader";
@@ -13,6 +14,7 @@ const priorityStyle: Record<RadPriority, string> = {
 };
 
 function RadtechDashboard() {
+  const navigate = useNavigate();
   return (
     <div className="space-y-6 p-8">
       <PageHeader

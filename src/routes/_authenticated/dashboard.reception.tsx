@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { UserPlus, ClipboardCheck, CalendarPlus, BedDouble } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -7,6 +8,7 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
 import { wardSummary } from "@/lib/mock/wards";
 function ReceptionDashboard() {
+  const navigate = useNavigate();
   const ward = wardSummary();
   const checkedIn = mockAppointments.filter((a) => a.status === "checked-in");
   const walkIns = mockAppointments.filter((a) => a.type === "Walk-in").length;

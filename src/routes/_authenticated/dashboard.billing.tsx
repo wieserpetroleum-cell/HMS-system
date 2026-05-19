@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { FilePlus2, ShieldCheck, Wallet, Receipt } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -14,6 +15,7 @@ const statusStyles: Record<Bill["status"], string> = {
 };
 
 function BillingDashboard() {
+  const navigate = useNavigate();
   const s = billsSummary();
   const buckets = ageingBuckets();
   const totalAgeing = Object.values(buckets).reduce((a, b) => a + b, 0) || 1;

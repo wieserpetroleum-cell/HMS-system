@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { Stethoscope, BedDouble, NotebookPen, Activity } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -6,6 +7,7 @@ import { RecentList, type RecentRow } from "@/components/dashboard/RecentList";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { mockAppointments } from "@/lib/mock/appointments";
 function DoctorDashboard() {
+  const navigate = useNavigate();
   const seen = mockAppointments.filter((a) => a.status === "completed").length;
   const pending = mockAppointments.filter((a) =>
     ["scheduled", "checked-in", "in-consultation"].includes(a.status),

@@ -1,4 +1,5 @@
 
+import { useNavigate } from "react-router-dom";
 import { Activity, Pill, AlertTriangle, ClipboardList } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
@@ -20,6 +21,7 @@ const alertStyles: Record<NonNullable<WardBed["alert"]>, string> = {
 };
 
 function NurseDashboard() {
+  const navigate = useNavigate();
   const occupied = mockBeds.filter((b) => b.status === "occupied");
   const vitalsDue = occupied.filter((b) => b.vitalsDue).length;
   const alerts = occupied.filter((b) => b.alert === "critical" || b.alert === "watch").length;
