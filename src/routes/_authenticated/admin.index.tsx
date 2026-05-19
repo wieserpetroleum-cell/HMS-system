@@ -1,6 +1,7 @@
-import { redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-  beforeLoad: () => {
-    throw redirect({ to: "/admin/hospital" });
-  },
-});
+function AdminIndex() {
+  return <Navigate to="/admin/hospital" replace />;
+}
+
+export default AdminIndex;

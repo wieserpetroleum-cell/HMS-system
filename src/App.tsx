@@ -69,6 +69,7 @@ import RatesPage from '@/routes/_authenticated/admin.rates';
 import ServicesPage from '@/routes/_authenticated/admin.services';
 import UsersPage from '@/routes/_authenticated/admin.users';
 import AdminLayout from '@/routes/_authenticated/admin';
+import AdminIndex from '@/routes/_authenticated/admin.index';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -135,7 +136,7 @@ function AppRoutes() {
 
         {/* Admin */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AuditPage />} />
+          <Route index element={<AdminIndex />} />
           <Route path="audit" element={<AuditPage />} />
           <Route path="beds" element={<BedsPage />} />
           <Route path="departments" element={<DeptDoctorsPage />} />

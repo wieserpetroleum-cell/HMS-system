@@ -1,6 +1,7 @@
-import { redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-  beforeLoad: () => {
-    throw redirect({ to: "/notifications/log" });
-  },
-});
+function NotificationsIndex() {
+  return <Navigate to="/notifications/log" replace />;
+}
+
+export default NotificationsIndex;
