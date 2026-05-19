@@ -69,7 +69,7 @@ function Workspace({ order, navigate, user, getStudyByOrderId, getReportByStudyI
     { heading: "Recommendations", text: "" },
   ];
 
-  const [sections, setSections] = React.useState<ReportSection[]>(undefined);
+  const [sections, setSections] = React.useState<ReportSection[] | undefined>(undefined);
   const [templateId, setTemplateId] = React.useState<string | undefined>(existingReport?.templateId);
   const [critical, setCritical] = React.useState<boolean>(existingReport?.criticalFinding ?? false);
   const [saveState, setSaveState] = React.useState<"idle" | "saving" | "saved" | "dirty">("idle");

@@ -284,7 +284,7 @@ function TpaTab({ invoice, onSave }: { invoice: ReturnType<typeof useInvoices>["
     claimedAmount: invoice.total, status: "draft",
     lastUpdateAt: new Date().toISOString(),
   };
-  const [c, setC] = React.useState<TpaClaim>(undefined);
+  const [c, setC] = React.useState<TpaClaim | undefined>(undefined);
   const set = <K extends keyof TpaClaim>(k: K, v: TpaClaim[K]) => setC((p) => ({ ...p, [k]: v }));
 
   const submit = () => {
