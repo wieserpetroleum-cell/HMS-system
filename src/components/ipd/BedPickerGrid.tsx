@@ -1,7 +1,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import type { WardBed } from "@/lib/types";
-import { bedsByWard } from "@/lib/mock/wards";
+import { mockBeds, setBedStatus, bedsByWard } from "@/lib/mock/wards";
 import { useAdmissions } from "@/lib/admissions-store";
 import { toast } from "sonner";
 
@@ -27,8 +27,34 @@ interface Props {
 }
 
 export function BedPickerGrid({ selectedBedId, onSelect, readOnly, filterWard, onOccupiedClick }: Props) {
-  const wards = bedsByWard().filter((w) => !filterWard || filterWard === "All" || w.ward === filterWard);
+  // Use local state to force re-render when bed status changes
+  const [beds, setBeds] = React.useState<WardBed[]>([...mockBeds]);
   const { markBedReady } = useAdmissions();
+
+  const handleMarkReady = (bedId: string, bedNumber: string) => {
+    setBedStatus(bedId, { 
+      status: "available", 
+      patientName: undefined, 
+      patientId: undefined, 
+      alert: undefined, 
+      vitalsDue: false 
+    });
+    // Update local state to trigger re-render immediately
+    setBeds([...mockBeds]);
+    toast.success(`Bed ${bedNumber} is now available ✓`);
+  };
+
+  const wards = React.useMemo(() => {
+    const grouped: Record<string, { ward: string; beds: WardBed[]; total: number; occupied: number; available: number }> = {};
+    for (const b of beds) {
+      if (!grouped[b.ward]) grouped[b.ward] = { ward: b.ward, beds: [], total: 0, occupied: 0, available: 0 };
+      grouped[b.ward].beds.push(b);
+      grouped[b.ward].total++;
+      if (b.status === "occupied") grouped[b.ward].occupied++;
+      if (b.status === "available") grouped[b.ward].available++;
+    }
+    return Object.values(grouped).filter((w) => !filterWard || filterWard === "All" || w.ward === filterWard);
+  }, [beds, filterWard]);
 
   return (
     <div className="space-y-4">
@@ -59,10 +85,10 @@ export function BedPickerGrid({ selectedBedId, onSelect, readOnly, filterWard, o
                       "w-full rounded-md border p-3 text-left text-xs transition-all",
                       statusStyles[b.status],
                       isSelected && "ring-2 ring-primary ring-offset-2 ring-offset-card",
-                      clickable ? "cursor-pointer" : "cursor-default opacity-90",
+                      clickable ? "cursor-pointer" : "cursor-default",
                     )}
                   >
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-1">
                       <span className="font-mono font-semibold">{b.bedNumber}</span>
                       {b.alert && (
                         <span className={cn("rounded px-1.5 py-0.5 text-[9px] font-bold uppercase", alertStyles[b.alert])}>
@@ -72,9 +98,10 @@ export function BedPickerGrid({ selectedBedId, onSelect, readOnly, filterWard, o
                     </div>
                     {b.patientName ? (
                       <>
-                        <div className="mt-1 truncate text-[11px] font-medium">{b.patientName}</div>
+                        {/* Show FULL name - no truncate */}
+                        <div className="mt-1 text-[11px] font-medium leading-tight">{b.patientName}</div>
                         <div className="mt-0.5 text-[10px] text-muted-foreground">
-                          {b.vitalsDue ? "Vitals due" : "Up to date"}
+                          {b.vitalsDue ? "⚠ Vitals due" : "✓ Up to date"}
                         </div>
                       </>
                     ) : (
@@ -84,10 +111,7 @@ export function BedPickerGrid({ selectedBedId, onSelect, readOnly, filterWard, o
                   {b.status === "cleaning" && (
                     <button
                       type="button"
-                      onClick={() => {
-                        markBedReady(b.id);
-                        toast.success(`Bed ${b.bedNumber} is now available`);
-                      }}
+                      onClick={() => handleMarkReady(b.id, b.bedNumber)}
                       className="w-full rounded-md border border-status-ok/40 bg-status-ok/10 px-2 py-1.5 text-[11px] font-bold text-status-ok hover:bg-status-ok/20 transition-colors"
                     >
                       🧹 → ✓ Mark Ready
