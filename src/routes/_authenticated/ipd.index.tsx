@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { BedDouble, Activity, AlertTriangle, Plus, LayoutGrid, Rows } from "lucide-react";
+import { BedDouble, Activity, AlertTriangle, Plus, LayoutGrid, Rows, CheckCircle2 } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ function FloorView() {
   const navigate = useNavigate();
   const [ward, setWard] = React.useState("All");
   const [view, setView] = React.useState<"grid" | "table">("grid");
-  const { admissions } = useAdmissions();
+  const { admissions, markBedReady } = useAdmissions();
 
   const activeAdmissions = admissions.filter((a) => a.status === "active");
 
@@ -163,6 +164,18 @@ function FloorView() {
                             <Link to="/ipd/admit">
                               <BedDouble className="mr-1.5 h-3.5 w-3.5" /> Admit
                             </Link>
+                          </Button>
+                        ) : b.status === "cleaning" ? (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-status-ok text-status-ok hover:bg-status-ok/10"
+                            onClick={() => {
+                              markBedReady(b.id);
+                              toast.success(`Bed ${b.bedNumber} marked as ready`);
+                            }}
+                          >
+                            <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" /> Mark Ready
                           </Button>
                         ) : (
                           <span className="text-xs text-muted-foreground">—</span>

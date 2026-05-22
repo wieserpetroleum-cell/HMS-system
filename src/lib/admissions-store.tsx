@@ -32,6 +32,7 @@ interface Ctx {
   addMarEntry: (admissionId: string, e: Omit<MarEntry, "id" | "admissionId">) => void;
   markMar: (entryId: string, slotIndex: number, status: MarStatus, by: string, note?: string) => void;
   addIo: (admissionId: string, i: Omit<IntakeOutput, "id" | "admissionId">) => void;
+  markBedReady: (bedId: string) => void;
 }
 
 const AdmissionsContext = React.createContext<Ctx | null>(null);
@@ -283,6 +284,9 @@ export function AdmissionsProvider({ children }: { children: React.ReactNode }) 
       admissions, vitals, notes, rounds, mar, io,
       addAdmission, transferBed, discharge, getById, getByPatientUid,
       addVital, addNote, addRound, addMarEntry, markMar, addIo,
+      markBedReady: (bedId: string) => {
+        setBedStatus(bedId, { status: "available", patientName: undefined, patientId: undefined, alert: undefined, vitalsDue: false });
+      },
     }),
     [admissions, vitals, notes, rounds, mar, io, addAdmission, transferBed, discharge, getById, getByPatientUid, addVital, addNote, addRound, addMarEntry, markMar, addIo],
   );
