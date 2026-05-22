@@ -94,10 +94,10 @@ function NurseDashboard() {
 
         <QuickActions
           actions={[
-            { label: "Record Vitals", icon: Activity },
-            { label: "Administer Meds", icon: Pill },
-            { label: "Raise Alert", icon: AlertTriangle },
-            { label: "Care Notes", icon: ClipboardList },
+            { label: "Record Vitals", icon: Activity, onClick: () => navigate("/ipd") },
+            { label: "Administer Meds", icon: Pill, onClick: () => navigate("/ipd") },
+            { label: "Raise Alert", icon: AlertTriangle, onClick: () => navigate("/notifications") },
+            { label: "Care Notes", icon: ClipboardList, onClick: () => navigate("/ipd") },
           ]}
         />
       </div>

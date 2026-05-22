@@ -125,10 +125,10 @@ function TpaDashboard() {
         </div>
 
         <QuickActions actions={[
-          { label: "New Pre-Auth",     icon: ShieldCheck },
-          { label: "Submit Claim",     icon: FileText },
-          { label: "Log Follow-up",    icon: Clock },
-          { label: "AR Report",        icon: TrendingDown },
+          { label: "New Pre-Auth", icon: ShieldCheck, onClick: () => navigate("/billing/tpa") },
+          { label: "Submit Claim", icon: FileText, onClick: () => navigate("/billing/tpa") },
+          { label: "Log Follow-up", icon: Clock, onClick: () => navigate("/billing/tpa") },
+          { label: "AR Report", icon: TrendingDown, onClick: () => navigate("/billing") },
         ]} />
       </div>
     </div>

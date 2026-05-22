@@ -52,10 +52,10 @@ function DoctorDashboard() {
         </div>
         <QuickActions
           actions={[
-            { label: "Start Consultation", icon: Stethoscope },
-            { label: "View Ward", icon: BedDouble },
-            { label: "Write Notes", icon: NotebookPen },
-            { label: "Review Vitals", icon: Activity },
+            { label: "Start Consultation", icon: Stethoscope, onClick: () => navigate("/appointments") },
+            { label: "View Ward", icon: BedDouble, onClick: () => navigate("/ipd") },
+            { label: "Write Notes", icon: NotebookPen, onClick: () => navigate("/appointments") },
+            { label: "Review Vitals", icon: Activity, onClick: () => navigate("/ipd") },
           ]}
         />
       </div>

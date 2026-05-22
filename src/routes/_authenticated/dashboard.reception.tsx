@@ -52,10 +52,10 @@ function ReceptionDashboard() {
         </div>
         <QuickActions
           actions={[
-            { label: "Check-in Patient", icon: ClipboardCheck },
-            { label: "Register New", icon: UserPlus },
-            { label: "Book Appointment", icon: CalendarPlus },
-            { label: "Allocate Bed", icon: BedDouble },
+            { label: "Check-in Patient", icon: ClipboardCheck, onClick: () => navigate("/appointments") },
+            { label: "Register New", icon: UserPlus, onClick: () => navigate("/patients/register") },
+            { label: "Book Appointment", icon: CalendarPlus, onClick: () => navigate("/appointments/new") },
+            { label: "Allocate Bed", icon: BedDouble, onClick: () => navigate("/ipd/admit") },
           ]}
         />
       </div>

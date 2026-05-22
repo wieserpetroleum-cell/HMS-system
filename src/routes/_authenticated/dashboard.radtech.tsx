@@ -73,10 +73,10 @@ function RadtechDashboard() {
         </div>
 
         <QuickActions actions={[
-          { label: "Mark Arrived",   icon: Activity },
-          { label: "Start Scan",     icon: ScanLine },
-          { label: "Today's List",   icon: Calendar },
-          { label: "Upload Images",  icon: FileText },
+          { label: "Mark Arrived", icon: Activity, onClick: () => navigate("/radiology/worklist") },
+          { label: "Start Scan", icon: ScanLine, onClick: () => navigate("/radiology/worklist") },
+          { label: "Today's List", icon: Calendar, onClick: () => navigate("/radiology/worklist") },
+          { label: "Upload Images", icon: FileText, onClick: () => navigate("/radiology") },
         ]} />
       </div>
     </div>

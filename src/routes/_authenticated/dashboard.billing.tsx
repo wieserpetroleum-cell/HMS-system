@@ -115,10 +115,10 @@ function BillingDashboard() {
 
           <QuickActions
             actions={[
-              { label: "Generate Invoice", icon: FilePlus2 },
-              { label: "Process TPA", icon: ShieldCheck },
-              { label: "Record Payment", icon: Wallet },
-              { label: "Bill Templates", icon: Receipt },
+              { label: "Generate Invoice", icon: FilePlus2, onClick: () => navigate("/billing/invoices/new") },
+              { label: "Process TPA", icon: ShieldCheck, onClick: () => navigate("/billing/tpa") },
+              { label: "Record Payment", icon: Wallet, onClick: () => navigate("/billing/invoices") },
+              { label: "Bill Templates", icon: Receipt, onClick: () => navigate("/billing") },
             ]}
           />
         </div>

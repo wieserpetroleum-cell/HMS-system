@@ -66,10 +66,10 @@ function RadiologistDashboard() {
         </div>
 
         <QuickActions actions={[
-          { label: "Write Report",  icon: Pen },
-          { label: "View PACS",     icon: ScanLine },
+          { label: "Write Report", icon: Pen, onClick: () => navigate("/radiology/worklist") },
+          { label: "View PACS", icon: ScanLine, onClick: () => navigate("/radiology") },
           { label: "Reported Today",icon: CheckCircle2 },
-          { label: "Avg TAT",       icon: Clock },
+          { label: "Avg TAT", icon: Clock, onClick: () => navigate("/radiology") },
         ]} />
       </div>
     </div>
