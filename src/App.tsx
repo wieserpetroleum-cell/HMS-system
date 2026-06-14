@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider, useAuth } from '@/lib/auth-context';
+import { AuditProvider } from '@/lib/audit-store';
 import { PatientsProvider } from '@/lib/patients-store';
 import { AppointmentsProvider } from '@/lib/appointments-store';
 import { ConsultationsProvider } from '@/lib/consultations-store';
@@ -164,6 +165,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
+        <AuditProvider>
         <PatientsProvider>
           <AppointmentsProvider>
             <ConsultationsProvider>
@@ -182,6 +184,7 @@ export default function App() {
             </ConsultationsProvider>
           </AppointmentsProvider>
         </PatientsProvider>
+        </AuditProvider>
       </AuthProvider>
     </BrowserRouter>
   );
