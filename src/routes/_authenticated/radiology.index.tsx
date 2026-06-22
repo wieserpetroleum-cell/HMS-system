@@ -118,8 +118,8 @@ function RadiologyDashboard() {
                 return (
                   <tr key={o.id} className="border-b border-border last:border-0 hover:bg-accent/30">
                     <td className="px-5 py-2.5">
-                      <Link to="/ipd" className="font-mono text-[11px] text-primary hover:underline">
-                        {o.orderNo}
+                      <Link to={`/radiology/orders/${o.id}`} className="font-mono text-[11px] text-primary hover:underline">
+                      {o.orderNo}
                       </Link>
                     </td>
                     <td className="px-5 py-2.5">
@@ -149,7 +149,7 @@ function RadiologyDashboard() {
               const impression = r.sections.find((s) => s.heading === "Impression");
               return (
                 <li key={r.id} className="px-5 py-3">
-                  <Link to="/ipd" className="block">
+                  <Link to={`/radiology/studies/${o.id}`} className="block">
                     <div className="flex items-baseline justify-between">
                       <div className="text-sm font-semibold">{order.patientName}</div>
                       <span className="font-mono text-[10px] text-muted-foreground">{order.orderNo}</span>
