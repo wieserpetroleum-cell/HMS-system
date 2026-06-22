@@ -15,6 +15,7 @@ import { RxRowEditor } from "@/components/consultation/RxRowEditor";
 import { StatusPill } from "@/components/ipd/StatusPill";
 import { useAdmissions } from "@/lib/admissions-store";
 import { useAuth } from "@/lib/auth-context";
+import { useInvoices } from "@/lib/invoices-store";
 import { mockDiagnoses } from "@/lib/mock/diagnoses";
 import { dischargeSchema } from "@/lib/validation/admission";
 import type { DiagnosisEntry, DischargeCondition, RxItem } from "@/lib/types";
@@ -27,6 +28,7 @@ function DischargePage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const adm = getById(admissionId);
+  const { invoices } = useInvoices();
 
   const [diagnosisCode, setDiagnosisCode] = React.useState<string | undefined>(adm?.provisionalDiagnosis?.code);
   const [hospitalCourse, setHospitalCourse] = React.useState("");
@@ -85,7 +87,24 @@ function DischargePage() {
       followUpDate,
       signedBy: user?.name ?? "Clinician",
     });
-    toast.success("Discharge summary saved");
+
+    // Check for pending bills
+    const pendingBills = invoices.filter(
+      (inv) => inv.patientUid === adm.patientUid &&
+      (inv.status === "pending" || inv.status === "partial" || inv.status === "draft") &&
+      inv.balance > 0
+    );
+
+    if (pendingBills.length > 0) {
+      const totalPending = pendingBills.reduce((sum, inv) => sum + inv.balance, 0);
+      toast.warning(
+        `⚠️ ${adm.patientName} has ${pendingBills.length} pending bill(s) totalling ₹${totalPending.toLocaleString('en-IN')}. Please collect payment before discharge.`,
+        { duration: 10000 }
+      );
+    } else {
+      toast.success("Discharge summary saved. No pending bills.");
+    }
+
     navigate(`/ipd/${adm.id}/discharge`);
   };
 
