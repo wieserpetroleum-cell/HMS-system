@@ -149,7 +149,7 @@ function RadiologyDashboard() {
               const impression = r.sections.find((s) => s.heading === "Impression");
               return (
                 <li key={r.id} className="px-5 py-3">
-                  <Link to={`/radiology/studies/${o.id}`} className="block">
+                  <Link to={`/radiology/studies/${order.id}`} className="block">
                     <div className="flex items-baseline justify-between">
                       <div className="text-sm font-semibold">{order.patientName}</div>
                       <span className="font-mono text-[10px] text-muted-foreground">{order.orderNo}</span>
