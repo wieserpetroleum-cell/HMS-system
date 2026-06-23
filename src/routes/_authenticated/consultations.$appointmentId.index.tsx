@@ -107,7 +107,14 @@ function ConsultationWorkspace() {
     plan: !!(advice || followUp != null),
   };
 
-  const allergyHits = (drugName?: string) => {
+  const currentIndex = SECTIONS.findIndex((s) => s.key === active);
+
+  const goNext = () => {
+    if (currentIndex < SECTIONS.length - 1) setActive(SECTIONS[currentIndex + 1].key);
+  };
+  const goPrev = () => {
+    if (currentIndex > 0) setActive(SECTIONS[currentIndex - 1].key);
+  };
     if (!drugName || !patient) return false;
     return patient.allergies.some((a) => drugName.toLowerCase().includes(a.toLowerCase().split(" ")[0]));
   };
@@ -191,7 +198,7 @@ function ConsultationWorkspace() {
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              Module 04 · Screen 13 · Consultation Workspace
+              Consultation Workspace
             </p>
             <h1 className="mt-1 text-xl font-bold">{appt.patientName}</h1>
             <div className="mt-1 text-xs text-muted-foreground">
@@ -204,6 +211,31 @@ function ConsultationWorkspace() {
               Queue
             </Link>
           </Button>
+        </div>
+        {/* Progress Bar */}
+        <div className="mt-4 flex items-center gap-1">
+          {SECTIONS.map((s, i) => {
+            const done = completion[s.key];
+            const isActive = active === s.key;
+            return (
+              <button
+                key={s.key}
+                onClick={() => setActive(s.key)}
+                className="flex flex-1 flex-col items-center gap-1"
+              >
+                <div className={cn(
+                  "h-1.5 w-full rounded-full transition-all",
+                  done ? "bg-status-ok" : isActive ? "bg-primary" : "bg-border"
+                )} />
+                <span className={cn(
+                  "text-[10px] font-medium",
+                  isActive ? "text-primary" : done ? "text-status-ok" : "text-muted-foreground"
+                )}>
+                  {s.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -535,14 +567,27 @@ function ConsultationWorkspace() {
             <span className="ml-3 font-mono">{appt.patientUid}</span>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" onClick={() => toast.info("Draft saved", { description: "Drafts are session-only." })}>
-              <Save className="mr-2 h-4 w-4" />
-              Save Draft
-            </Button>
-            <Button onClick={complete}>
-              <CheckCircle2 className="mr-2 h-4 w-4" />
-              Complete Visit
-            </Button>
+            {currentIndex > 0 && (
+              <Button variant="outline" onClick={goPrev}>
+                ← {SECTIONS[currentIndex - 1].label}
+              </Button>
+            )}
+            {currentIndex < SECTIONS.length - 1 ? (
+              <Button onClick={goNext}>
+                Next: {SECTIONS[currentIndex + 1].label} →
+              </Button>
+            ) : (
+              <>
+                <Button variant="outline" onClick={() => toast.info("Draft saved", { description: "Drafts are session-only." })}>
+                  <Save className="mr-2 h-4 w-4" />
+                  Save Draft
+                </Button>
+                <Button onClick={complete} className="bg-status-ok hover:bg-status-ok/90">
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                  Complete Visit ✓
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>
