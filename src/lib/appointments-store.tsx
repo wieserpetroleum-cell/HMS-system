@@ -6,6 +6,7 @@ interface Ctx {
   appointments: Appointment[];
   addAppointment: (input: Omit<Appointment, "id">) => Appointment;
   updateStatus: (id: string, status: AppointmentStatus) => void;
+  reschedule: (id: string, date: string, time: string) => void;
   getById: (id: string) => Appointment | undefined;
 }
 
@@ -24,14 +25,18 @@ export function AppointmentsProvider({ children }: { children: React.ReactNode }
     setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, status } : a)));
   }, []);
 
+  const reschedule = React.useCallback((id: string, date: string, time: string) => {
+    setAppointments((prev) => prev.map((a) => (a.id === id ? { ...a, date, time, status: "scheduled" } : a)));
+  }, []);
+
   const getById = React.useCallback(
     (id: string) => appointments.find((a) => a.id === id),
     [appointments],
   );
 
   const value = React.useMemo(
-    () => ({ appointments, addAppointment, updateStatus, getById }),
-    [appointments, addAppointment, updateStatus, getById],
+    () => ({ appointments, addAppointment, updateStatus, reschedule, getById }),
+    [appointments, addAppointment, updateStatus, reschedule, getById],
   );
 
   return <AppointmentsContext.Provider value={value}>{children}</AppointmentsContext.Provider>;
