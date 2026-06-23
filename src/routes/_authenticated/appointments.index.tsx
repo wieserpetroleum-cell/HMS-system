@@ -198,7 +198,8 @@ function AppointmentsQueue() {
   const onCheckIn = (a: Appointment) => {
     updateStatus(a.id, "checked-in");
     setCheckedInAt((prev) => ({ ...prev, [a.id]: new Date().toISOString() }));
-    setFeeAppt(a); // Show fee collection on check-in
+    // Small delay so status update renders first, then show fee modal
+    setTimeout(() => setFeeAppt(a), 100);
   };
 
   const onAction = (a: Appointment) => {
