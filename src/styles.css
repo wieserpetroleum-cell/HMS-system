@@ -4,33 +4,21 @@
 
 /* ─── PRINT STYLES ─────────────────────────────────── */
 @media print {
-  /* Hide everything except print area */
   body * { visibility: hidden; }
   .print-area, .print-area * { visibility: visible; }
   .no-print { display: none !important; }
-  
+
   .print-area {
     display: block !important;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
   }
 
-  /* Default: Full A4 for prescriptions & reports */
+  /* Half A4 (A5 landscape) for invoices/receipts */
   @page {
-    size: A4 portrait;
-    margin: 10mm;
-  }
-
-  /* Half A4 for invoices - target invoice print area */
-  .invoice-print-area {
-    width: 210mm;
-    max-height: 148mm;
-    overflow: hidden;
-  }
-
-  @page invoice {
     size: A5 landscape;
     margin: 0;
   }
