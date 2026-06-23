@@ -115,6 +115,8 @@ function ConsultationWorkspace() {
   const goPrev = () => {
     if (currentIndex > 0) setActive(SECTIONS[currentIndex - 1].key);
   };
+
+  const allergyHits = (drugName?: string) => {
     if (!drugName || !patient) return false;
     return patient.allergies.some((a) => drugName.toLowerCase().includes(a.toLowerCase().split(" ")[0]));
   };
