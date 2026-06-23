@@ -53,6 +53,7 @@ import TpaQueue from '@/routes/_authenticated/billing.tpa';
 // Radiology
 import RadiologyDashboard from '@/routes/_authenticated/radiology.index';
 import NewRadiologyOrder from '@/routes/_authenticated/radiology.orders.new';
+import RadiologyOrderDetail from '@/routes/_authenticated/radiology.orders.$id';
 import StudyWorkspace from '@/routes/_authenticated/radiology.studies.$id';
 import ReportView from '@/routes/_authenticated/radiology.studies.$id.report';
 import Worklist from '@/routes/_authenticated/radiology.worklist';
@@ -126,6 +127,7 @@ function AppRoutes() {
         {/* Radiology */}
         <Route path="/radiology" element={<RadiologyDashboard />} />
         <Route path="/radiology/orders/new" element={<NewRadiologyOrder />} />
+        <Route path="/radiology/orders/:id" element={<RadiologyOrderDetail />} />
         <Route path="/radiology/studies/:id" element={<StudyWorkspace />} />
         <Route path="/radiology/studies/:id/report" element={<ReportView />} />
         <Route path="/radiology/worklist" element={<Worklist />} />
