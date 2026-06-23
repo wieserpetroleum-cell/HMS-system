@@ -209,6 +209,8 @@ function AppointmentsQueue() {
   const [view, setView]     = React.useState<"pipeline" | "table">("pipeline");
   const [rescheduleAppt, setRescheduleAppt] = React.useState<Appointment | null>(null);
   const [feeAppt, setFeeAppt]               = React.useState<Appointment | null>(null);
+  // Track which appointments have fees collected (disable button)
+  const [feeCollected, setFeeCollected] = React.useState<Set<string>>(new Set());
   // Track check-in times for waiting time
   const [checkedInAt, setCheckedInAt] = React.useState<Record<string, string>>({});
 
@@ -282,45 +284,46 @@ function AppointmentsQueue() {
 
   const onCollectFee = (mode: string, amount: number) => {
     if (!feeAppt) return;
-    // Create invoice in billing system
-    const inv = addInvoice({
-      patientUid: feeAppt.patientUid ?? "",
-      patientName: feeAppt.patientName,
-      sourceType: "opd",
-      sourceId: feeAppt.id,
-      items: [{
-        id: `tmp-opd-${Date.now()}`,
-        category: "consultation",
-        code: "OPD-CONSULT",
-        description: `OPD Consultation — ${feeAppt.doctor} (${feeAppt.department})`,
-        qty: 1,
-        unitPrice: amount,
-        amount: amount,
-        taxable: false,
-      }],
-      discount: 0,
-      taxRate: 0,
-      status: "paid",
-      createdAt: new Date().toISOString(),
-      dueAt: new Date().toISOString(),
-      payments: [{
-        id: `pay-${Date.now()}`,
-        mode,
-        amount,
-        paidAt: new Date().toISOString(),
-        reference: mode === "upi" ? `UPI-${Date.now()}` : undefined,
-        receivedBy: "Reception",
-      }],
-    });
-    toast.success(`₹${amount} collected via ${mode.toUpperCase()} — Invoice ${inv.invoiceNo} generated`, {
-      action: {
-        label: "Print Receipt",
-        onClick: () => navigate(`/billing/invoices/${inv.id}?tab=print`),
-      },
-      duration: 8000,
-    });
-    // Navigate to invoice print page
-    navigate(`/billing/invoices/${inv.id}`);
+    try {
+      const inv = addInvoice({
+        patientUid: feeAppt.patientUid ?? "",
+        patientName: feeAppt.patientName,
+        sourceType: "opd",
+        sourceId: feeAppt.id,
+        items: [{
+          id: `tmp-opd-${Date.now()}`,
+          category: "consultation",
+          code: "OPD-CONSULT",
+          description: `OPD Consultation — ${feeAppt.doctor} (${feeAppt.department || "General"})`,
+          qty: 1,
+          unitPrice: amount,
+          amount: amount,
+          taxable: false,
+        }],
+        discount: 0,
+        taxRate: 0,
+        status: "paid",
+        createdAt: new Date().toISOString(),
+        dueAt: new Date().toISOString(),
+        payments: [{
+          id: `pay-${Date.now()}`,
+          at: new Date().toISOString(),
+          mode: mode as "cash" | "card" | "upi" | "bank" | "tpa",
+          amount,
+          reference: mode === "upi" ? `UPI-${Date.now()}` : undefined,
+          collectedBy: "Reception",
+        }],
+      });
+      // Mark fee as collected for this appointment
+      setFeeCollected((prev) => new Set([...prev, feeAppt.id]));
+      toast.success(`✅ ₹${amount} collected — Receipt ${inv.invoiceNo}`, {
+        description: "Navigating to print receipt...",
+        duration: 4000,
+      });
+      navigate(`/billing/invoices/${inv.id}`);
+    } catch (err) {
+      toast.error("Failed to create invoice. Please try again.");
+    }
   };
 
   const actionLabel = (s: AppointmentStatus) =>
@@ -445,10 +448,11 @@ function AppointmentsQueue() {
                             {a.status === "scheduled" && (
                               <div className="grid grid-cols-3 gap-1">
                                 <button
-                                  onClick={() => setFeeAppt(a)}
-                                  className="flex items-center justify-center gap-1 rounded border border-border py-1 text-[10px] font-medium text-muted-foreground hover:border-status-ok/50 hover:bg-status-ok/10 hover:text-status-ok"
+                                  onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)}
+                                  disabled={feeCollected.has(a.id)}
+                                  className={`flex items-center justify-center gap-1 rounded border py-1 text-[10px] font-medium transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-70 cursor-not-allowed" : "border-border text-muted-foreground hover:border-status-ok/50 hover:bg-status-ok/10 hover:text-status-ok"}`}
                                 >
-                                  <CreditCard className="h-3 w-3" /> Fee
+                                  <CreditCard className="h-3 w-3" /> {feeCollected.has(a.id) ? "Paid ✓" : "Fee"}
                                 </button>
                                 <button
                                   onClick={() => setRescheduleAppt(a)}
@@ -466,10 +470,11 @@ function AppointmentsQueue() {
                             )}
                             {a.status === "checked-in" && (
                               <button
-                                onClick={() => setFeeAppt(a)}
-                                className="flex w-full items-center justify-center gap-1 rounded border border-status-ok/40 bg-status-ok/10 py-1 text-[10px] font-semibold text-status-ok hover:bg-status-ok/20"
+                                onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)}
+                                disabled={feeCollected.has(a.id)}
+                                className={`flex w-full items-center justify-center gap-1 rounded border py-1 text-[10px] font-semibold transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}
                               >
-                                <CreditCard className="h-3 w-3" /> Collect Fee
+                                <CreditCard className="h-3 w-3" /> {feeCollected.has(a.id) ? "Fee Collected ✓" : "Collect Fee"}
                               </button>
                             )}
                           </div>
@@ -535,7 +540,7 @@ function AppointmentsQueue() {
                           <Button size="sm" onClick={() => onAction(a)}>{actionLabel(a.status)}</Button>
                           {a.status === "scheduled" && (
                             <>
-                              <button onClick={() => setFeeAppt(a)} title="Collect Fee" className="rounded border border-border p-1.5 text-muted-foreground hover:text-status-ok hover:border-status-ok/50">
+                              <button onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)} disabled={feeCollected.has(a.id)} title={feeCollected.has(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-border text-muted-foreground hover:text-status-ok hover:border-status-ok/50"}`}>
                                 <CreditCard className="h-3.5 w-3.5" />
                               </button>
                               <button onClick={() => setRescheduleAppt(a)} title="Reschedule" className="rounded border border-border p-1.5 text-muted-foreground hover:text-status-info hover:border-status-info/50">
@@ -550,7 +555,7 @@ function AppointmentsQueue() {
                             </>
                           )}
                           {a.status === "checked-in" && (
-                            <button onClick={() => setFeeAppt(a)} title="Collect Fee" className="rounded border border-status-ok/40 bg-status-ok/10 p-1.5 text-status-ok hover:bg-status-ok/20">
+                            <button onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)} disabled={feeCollected.has(a.id)} title={feeCollected.has(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}>
                               <CreditCard className="h-3.5 w-3.5" />
                             </button>
                           )}

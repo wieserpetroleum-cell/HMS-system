@@ -369,12 +369,13 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["invoices"][number] }) {
+  const isOPD = invoice.sourceType === "opd";
   return (
     <div style={{
       width: '210mm',
       minHeight: '148mm',
       maxHeight: '148mm',
-      padding: '12mm 14mm',
+      padding: '10mm 12mm',
       background: 'white',
       color: '#0f172a',
       fontSize: '11px',
@@ -383,51 +384,57 @@ function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["in
       overflow: 'hidden',
     }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #0f172a', paddingBottom: '8px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '2px solid #0f172a', paddingBottom: '6px', marginBottom: '8px' }}>
         <div>
           <div style={{ fontSize: '18px', fontWeight: 'bold', letterSpacing: '-0.5px' }}>City Hospital</div>
-          <div style={{ fontSize: '8px', color: '#94a3b8', letterSpacing: '0.5px' }}>Powered by Hospitrix</div>
+          <div style={{ fontSize: '7.5px', color: '#94a3b8', letterSpacing: '0.5px' }}>Powered by Hospitrix</div>
+          <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>123 Care Avenue, Mumbai 400001 · Tel: 022-1234-5678</div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>Tax Invoice</div>
-          <div style={{ fontFamily: 'monospace', fontSize: '12px', fontWeight: 'bold' }}>{invoice.invoiceNo}</div>
-          <div style={{ fontSize: '9px', color: '#64748b' }}>Date: {new Date(invoice.createdAt).toLocaleDateString('en-IN')}</div>
+          <div style={{ fontSize: '9px', textTransform: 'uppercase', letterSpacing: '1px', color: '#64748b' }}>
+            {isOPD ? 'OPD Receipt' : 'Tax Invoice'}
+          </div>
+          <div style={{ fontFamily: 'monospace', fontSize: '13px', fontWeight: 'bold' }}>{invoice.invoiceNo}</div>
+          <div style={{ fontSize: '9px', color: '#64748b' }}>Date: {new Date(invoice.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+          <div style={{ fontSize: '9px', color: '#64748b' }}>Time: {new Date(invoice.createdAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })}</div>
         </div>
       </div>
 
-      {/* Billing Info */}
+      {/* Patient + Status */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '8px' }}>
         <div>
-          <div style={{ fontSize: '9px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Billed To</div>
-          <div style={{ fontSize: '12px', fontWeight: '600', marginTop: '2px' }}>{invoice.patientName}</div>
-          <div style={{ fontFamily: 'monospace', fontSize: '10px', color: '#475569' }}>{invoice.patientUid}</div>
+          <div style={{ fontSize: '8.5px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Patient</div>
+          <div style={{ fontSize: '13px', fontWeight: '700', marginTop: '2px' }}>{invoice.patientName}</div>
+          <div style={{ fontFamily: 'monospace', fontSize: '9px', color: '#475569' }}>{invoice.patientUid}</div>
+          <div style={{ fontSize: '9px', color: '#64748b', marginTop: '1px' }}>
+            Source: {invoice.sourceType?.toUpperCase() ?? 'OPD'}
+          </div>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: '9px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Status</div>
+          <div style={{ fontSize: '8.5px', fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b' }}>Status</div>
           <div style={{
             display: 'inline-block',
             marginTop: '2px',
-            padding: '2px 8px',
-            borderRadius: '4px',
+            padding: '2px 10px',
+            borderRadius: '20px',
             fontSize: '10px',
             fontWeight: 'bold',
             textTransform: 'uppercase',
-            background: invoice.status === 'paid' ? '#dcfce7' : '#fef9c3',
-            color: invoice.status === 'paid' ? '#166534' : '#854d0e',
+            background: invoice.status === 'paid' ? '#dcfce7' : invoice.status === 'pending' ? '#fef9c3' : '#fee2e2',
+            color: invoice.status === 'paid' ? '#166534' : invoice.status === 'pending' ? '#854d0e' : '#991b1b',
           }}>{invoice.status}</div>
-          <div style={{ fontSize: '9px', color: '#64748b', marginTop: '2px' }}>Due: {new Date(invoice.dueAt).toLocaleDateString('en-IN')}</div>
         </div>
       </div>
 
       {/* Items Table */}
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px', marginBottom: '8px' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px', marginBottom: '6px' }}>
         <thead>
-          <tr style={{ borderBottom: '1px solid #cbd5e1', color: '#64748b' }}>
-            <th style={{ textAlign: 'left', padding: '4px 2px' }}>#</th>
-            <th style={{ textAlign: 'left', padding: '4px 2px' }}>Description</th>
-            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Qty</th>
-            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Unit ₹</th>
-            <th style={{ textAlign: 'right', padding: '4px 2px' }}>Amount</th>
+          <tr style={{ borderBottom: '1.5px solid #0f172a', color: '#64748b' }}>
+            <th style={{ textAlign: 'left', padding: '3px 2px', fontSize: '8.5px', textTransform: 'uppercase' }}>#</th>
+            <th style={{ textAlign: 'left', padding: '3px 2px', fontSize: '8.5px', textTransform: 'uppercase' }}>Description</th>
+            <th style={{ textAlign: 'right', padding: '3px 2px', fontSize: '8.5px', textTransform: 'uppercase' }}>Qty</th>
+            <th style={{ textAlign: 'right', padding: '3px 2px', fontSize: '8.5px', textTransform: 'uppercase' }}>Rate</th>
+            <th style={{ textAlign: 'right', padding: '3px 2px', fontSize: '8.5px', textTransform: 'uppercase' }}>Amount</th>
           </tr>
         </thead>
         <tbody>
@@ -436,56 +443,81 @@ function PrintInvoice({ invoice }: { invoice: ReturnType<typeof useInvoices>["in
               <td style={{ padding: '3px 2px' }}>{i + 1}</td>
               <td style={{ padding: '3px 2px' }}>
                 {it.description}
-                {it.code && <span style={{ color: '#94a3b8', fontSize: '9px' }}> ({it.code})</span>}
+                {it.code && <span style={{ color: '#94a3b8', fontSize: '8px' }}> [{it.code}]</span>}
               </td>
               <td style={{ padding: '3px 2px', textAlign: 'right' }}>{it.qty}</td>
-              <td style={{ padding: '3px 2px', textAlign: 'right' }}>₹{it.unitPrice?.toLocaleString('en-IN') ?? 0}</td>
-              <td style={{ padding: '3px 2px', textAlign: 'right', fontWeight: '500' }}>₹{it.amount?.toLocaleString('en-IN') ?? 0}</td>
+              <td style={{ padding: '3px 2px', textAlign: 'right' }}>₹{(it.unitPrice ?? 0).toLocaleString('en-IN')}</td>
+              <td style={{ padding: '3px 2px', textAlign: 'right', fontWeight: '600' }}>₹{(it.amount ?? 0).toLocaleString('en-IN')}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Totals */}
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '8px' }}>
-        <table style={{ width: '200px', fontSize: '10px' }}>
-          <tbody>
-            <tr>
-              <td style={{ padding: '2px 0', color: '#64748b' }}>Subtotal</td>
-              <td style={{ textAlign: 'right' }}>₹{invoice.subtotal?.toLocaleString('en-IN') ?? 0}</td>
-            </tr>
-            {invoice.discount > 0 && (
-              <tr>
-                <td style={{ padding: '2px 0', color: '#64748b' }}>Discount</td>
-                <td style={{ textAlign: 'right', color: '#16a34a' }}>- ₹{invoice.discount?.toLocaleString('en-IN') ?? 0}</td>
+      {/* Totals + Payment */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginBottom: '6px' }}>
+        {/* Payment Details */}
+        <div style={{ fontSize: '9px' }}>
+          {(invoice.payments ?? []).length > 0 && (
+            <>
+              <div style={{ fontWeight: 'bold', textTransform: 'uppercase', color: '#64748b', marginBottom: '3px' }}>Payment Received</div>
+              {invoice.payments.map((p, i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0' }}>
+                  <span style={{ textTransform: 'uppercase', color: '#475569' }}>{p.mode}{p.reference ? ` (${p.reference})` : ''}</span>
+                  <span style={{ fontWeight: '600' }}>₹{p.amount.toLocaleString('en-IN')}</span>
+                </div>
+              ))}
+              <div style={{ fontSize: '8px', color: '#94a3b8', marginTop: '2px' }}>
+                Received by: {invoice.payments[0]?.collectedBy ?? 'Reception'}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Amount Summary */}
+        <div>
+          <table style={{ width: '100%', fontSize: '10px' }}>
+            <tbody>
+              {invoice.discount > 0 && (
+                <tr>
+                  <td style={{ padding: '1px 0', color: '#64748b' }}>Subtotal</td>
+                  <td style={{ textAlign: 'right' }}>₹{(invoice.subtotal ?? 0).toLocaleString('en-IN')}</td>
+                </tr>
+              )}
+              {invoice.discount > 0 && (
+                <tr>
+                  <td style={{ padding: '1px 0', color: '#16a34a' }}>Discount</td>
+                  <td style={{ textAlign: 'right', color: '#16a34a' }}>-₹{invoice.discount.toLocaleString('en-IN')}</td>
+                </tr>
+              )}
+              {(invoice.taxRate ?? 0) > 0 && (
+                <tr>
+                  <td style={{ padding: '1px 0', color: '#64748b' }}>Tax ({Math.round((invoice.taxRate ?? 0) * 100)}%)</td>
+                  <td style={{ textAlign: 'right' }}>₹{(invoice.taxAmount ?? 0).toLocaleString('en-IN')}</td>
+                </tr>
+              )}
+              <tr style={{ borderTop: '1.5px solid #0f172a' }}>
+                <td style={{ padding: '3px 0', fontWeight: 'bold', fontSize: '12px' }}>Total</td>
+                <td style={{ textAlign: 'right', fontWeight: 'bold', fontSize: '12px' }}>₹{(invoice.total ?? 0).toLocaleString('en-IN')}</td>
               </tr>
-            )}
-            <tr>
-              <td style={{ padding: '2px 0', color: '#64748b' }}>Tax ({Math.round((invoice.taxRate ?? 0) * 100)}%)</td>
-              <td style={{ textAlign: 'right' }}>₹{invoice.taxAmount?.toLocaleString('en-IN') ?? 0}</td>
-            </tr>
-            <tr style={{ borderTop: '1px solid #cbd5e1' }}>
-              <td style={{ padding: '3px 0', fontWeight: 'bold' }}>Total</td>
-              <td style={{ textAlign: 'right', fontWeight: 'bold' }}>₹{invoice.total?.toLocaleString('en-IN') ?? 0}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '2px 0', color: '#64748b' }}>Paid</td>
-              <td style={{ textAlign: 'right', color: '#16a34a' }}>₹{invoice.paid?.toLocaleString('en-IN') ?? 0}</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '2px 0', fontWeight: 'bold' }}>Balance Due</td>
-              <td style={{ textAlign: 'right', fontWeight: 'bold', color: invoice.balance > 0 ? '#dc2626' : '#16a34a' }}>
-                ₹{invoice.balance?.toLocaleString('en-IN') ?? 0}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <td style={{ padding: '1px 0', color: '#16a34a' }}>Paid</td>
+                <td style={{ textAlign: 'right', color: '#16a34a', fontWeight: '600' }}>₹{(invoice.paid ?? 0).toLocaleString('en-IN')}</td>
+              </tr>
+              {(invoice.balance ?? 0) > 0 && (
+                <tr>
+                  <td style={{ padding: '1px 0', fontWeight: 'bold', color: '#dc2626' }}>Balance Due</td>
+                  <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#dc2626' }}>₹{invoice.balance.toLocaleString('en-IN')}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Footer */}
-      <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '6px', display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: '#94a3b8' }}>
-        <span>Computer-generated invoice. No signature required.</span>
-        <span>Hospitrix HMS · hospitrix.app</span>
+      <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '4px', display: 'flex', justifyContent: 'space-between', fontSize: '8px', color: '#94a3b8' }}>
+        <span>Thank you for visiting City Hospital. Get well soon!</span>
+        <span>City Hospital · Powered by Hospitrix</span>
       </div>
     </div>
   );
