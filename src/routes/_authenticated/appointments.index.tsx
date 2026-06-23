@@ -3,10 +3,11 @@ import * as React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   CalendarPlus, Search, LayoutGrid, Rows3, Clock, FileText,
-  Play, ClipboardCheck, X, UserX, CalendarClock, CreditCard, AlertCircle,
+  Play, ClipboardCheck, X, UserX, CalendarClock, CreditCard, Printer,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAppointments } from "@/lib/appointments-store";
+import { useInvoices } from "@/lib/invoices-store";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { Input } from "@/components/ui/input";
@@ -102,6 +103,9 @@ function FeeModal({ appt, onClose, onCollect }: {
 }) {
   const [mode, setMode] = React.useState("cash");
   const [amount, setAmount] = React.useState("500");
+
+  const QUICK_AMOUNTS = [200, 300, 500, 1000];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-xl">
@@ -109,33 +113,82 @@ function FeeModal({ appt, onClose, onCollect }: {
           <h3 className="text-base font-semibold">Collect Consultation Fee</h3>
           <button onClick={onClose}><X className="h-4 w-4 text-muted-foreground" /></button>
         </div>
-        <p className="text-sm text-muted-foreground mb-4">
-          Patient: <strong>{appt.patientName}</strong><br />
-          Doctor: {appt.doctor}
-        </p>
-        <div className="space-y-3">
+
+        {/* Patient Info */}
+        <div className="rounded-lg bg-secondary/50 p-3 mb-4">
+          <div className="text-sm font-semibold">{appt.patientName}</div>
+          <div className="text-xs text-muted-foreground">{appt.patientUid} · {appt.doctor} · {appt.department}</div>
+        </div>
+
+        <div className="space-y-4">
+          {/* Quick Amounts */}
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick Amount</label>
+            <div className="mt-1.5 grid grid-cols-4 gap-1.5">
+              {QUICK_AMOUNTS.map((a) => (
+                <button
+                  key={a}
+                  onClick={() => setAmount(String(a))}
+                  className={cn(
+                    "rounded-md border py-1.5 text-sm font-semibold transition-colors",
+                    amount === String(a)
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border bg-background hover:border-primary"
+                  )}
+                >
+                  ₹{a}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Custom Amount */}
           <div>
             <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount (₹)</label>
-            <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="mt-1" />
+            <Input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              className="mt-1 text-lg font-bold"
+              placeholder="Enter amount"
+            />
           </div>
+
+          {/* Payment Mode */}
           <div>
             <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment Mode</label>
-            <select
-              value={mode}
-              onChange={(e) => setMode(e.target.value)}
-              className="mt-1 h-9 w-full rounded-md border border-input bg-transparent px-2 text-sm"
-            >
-              <option value="cash">Cash</option>
-              <option value="card">Card</option>
-              <option value="upi">UPI</option>
-              <option value="insurance">Insurance</option>
-            </select>
+            <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+              {[
+                { value: "cash", label: "💵 Cash" },
+                { value: "upi", label: "📱 UPI" },
+                { value: "card", label: "💳 Card" },
+                { value: "insurance", label: "🏥 Insurance" },
+              ].map((m) => (
+                <button
+                  key={m.value}
+                  onClick={() => setMode(m.value)}
+                  className={cn(
+                    "rounded-md border py-2 text-sm font-medium transition-colors",
+                    mode === m.value
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-background text-muted-foreground hover:border-primary"
+                  )}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
+
         <div className="mt-5 flex gap-2">
           <Button variant="outline" className="flex-1" onClick={onClose}>Cancel</Button>
-          <Button className="flex-1" onClick={() => { onCollect(mode, Number(amount)); onClose(); }}>
-            <CreditCard className="mr-1.5 h-4 w-4" /> Collect ₹{amount}
+          <Button
+            className="flex-1 bg-status-ok hover:bg-status-ok/90"
+            onClick={() => { onCollect(mode, Number(amount)); onClose(); }}
+          >
+            <Printer className="mr-1.5 h-4 w-4" />
+            Collect & Print ₹{amount}
           </Button>
         </div>
       </div>
@@ -146,6 +199,7 @@ function FeeModal({ appt, onClose, onCollect }: {
 // ── Main Component ────────────────────────────────────────────────
 function AppointmentsQueue() {
   const { appointments, updateStatus, reschedule } = useAppointments();
+  const { addInvoice } = useInvoices();
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 10);
 
@@ -228,7 +282,45 @@ function AppointmentsQueue() {
 
   const onCollectFee = (mode: string, amount: number) => {
     if (!feeAppt) return;
-    toast.success(`₹${amount} collected via ${mode.toUpperCase()} from ${feeAppt.patientName}`);
+    // Create invoice in billing system
+    const inv = addInvoice({
+      patientUid: feeAppt.patientUid ?? "",
+      patientName: feeAppt.patientName,
+      sourceType: "opd",
+      sourceId: feeAppt.id,
+      items: [{
+        id: `tmp-opd-${Date.now()}`,
+        category: "consultation",
+        code: "OPD-CONSULT",
+        description: `OPD Consultation — ${feeAppt.doctor} (${feeAppt.department})`,
+        qty: 1,
+        unitPrice: amount,
+        amount: amount,
+        taxable: false,
+      }],
+      discount: 0,
+      taxRate: 0,
+      status: "paid",
+      createdAt: new Date().toISOString(),
+      dueAt: new Date().toISOString(),
+      payments: [{
+        id: `pay-${Date.now()}`,
+        mode,
+        amount,
+        paidAt: new Date().toISOString(),
+        reference: mode === "upi" ? `UPI-${Date.now()}` : undefined,
+        receivedBy: "Reception",
+      }],
+    });
+    toast.success(`₹${amount} collected via ${mode.toUpperCase()} — Invoice ${inv.invoiceNo} generated`, {
+      action: {
+        label: "Print Receipt",
+        onClick: () => navigate(`/billing/invoices/${inv.id}?tab=print`),
+      },
+      duration: 8000,
+    });
+    // Navigate to invoice print page
+    navigate(`/billing/invoices/${inv.id}`);
   };
 
   const actionLabel = (s: AppointmentStatus) =>
