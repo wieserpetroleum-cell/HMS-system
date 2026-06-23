@@ -1,19 +1,19 @@
 import type { WardBed } from "@/lib/types";
 
 export const mockBeds: WardBed[] = [
-  { id: "b1", ward: "ICU", bedNumber: "ICU-01", status: "occupied", patientName: "R. Verma", patientId: "p10", vitalsDue: true, alert: "critical" },
-  { id: "b2", ward: "ICU", bedNumber: "ICU-02", status: "occupied", patientName: "S. Khan", patientId: "p11", vitalsDue: false, alert: "watch" },
+  { id: "b1", ward: "ICU", bedNumber: "ICU-01", status: "occupied", patientName: "Rajesh Verma", patientId: "p10", vitalsDue: true, alert: "critical" },
+  { id: "b2", ward: "ICU", bedNumber: "ICU-02", status: "occupied", patientName: "Sana Khan", patientId: "p11", vitalsDue: false, alert: "watch" },
   { id: "b3", ward: "ICU", bedNumber: "ICU-03", status: "available" },
   { id: "b4", ward: "ICU", bedNumber: "ICU-04", status: "cleaning" },
-  { id: "b5", ward: "General A", bedNumber: "GA-01", status: "occupied", patientName: "A. Singh", patientId: "p1", vitalsDue: true, alert: "stable" },
-  { id: "b6", ward: "General A", bedNumber: "GA-02", status: "occupied", patientName: "P. Sharma", patientId: "p2", vitalsDue: false, alert: "stable" },
-  { id: "b7", ward: "General A", bedNumber: "GA-03", status: "occupied", patientName: "M. Nair", patientId: "p6", vitalsDue: true, alert: "watch" },
+  { id: "b5", ward: "General A", bedNumber: "GA-01", status: "occupied", patientName: "Arjun Singh", patientId: "p1", vitalsDue: true, alert: "stable" },
+  { id: "b6", ward: "General A", bedNumber: "GA-02", status: "occupied", patientName: "Priya Sharma", patientId: "p2", vitalsDue: false, alert: "stable" },
+  { id: "b7", ward: "General A", bedNumber: "GA-03", status: "occupied", patientName: "Meera Nair", patientId: "p6", vitalsDue: true, alert: "watch" },
   { id: "b8", ward: "General A", bedNumber: "GA-04", status: "available" },
   { id: "b9", ward: "General A", bedNumber: "GA-05", status: "reserved" },
-  { id: "b10", ward: "General B", bedNumber: "GB-01", status: "occupied", patientName: "L. Rao", patientId: "p8", vitalsDue: false, alert: "stable" },
+  { id: "b10", ward: "General B", bedNumber: "GB-01", status: "occupied", patientName: "Lakshmi Rao", patientId: "p8", vitalsDue: false, alert: "stable" },
   { id: "b11", ward: "General B", bedNumber: "GB-02", status: "available" },
-  { id: "b12", ward: "General B", bedNumber: "GB-03", status: "occupied", patientName: "V. Joshi", patientId: "p7", vitalsDue: true, alert: "stable" },
-  { id: "b13", ward: "Pediatric", bedNumber: "PD-01", status: "occupied", patientName: "K. Bose", patientId: "p12", vitalsDue: false, alert: "stable" },
+  { id: "b12", ward: "General B", bedNumber: "GB-03", status: "occupied", patientName: "Vikram Joshi", patientId: "p7", vitalsDue: true, alert: "stable" },
+  { id: "b13", ward: "Pediatric", bedNumber: "PD-01", status: "occupied", patientName: "Kavya Bose", patientId: "p12", vitalsDue: false, alert: "stable" },
   { id: "b14", ward: "Pediatric", bedNumber: "PD-02", status: "available" },
   { id: "b15", ward: "Pediatric", bedNumber: "PD-03", status: "available" },
 ];

@@ -69,10 +69,10 @@ function seed(): {
   const iso = (offsetH: number) => new Date(now - offsetH * 3600000).toISOString();
 
   const seedBeds = [
-    { bedId: "b1", patientUid: "MR-2024-00010", patientName: "R. Verma", doctor: "Dr. Mehta", dept: "Cardiology", reason: "Acute coronary syndrome — observation", days: 2 },
-    { bedId: "b5", patientUid: "MR-2024-00001", patientName: "A. Singh", doctor: "Dr. Iyer", dept: "General Medicine", reason: "Pyrexia of unknown origin", days: 3 },
-    { bedId: "b7", patientUid: "MR-2024-00006", patientName: "M. Nair", doctor: "Dr. Iyer", dept: "General Medicine", reason: "Community-acquired pneumonia", days: 1 },
-    { bedId: "b10", patientUid: "MR-2024-00008", patientName: "L. Rao", doctor: "Dr. Khan", dept: "Orthopedics", reason: "Post-op femur fracture care", days: 4 },
+    { bedId: "b1", patientUid: "MR-2024-00010", patientName: "Rajesh Verma", doctor: "Dr. Mehta", dept: "Cardiology", reason: "Acute coronary syndrome — observation", days: 2 },
+    { bedId: "b5", patientUid: "MR-2024-00001", patientName: "Arjun Singh", doctor: "Dr. Iyer", dept: "General Medicine", reason: "Pyrexia of unknown origin", days: 3 },
+    { bedId: "b7", patientUid: "MR-2024-00006", patientName: "Meera Nair", doctor: "Dr. Iyer", dept: "General Medicine", reason: "Community-acquired pneumonia", days: 1 },
+    { bedId: "b10", patientUid: "MR-2024-00008", patientName: "Lakshmi Rao", doctor: "Dr. Khan", dept: "Orthopedics", reason: "Post-op femur fracture care", days: 4 },
   ];
 
   const admissions: Admission[] = seedBeds.map((s, i) => {

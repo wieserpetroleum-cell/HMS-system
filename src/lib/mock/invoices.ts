@@ -159,6 +159,16 @@ export const mockInvoices: Invoice[] = [
       notes: "Outpatient lab not covered under policy.",
     },
   }),
+  // IPD pending invoices for admitted patients (matches admission patientUid)
+  mk("iv-ipd-01", "MR-2024-00010", "Rajesh Verma", "ipd", [
+    { category: "room", code: "RM-ICU", description: "ICU Room — 3 days", qty: 3, unitPrice: 15000 },
+    { category: "procedure", code: "PROC-ECHO", description: "2D Echo", qty: 1, unitPrice: 2800, taxable: true },
+    { category: "pharmacy", code: "PH-AUG", description: "Augmentin 1.2g IV", qty: 6, unitPrice: 320, taxable: true },
+  ], { createdAt: daysAgo(3), status: "pending" }),
+  mk("iv-ipd-02", "MR-2024-00001", "Arjun Singh", "ipd", [
+    { category: "room", code: "RM-GEN", description: "General Ward — 3 days", qty: 3, unitPrice: 3500 },
+    { category: "lab", code: "LAB-CBC", description: "Complete Blood Count", qty: 2, unitPrice: 350 },
+  ], { createdAt: daysAgo(3), status: "draft" }),
 ];
 
 export function invoicesSummary(list = mockInvoices) {
