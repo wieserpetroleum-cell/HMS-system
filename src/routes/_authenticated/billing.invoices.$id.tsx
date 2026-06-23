@@ -74,12 +74,18 @@ function InvoiceWorkspace() {
 
   const save = () => {
     replaceItems(invoice.id, items);
-    if (discount !== invoice.discount) {
-      updateInvoice(invoice.id, { discount }, { by: "Reception", action: "Discount updated", detail: money(discount) });
+    // Change status from draft to pending when saved with items
+    const newStatus = invoice.status === "draft" && items.length > 0 ? "pending" : invoice.status;
+    if (discount !== invoice.discount || newStatus !== invoice.status) {
+      updateInvoice(
+        invoice.id,
+        { discount, status: newStatus },
+        { by: "Reception", action: newStatus === "pending" ? "Invoice finalized" : "Invoice updated", detail: money(invoice.total) }
+      );
     } else {
       updateInvoice(invoice.id, {});
     }
-    toast.success("Invoice saved");
+    toast.success(newStatus === "pending" ? "Invoice finalized → Pending payment" : "Invoice saved");
   };
 
   const addFromCatalog = (code: string) => {

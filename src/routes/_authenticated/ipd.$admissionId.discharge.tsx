@@ -77,6 +77,22 @@ function DischargePage() {
       setError(parsed.error.issues[0]?.message ?? "Invalid input");
       return;
     }
+    // Check for pending bills BEFORE discharging
+    const pendingBills = invoices.filter(
+      (inv) => inv.patientUid === adm.patientUid &&
+      (inv.status === "pending" || inv.status === "partial" || inv.status === "draft" || inv.status === "overdue") &&
+      inv.balance > 0
+    );
+
+    if (pendingBills.length > 0) {
+      const totalPending = pendingBills.reduce((sum, inv) => sum + inv.balance, 0);
+      toast.warning(
+        `⚠️ Cannot discharge! ${adm.patientName} has ${pendingBills.length} unpaid bill(s) totalling ₹${totalPending.toLocaleString('en-IN')}. Please settle bills first.`,
+        { duration: 10000 }
+      );
+      return; // BLOCK the discharge
+    }
+
     discharge(adm.id, {
       finalDiagnosis: finalDiagnoses,
       procedures,
@@ -88,23 +104,7 @@ function DischargePage() {
       signedBy: user?.name ?? "Clinician",
     });
 
-    // Check for pending bills
-    const pendingBills = invoices.filter(
-      (inv) => inv.patientUid === adm.patientUid &&
-      (inv.status === "pending" || inv.status === "partial" || inv.status === "draft") &&
-      inv.balance > 0
-    );
-
-    if (pendingBills.length > 0) {
-      const totalPending = pendingBills.reduce((sum, inv) => sum + inv.balance, 0);
-      toast.warning(
-        `⚠️ ${adm.patientName} has ${pendingBills.length} pending bill(s) totalling ₹${totalPending.toLocaleString('en-IN')}. Please collect payment before discharge.`,
-        { duration: 10000 }
-      );
-    } else {
-      toast.success("Discharge summary saved. No pending bills.");
-    }
-
+    toast.success("✅ Discharge summary saved. All bills cleared.");
     navigate(`/ipd/${adm.id}/discharge`);
   };
 
