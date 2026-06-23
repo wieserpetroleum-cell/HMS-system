@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft, Activity, ClipboardList, Stethoscope, Pill, Droplet, FileText,
   ArrowRightLeft, FilePlus2, FlaskConical, LogOut, Plus, BedDouble, Sparkles,
+  AlertCircle, X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { VitalsSparkline } from "@/components/ipd/VitalsSparkline";
 import { useAdmissions } from "@/lib/admissions-store";
 import { usePatients } from "@/lib/patients-store";
 import { useAuth } from "@/lib/auth-context";
+import { useInvoices } from "@/lib/invoices-store";
 import type { NursingNoteCategory } from "@/lib/types";
 import { cn } from "@/lib/utils";
 function dayOfStay(admittedAt: string) {
@@ -31,9 +33,31 @@ function WardChart() {
   const { getById, vitals, notes, rounds, mar, io, addVital, addNote, addRound, markMar, addIo } = useAdmissions();
   const { getPatient } = usePatients();
   const { user } = useAuth();
+  const { invoices } = useInvoices();
   const navigate = useNavigate();
   const adm = getById(admissionId);
   const [tab, setTab] = React.useState("overview");
+  const [showBillingAlert, setShowBillingAlert] = React.useState(false);
+
+  // Calculate pending bills for this patient
+  const pendingBills = React.useMemo(() => {
+    if (!adm) return [];
+    return invoices.filter(
+      (inv) => inv.patientUid === adm.patientUid &&
+      (inv.status === "pending" || inv.status === "partial" || inv.status === "draft" || inv.status === "overdue") &&
+      inv.balance > 0
+    );
+  }, [invoices, adm]);
+
+  const totalPending = pendingBills.reduce((sum, inv) => sum + inv.balance, 0);
+  const hasPendingBills = pendingBills.length > 0;
+
+  const handleDischargeClick = (e: React.MouseEvent) => {
+    if (hasPendingBills) {
+      e.preventDefault();
+      setShowBillingAlert(true);
+    }
+  };
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -75,6 +99,27 @@ function WardChart() {
 
   return (
     <div className="space-y-4 p-6">
+      {/* Pending Bills Alert Banner */}
+      {hasPendingBills && showBillingAlert && (
+        <div className="flex items-center justify-between rounded-lg border border-amber-300 bg-amber-50 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="h-5 w-5 shrink-0 text-amber-600" />
+            <div>
+              <p className="text-sm font-semibold text-amber-800">Pending Payment Required Before Discharge</p>
+              <p className="text-xs text-amber-700">
+                {pendingBills.length} unpaid bill(s) totalling ₹{totalPending.toLocaleString('en-IN')}. Please settle all bills before discharging the patient.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowBillingAlert(false)}
+            className="ml-4 rounded p-1 text-amber-600 hover:bg-amber-100"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+      )}
+
       <div className="flex items-center justify-between">
         <Link
           to="/ipd"
@@ -82,16 +127,35 @@ function WardChart() {
         >
           <ArrowLeft className="h-3 w-3" /> Floor View
         </Link>
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
+          {/* Pending Payment Tag */}
+          {hasPendingBills && (
+            <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700">
+              <AlertCircle className="h-3 w-3" />
+              ₹{totalPending.toLocaleString('en-IN')} Pending
+            </span>
+          )}
           <Button variant="outline" size="sm" asChild>
             <Link to={`/ipd/${admissionId}/transfer`}>
               <ArrowRightLeft className="mr-1.5 h-3.5 w-3.5" /> Transfer
             </Link>
           </Button>
-          <Button size="sm" asChild>
-            <Link to={`/ipd/${admissionId}/discharge`}>
-              <LogOut className="mr-1.5 h-3.5 w-3.5" /> Discharge
-            </Link>
+          <Button
+            size="sm"
+            variant={hasPendingBills ? "outline" : "default"}
+            className={hasPendingBills ? "border-amber-300 text-amber-700 hover:bg-amber-50" : ""}
+            asChild={!hasPendingBills}
+            onClick={handleDischargeClick}
+          >
+            {hasPendingBills ? (
+              <span className="flex items-center">
+                <LogOut className="mr-1.5 h-3.5 w-3.5" /> Discharge
+              </span>
+            ) : (
+              <Link to={`/ipd/${admissionId}/discharge`}>
+                <LogOut className="mr-1.5 h-3.5 w-3.5" /> Discharge
+              </Link>
+            )}
           </Button>
         </div>
       </div>
