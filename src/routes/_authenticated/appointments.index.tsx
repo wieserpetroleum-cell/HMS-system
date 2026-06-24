@@ -199,7 +199,7 @@ function FeeModal({ appt, onClose, onCollect }: {
 // ── Main Component ────────────────────────────────────────────────
 function AppointmentsQueue() {
   const { appointments, updateStatus, reschedule } = useAppointments();
-  const { addInvoice } = useInvoices();
+  const { addInvoice, invoices } = useInvoices();
   const navigate = useNavigate();
   const today = new Date().toISOString().slice(0, 10);
 
@@ -208,11 +208,15 @@ function AppointmentsQueue() {
   const [search, setSearch] = React.useState("");
   const [view, setView]     = React.useState<"pipeline" | "table">("pipeline");
   const [rescheduleAppt, setRescheduleAppt] = React.useState<Appointment | null>(null);
-  const [feeAppt, setFeeAppt]               = React.useState<Appointment | null>(null);
-  // Track which appointments have fees collected (disable button)
-  const [feeCollected, setFeeCollected] = React.useState<Set<string>>(new Set());
-  // Track check-in times for waiting time
+  const [feeAppt, setFeeAppt] = React.useState<Appointment | null>(null);
   const [checkedInAt, setCheckedInAt] = React.useState<Record<string, string>>({});
+
+  // Check if fee already collected by looking at existing invoices
+  const isFeeCollected = React.useCallback((apptId: string) => {
+    return invoices.some(
+      (inv) => inv.sourceId === apptId && inv.sourceType === "opd" && inv.status !== "cancelled"
+    );
+  }, [invoices]);
 
   const doctors = React.useMemo(
     () => Array.from(new Set(appointments.map((a) => a.doctor))).sort(),
@@ -315,7 +319,6 @@ function AppointmentsQueue() {
         }],
       });
       // Mark fee as collected for this appointment
-      setFeeCollected((prev) => new Set([...prev, feeAppt.id]));
       toast.success(`✅ ₹${amount} collected — Receipt ${inv.invoiceNo}`, {
         description: "Navigating to print receipt...",
         duration: 4000,
@@ -448,11 +451,11 @@ function AppointmentsQueue() {
                             {a.status === "scheduled" && (
                               <div className="grid grid-cols-3 gap-1">
                                 <button
-                                  onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)}
-                                  disabled={feeCollected.has(a.id)}
-                                  className={`flex items-center justify-center gap-1 rounded border py-1 text-[10px] font-medium transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-70 cursor-not-allowed" : "border-border text-muted-foreground hover:border-status-ok/50 hover:bg-status-ok/10 hover:text-status-ok"}`}
+                                  onClick={() => !isFeeCollected(a.id) && setFeeAppt(a)}
+                                  disabled={isFeeCollected(a.id)}
+                                  className={`flex items-center justify-center gap-1 rounded border py-1 text-[10px] font-medium transition-colors ${isFeeCollected(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-70 cursor-not-allowed" : "border-border text-muted-foreground hover:border-status-ok/50 hover:bg-status-ok/10 hover:text-status-ok"}`}
                                 >
-                                  <CreditCard className="h-3 w-3" /> {feeCollected.has(a.id) ? "Paid ✓" : "Fee"}
+                                  <CreditCard className="h-3 w-3" /> {isFeeCollected(a.id) ? "Paid ✓" : "Fee"}
                                 </button>
                                 <button
                                   onClick={() => setRescheduleAppt(a)}
@@ -470,11 +473,11 @@ function AppointmentsQueue() {
                             )}
                             {a.status === "checked-in" && (
                               <button
-                                onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)}
-                                disabled={feeCollected.has(a.id)}
-                                className={`flex w-full items-center justify-center gap-1 rounded border py-1 text-[10px] font-semibold transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}
+                                onClick={() => !isFeeCollected(a.id) && setFeeAppt(a)}
+                                disabled={isFeeCollected(a.id)}
+                                className={`flex w-full items-center justify-center gap-1 rounded border py-1 text-[10px] font-semibold transition-colors ${isFeeCollected(a.id) ? "border-status-ok/30 bg-status-ok/10 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}
                               >
-                                <CreditCard className="h-3 w-3" /> {feeCollected.has(a.id) ? "Fee Collected ✓" : "Collect Fee"}
+                                <CreditCard className="h-3 w-3" /> {isFeeCollected(a.id) ? "Fee Collected ✓" : "Collect Fee"}
                               </button>
                             )}
                           </div>
@@ -540,7 +543,7 @@ function AppointmentsQueue() {
                           <Button size="sm" onClick={() => onAction(a)}>{actionLabel(a.status)}</Button>
                           {a.status === "scheduled" && (
                             <>
-                              <button onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)} disabled={feeCollected.has(a.id)} title={feeCollected.has(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-border text-muted-foreground hover:text-status-ok hover:border-status-ok/50"}`}>
+                              <button onClick={() => !isFeeCollected(a.id) && setFeeAppt(a)} disabled={isFeeCollected(a.id)} title={isFeeCollected(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${isFeeCollected(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-border text-muted-foreground hover:text-status-ok hover:border-status-ok/50"}`}>
                                 <CreditCard className="h-3.5 w-3.5" />
                               </button>
                               <button onClick={() => setRescheduleAppt(a)} title="Reschedule" className="rounded border border-border p-1.5 text-muted-foreground hover:text-status-info hover:border-status-info/50">
@@ -555,7 +558,7 @@ function AppointmentsQueue() {
                             </>
                           )}
                           {a.status === "checked-in" && (
-                            <button onClick={() => !feeCollected.has(a.id) && setFeeAppt(a)} disabled={feeCollected.has(a.id)} title={feeCollected.has(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${feeCollected.has(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}>
+                            <button onClick={() => !isFeeCollected(a.id) && setFeeAppt(a)} disabled={isFeeCollected(a.id)} title={isFeeCollected(a.id) ? "Fee Collected" : "Collect Fee"} className={`rounded border p-1.5 transition-colors ${isFeeCollected(a.id) ? "border-status-ok/30 text-status-ok opacity-60 cursor-not-allowed" : "border-status-ok/40 bg-status-ok/10 text-status-ok hover:bg-status-ok/20"}`}>
                               <CreditCard className="h-3.5 w-3.5" />
                             </button>
                           )}
