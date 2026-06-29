@@ -85,8 +85,6 @@ function PatientProfile() {
           <Button size="sm" onClick={() => navigate(`/patients/register?edit=${patient.uid}`)}>
             <Pencil className="mr-1.5 h-4 w-4" /> Edit
           </Button>
-            <Pencil className="mr-1.5 h-4 w-4" /> Edit
-          </Button>
         </div>
       </div>
 
