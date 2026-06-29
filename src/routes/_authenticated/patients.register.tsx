@@ -184,19 +184,6 @@ function RegisterPatient() {
 
     // CREATE new patient
     const patient = addPatient(patientData);
-      emergencyRelation: data.emergencyRelation,
-      emergencyPhone: data.emergencyPhone,
-      allergies: data.allergies,
-      conditions: data.conditions,
-      notes: data.notes || undefined,
-      hasInsurance: data.hasInsurance,
-      insuranceProvider: data.insuranceProvider || undefined,
-      policyNumber: data.policyNumber || undefined,
-      tpaName: data.tpaName || undefined,
-      policyValidity: data.policyValidity || undefined,
-      registrationType: data.registrationType,
-      referredBy: data.referredBy || undefined,
-    });
     toast.success(`Patient registered · ${patient.uid}`);
     if (mode === "open") {
       navigate(`/patients/${patient.uid}`);
