@@ -47,6 +47,16 @@ function AdmitPatient() {
   const patient = selectedUid ? getPatient(selectedUid) : undefined;
   const doctorMeta = DOCTORS.find((d) => d.name === doctor)!;
 
+  // Check if patient profile is complete for IPD
+  const missingFields = React.useMemo(() => {
+    if (!patient) return [];
+    const missing = [];
+    if (!patient.address) missing.push("Address");
+    if (!patient.idNumber) missing.push("ID Number (Aadhaar/Passport)");
+    if (!patient.emergencyContact?.name) missing.push("Emergency Contact");
+    return missing;
+  }, [patient]);
+
   const patientOptions = patients.map((p) => ({
     value: p.uid,
     label: p.name,
@@ -128,6 +138,28 @@ function AdmitPatient() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">
+          {/* Profile completeness warning */}
+          {patient && missingFields.length > 0 && (
+            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3">
+              <div className="flex items-start gap-3">
+                <span className="text-lg">⚠️</span>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-amber-800">Patient Profile Incomplete for IPD</p>
+                  <p className="text-xs text-amber-700 mt-1">
+                    The following are required for IPD admission:
+                    <strong> {missingFields.join(", ")}</strong>
+                  </p>
+                  <a
+                    href={`/patients/register?edit=${patient.uid}`}
+                    className="mt-2 inline-flex items-center gap-1 text-xs font-semibold text-amber-800 underline hover:text-amber-900"
+                  >
+                    → Complete Patient Profile First
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
+
           <FormSection title="Patient & Care Team" number="01">
             <FormGrid cols={2}>
               <Field label="Patient" required>

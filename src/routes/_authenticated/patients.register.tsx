@@ -165,8 +165,22 @@ function RegisterPatient() {
       <PageHeader
         eyebrow="Patient Registry · Register"
         title="New Patient Registration"
-        description="Capture identity, contact, and clinical baselines. Required fields marked with an asterisk."
+        description="Quick registration — only name, sex, DOB and mobile are required. Additional details can be filled at the time of IPD admission."
       />
+
+      {/* Quick vs Complete info banner */}
+      <div className="rounded-lg border border-status-info/30 bg-status-info/5 px-4 py-3">
+        <div className="flex items-start gap-3">
+          <span className="text-lg">⚡</span>
+          <div>
+            <p className="text-sm font-semibold text-foreground">Quick Registration for OPD</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Fill <strong>Section 1 (Identity)</strong> and <strong>Mobile</strong> — that's all you need to get started.
+              Address, ID proof, and emergency contact can be completed <strong>later at IPD admission</strong>.
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <div className="space-y-6">
@@ -258,7 +272,7 @@ function RegisterPatient() {
           </FormSection>
 
           {/* 02 Contact */}
-          <FormSection number="02" title="Contact" description="Primary reach-out and address.">
+          <FormSection number="02" title="Contact" description="Mobile required. Address optional for OPD — required for IPD admission.">
             <FormGrid cols={3}>
               <Field label="Mobile" required error={errors.mobile}>
                 <Input
@@ -285,7 +299,7 @@ function RegisterPatient() {
             </FormGrid>
             <div className="mt-4">
               <FormGrid cols={2}>
-                <Field label="Address line 1" required error={errors.address1}>
+                <Field label="Address line 1" error={errors.address1}>
                   <Input
                     value={values.address1}
                     onChange={(e) => set("address1", e.target.value)}
@@ -301,13 +315,13 @@ function RegisterPatient() {
             </div>
             <div className="mt-4">
               <FormGrid cols={4}>
-                <Field label="City" required error={errors.city}>
+                <Field label="City" error={errors.city}>
                   <Input value={values.city} onChange={(e) => set("city", e.target.value)} />
                 </Field>
-                <Field label="State" required error={errors.state}>
+                <Field label="State" error={errors.state}>
                   <Input value={values.state} onChange={(e) => set("state", e.target.value)} />
                 </Field>
-                <Field label="Pincode" required error={errors.pincode}>
+                <Field label="Pincode" error={errors.pincode}>
                   <Input value={values.pincode} onChange={(e) => set("pincode", e.target.value)} />
                 </Field>
                 <Field label="Country" required error={errors.country}>
@@ -318,7 +332,7 @@ function RegisterPatient() {
           </FormSection>
 
           {/* 03 Identification */}
-          <FormSection number="03" title="Identification" description="Government identity for medico-legal records.">
+          <FormSection number="03" title="Identification" description="Optional for OPD. ID proof required for IPD admission.">
             <FormGrid cols={3}>
               <Field label="ID type" required error={errors.idType}>
                 <NativeSelect
@@ -327,7 +341,7 @@ function RegisterPatient() {
                   options={["Aadhaar", "Passport", "PAN", "Other"]}
                 />
               </Field>
-              <Field label="ID number" required error={errors.idNumber}>
+              <Field label="ID number" error={errors.idNumber}>
                 <Input value={values.idNumber} onChange={(e) => set("idNumber", e.target.value)} />
               </Field>
               <Field label="Nationality" required error={errors.nationality}>
@@ -340,7 +354,7 @@ function RegisterPatient() {
           </FormSection>
 
           {/* 04 Emergency */}
-          <FormSection number="04" title="Emergency Contact" description="Required for all admissions.">
+          <FormSection number="04" title="Emergency Contact" description="Optional for OPD. Mandatory for IPD admission.">
             <FormGrid cols={3}>
               <Field label="Name" required error={errors.emergencyName}>
                 <Input
@@ -355,7 +369,7 @@ function RegisterPatient() {
                   placeholder="Spouse, Parent…"
                 />
               </Field>
-              <Field label="Phone" required error={errors.emergencyPhone}>
+              <Field label="Phone" error={errors.emergencyPhone}>
                 <Input
                   value={values.emergencyPhone}
                   onChange={(e) => set("emergencyPhone", e.target.value)}
@@ -402,7 +416,7 @@ function RegisterPatient() {
           </FormSection>
 
           {/* 06 Insurance */}
-          <FormSection number="06" title="Insurance / TPA" description="Skip if patient is self-pay.">
+          <FormSection number="06" title="Insurance / TPA" description="Skip if self-pay or unknown at registration time.">
             <div className="mb-4 flex items-center gap-3">
               <Switch
                 checked={values.hasInsurance}
