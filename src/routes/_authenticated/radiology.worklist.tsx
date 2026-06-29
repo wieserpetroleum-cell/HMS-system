@@ -1,13 +1,16 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { FilePlus2, Search } from "lucide-react";
+import { toast } from "sonner";
 import { PageHeader } from "@/components/dashboard/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { OrderStatusPill, PriorityBadge } from "@/components/radiology/StatusPill";
+import { TatGauge } from "@/components/radiology/TatGauge";
 import { useRadiology } from "@/lib/radiology-store";
-import { WorklistRow } from "@/components/radiology/WorklistRow";
+import { useAuth } from "@/lib/auth-context";
+import { findStudy, modalityLabels } from "@/lib/mock/radiology-catalog";
 import type { Modality, RadiologyOrderStatus, RadiologyPriority } from "@/lib/types";
-import { modalityLabels } from "@/lib/mock/radiology-catalog";
 import { cn } from "@/lib/utils";
 const STATUSES: { value: RadiologyOrderStatus | "all"; label: string }[] = [
   { value: "all", label: "All" },
@@ -22,7 +25,8 @@ const STATUSES: { value: RadiologyOrderStatus | "all"; label: string }[] = [
 ];
 
 function Worklist() {
-  const { orders } = useRadiology();
+  const { orders, studies, startAcquisition, completeAcquisition, cancelOrder } = useRadiology();
+  const { user } = useAuth();
   const [search, setSearch] = React.useState("");
   const [status, setStatus] = React.useState<RadiologyOrderStatus | "all">("all");
   const [modality, setModality] = React.useState<Modality | "all">("all");
@@ -108,11 +112,73 @@ function Worklist() {
               <th className="px-4 py-2 text-left">Ordered At</th>
               <th className="px-4 py-2 text-left">Status</th>
               <th className="px-4 py-2 text-left">TAT</th>
-              <th className="px-4 py-2 text-left">Assigned</th>
+              <th className="px-4 py-2 text-left">Action</th>
             </tr>
           </thead>
           <tbody>
-            {filtered.map((o) => <WorklistRow key={o.id} order={o} />)}
+            {filtered.map((o) => {
+              const study = studies.find((s) => s.orderId === o.id);
+              const cat = findStudy(o.studyCode);
+              return (
+                <tr key={o.id} className={cn(
+                  "border-b border-border last:border-0 hover:bg-accent/30",
+                  o.priority === "stat" && "bg-allergy/5"
+                )}>
+                  <td className="px-4 py-2.5 font-mono text-[11px]">
+                    <Link to={`/radiology/orders/${o.id}`} className="text-primary hover:underline">{o.orderNo}</Link>
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <div className="font-medium">{o.patientName}</div>
+                    <div className="font-mono text-[10px] text-muted-foreground">{o.patientUid}</div>
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <div className="text-sm">{o.studyName}</div>
+                    <div className="text-[10px] uppercase text-muted-foreground">{o.modality}</div>
+                  </td>
+                  <td className="px-4 py-2.5"><PriorityBadge priority={o.priority} /></td>
+                  <td className="px-4 py-2.5 text-xs text-muted-foreground">{o.orderedBy}</td>
+                  <td className="px-4 py-2.5 text-xs text-muted-foreground">{new Date(o.orderedAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}</td>
+                  <td className="px-4 py-2.5"><OrderStatusPill status={o.status} /></td>
+                  <td className="px-4 py-2.5">
+                    {cat && <TatGauge orderedAt={o.orderedAt} targetMin={findStudy(o.studyCode)?.targetTatMin ?? 60} />}
+                  </td>
+                  <td className="px-4 py-2.5">
+                    <div className="flex items-center gap-1.5">
+                      {(o.status === "ordered" || o.status === "scheduled") && (
+                        <button onClick={() => { startAcquisition(o.id); toast.success(`Acquisition started for ${o.patientName}`); }}
+                          className="rounded bg-primary px-2.5 py-1 text-xs font-semibold text-primary-foreground hover:bg-primary/90">
+                          Start Scan
+                        </button>
+                      )}
+                      {o.status === "in-acquisition" && (
+                        <button onClick={() => { completeAcquisition(o.id, { series: [{ description: "Standard", imageCount: 12 }], technologist: user?.name ?? "Tech" }); toast.success("Acquisition complete"); }}
+                          className="rounded bg-status-ok px-2.5 py-1 text-xs font-semibold text-white hover:bg-status-ok/90">
+                          Complete ✓
+                        </button>
+                      )}
+                      {(o.status === "acquired" || o.status === "reporting") && (
+                        <Link to={study ? `/radiology/studies/${study.id}` : `/radiology/orders/${o.id}`}
+                          className="rounded bg-condition px-2.5 py-1 text-xs font-semibold text-white hover:bg-condition/90">
+                          Write Report →
+                        </Link>
+                      )}
+                      {o.status === "verified" && study && (
+                        <Link to={`/radiology/studies/${study.id}/report`}
+                          className="rounded bg-secondary px-2.5 py-1 text-xs font-semibold hover:bg-secondary/80">
+                          View Report
+                        </Link>
+                      )}
+                      {o.status !== "cancelled" && o.status !== "verified" && (
+                        <button onClick={() => { cancelOrder(o.id, "Cancelled from worklist"); toast.error("Order cancelled"); }}
+                          className="rounded border border-border px-2 py-1 text-xs text-muted-foreground hover:border-allergy hover:text-allergy">
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
             {filtered.length === 0 && (
               <tr><td colSpan={9} className="px-4 py-12 text-center text-sm text-muted-foreground">No studies match your filters.</td></tr>
             )}
