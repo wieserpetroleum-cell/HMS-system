@@ -56,11 +56,56 @@ const blankForm: PatientFormValues = {
 type Errors = Partial<Record<keyof PatientFormValues, string>>;
 
 function RegisterPatient() {
-  const { addPatient, nextUid } = usePatients();
+  const { addPatient, updatePatient, getPatient, nextUid } = usePatients();
   const navigate = useNavigate();
-  const [values, setValues] = React.useState<PatientFormValues>(blankForm);
+
+  // Check if we're in edit mode
+  const urlParams = new URLSearchParams(window.location.search);
+  const editUid = urlParams.get('edit') ?? undefined;
+  const existingPatient = editUid ? getPatient(editUid) : undefined;
+  const isEditMode = !!existingPatient;
+
+  // Pre-fill form with existing patient data in edit mode
+  const initialValues: PatientFormValues = existingPatient ? {
+    title: (existingPatient.title as PatientFormValues["title"]) ?? "Mr",
+    firstName: existingPatient.name?.split(" ")[1] ?? existingPatient.name ?? "",
+    middleName: "",
+    lastName: existingPatient.name?.split(" ").slice(2).join(" ") ?? "",
+    sex: (existingPatient.sex as PatientFormValues["sex"]) ?? "M",
+    dob: existingPatient.dob ?? "",
+    bloodGroup: (existingPatient.blood as PatientFormValues["bloodGroup"]) ?? "Unknown",
+    maritalStatus: "single",
+    mobile: existingPatient.mobile ?? "",
+    altMobile: "",
+    email: existingPatient.email ?? "",
+    address1: existingPatient.address ?? "",
+    address2: "",
+    city: existingPatient.city ?? "",
+    state: existingPatient.state ?? "",
+    pincode: existingPatient.pincode ?? "",
+    country: "India",
+    idType: "Aadhaar",
+    idNumber: existingPatient.idNumber ?? "",
+    nationality: "Indian",
+    emergencyName: existingPatient.emergencyContact?.name ?? "",
+    emergencyRelation: existingPatient.emergencyContact?.relation ?? "",
+    emergencyPhone: existingPatient.emergencyContact?.phone ?? "",
+    allergies: existingPatient.allergies ?? [],
+    conditions: existingPatient.conditions ?? [],
+    notes: existingPatient.notes ?? "",
+    hasInsurance: false,
+    insuranceProvider: "",
+    policyNumber: "",
+    tpaName: "",
+    policyValidity: "",
+    registrationType: "OPD",
+    referredBy: "",
+    consent: false,
+  } : blankForm;
+
+  const [values, setValues] = React.useState<PatientFormValues>(initialValues);
   const [errors, setErrors] = React.useState<Errors>({});
-  const previewUid = React.useMemo(() => nextUid(), [nextUid]);
+  const previewUid = React.useMemo(() => existingPatient?.uid ?? nextUid(), [nextUid, existingPatient]);
 
   const set = <K extends keyof PatientFormValues>(key: K, v: PatientFormValues[K]) => {
     setValues((prev) => ({ ...prev, [key]: v }));
@@ -94,7 +139,8 @@ function RegisterPatient() {
   const submit = (mode: "open" | "new") => {
     const data = validate();
     if (!data) return;
-    const patient = addPatient({
+
+    const patientData = {
       title: data.title,
       firstName: data.firstName,
       middleName: data.middleName || undefined,
@@ -103,21 +149,41 @@ function RegisterPatient() {
       sex: data.sex,
       dob: data.dob,
       age: ageFromDob(data.dob),
+      blood: data.bloodGroup,
       bloodGroup: data.bloodGroup,
       maritalStatus: data.maritalStatus,
       mobile: data.mobile,
       altMobile: data.altMobile || undefined,
       email: data.email || undefined,
-      address1: data.address1,
-      address2: data.address2 || undefined,
-      city: data.city,
-      state: data.state,
-      pincode: data.pincode,
+      address: data.address1 || undefined,
+      address1: data.address1 || undefined,
+      city: data.city || undefined,
+      state: data.state || undefined,
+      pincode: data.pincode || undefined,
       country: data.country,
       idType: data.idType,
-      idNumber: data.idNumber,
+      idNumber: data.idNumber || undefined,
       nationality: data.nationality,
-      emergencyName: data.emergencyName,
+      emergencyContact: data.emergencyName ? {
+        name: data.emergencyName,
+        relation: data.emergencyRelation || "",
+        phone: data.emergencyPhone || "",
+      } : undefined,
+      allergies: data.allergies,
+      conditions: data.conditions,
+      notes: data.notes || undefined,
+    };
+
+    if (isEditMode && existingPatient) {
+      // UPDATE existing patient
+      updatePatient(existingPatient.uid, patientData);
+      toast.success(`✅ ${patientData.name}'s profile updated`);
+      navigate(`/patients/${existingPatient.uid}`);
+      return;
+    }
+
+    // CREATE new patient
+    const patient = addPatient(patientData);
       emergencyRelation: data.emergencyRelation,
       emergencyPhone: data.emergencyPhone,
       allergies: data.allergies,
@@ -164,8 +230,8 @@ function RegisterPatient() {
 
       <PageHeader
         eyebrow="Patient Registry · Register"
-        title="New Patient Registration"
-        description="Quick registration — only name, sex, DOB and mobile are required. Additional details can be filled at the time of IPD admission."
+        title={isEditMode ? `Edit Patient: ${existingPatient?.name}` : "New Patient Registration"}
+        description={isEditMode ? "Update patient information. All changes are saved immediately." : "Quick registration — only name, sex, DOB and mobile are required. Additional details can be filled at the time of IPD admission."}
       />
 
       {/* Quick vs Complete info banner */}

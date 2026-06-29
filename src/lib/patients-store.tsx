@@ -6,6 +6,7 @@ import { generateUid } from "@/lib/age";
 interface PatientsContextValue {
   patients: Patient[];
   addPatient: (input: Omit<Patient, "id" | "uid" | "registeredAt">) => Patient;
+  updatePatient: (uid: string, input: Partial<Omit<Patient, "id" | "uid">>) => Patient | undefined;
   getPatient: (uid: string) => Patient | undefined;
   nextUid: () => string;
 }
@@ -24,16 +25,24 @@ export function PatientsProvider({ children }: { children: React.ReactNode }) {
     (input) => {
       const uid = generateUid(patients.length + 1);
       const id = `p${Date.now()}`;
-      const patient: Patient = {
-        ...input,
-        id,
-        uid,
-        registeredAt: new Date().toISOString(),
-      };
+      const patient: Patient = { ...input, id, uid, registeredAt: new Date().toISOString() };
       setPatients((prev) => [patient, ...prev]);
       return patient;
     },
     [patients.length],
+  );
+
+  const updatePatient = React.useCallback(
+    (uid: string, input: Partial<Omit<Patient, "id" | "uid">>) => {
+      let updated: Patient | undefined;
+      setPatients((prev) => prev.map((p) => {
+        if (p.uid !== uid) return p;
+        updated = { ...p, ...input };
+        return updated;
+      }));
+      return updated;
+    },
+    [],
   );
 
   const getPatient = React.useCallback(
@@ -42,8 +51,8 @@ export function PatientsProvider({ children }: { children: React.ReactNode }) {
   );
 
   const value = React.useMemo(
-    () => ({ patients, addPatient, getPatient, nextUid }),
-    [patients, addPatient, getPatient, nextUid],
+    () => ({ patients, addPatient, updatePatient, getPatient, nextUid }),
+    [patients, addPatient, updatePatient, getPatient, nextUid],
   );
 
   return <PatientsContext.Provider value={value}>{children}</PatientsContext.Provider>;

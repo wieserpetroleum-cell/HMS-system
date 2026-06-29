@@ -402,8 +402,48 @@ function AppointmentsQueue() {
         </div>
       </div>
 
-      {/* Pipeline View */}
-      {view === "pipeline" ? (
+      {/* Doctor Availability Panel */}
+      <div className="rounded-lg border border-border bg-card p-4">
+        <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+          Doctor Status — Today
+        </div>
+        <div className="flex flex-wrap gap-3">
+          {doctors.map((doc) => {
+            const docAppts = filtered.filter((a) => a.doctor === doc);
+            const inConsultation = docAppts.filter((a) => a.status === "in-consultation");
+            const waiting = docAppts.filter((a) => a.status === "checked-in");
+            const completed = docAppts.filter((a) => a.status === "completed");
+            const isFree = inConsultation.length === 0;
+            return (
+              <div
+                key={doc}
+                className={cn(
+                  "flex items-center gap-2 rounded-lg border px-3 py-2 text-xs",
+                  isFree
+                    ? "border-status-ok/40 bg-status-ok/10"
+                    : "border-condition/40 bg-condition/10"
+                )}
+              >
+                <div className={cn(
+                  "h-2 w-2 rounded-full",
+                  isFree ? "bg-status-ok" : "bg-condition"
+                )} />
+                <div>
+                  <div className="font-semibold">{doc}</div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {isFree ? "🟢 Free" : `🟡 In Consultation`}
+                    {waiting.length > 0 && ` · ${waiting.length} waiting`}
+                    {` · ${completed.length} done`}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+          {doctors.length === 0 && (
+            <p className="text-xs text-muted-foreground">No appointments today</p>
+          )}
+        </div>
+      </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {COLUMNS.map((col) => {
             const items = filtered.filter((a) => a.status === col).sort((a, b) => a.time.localeCompare(b.time));
