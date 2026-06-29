@@ -171,6 +171,9 @@ function NewRadiologyOrder() {
               <div className="flex items-center justify-between">
                 <span className="font-medium">{study.bodyPart}</span>
                 <span className="font-mono text-[11px] text-muted-foreground">Target TAT {study.targetTatMin}m</span>
+                <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">
+                  ₹{study.tariff.toLocaleString('en-IN')}
+                </span>
               </div>
             </div>
           )}

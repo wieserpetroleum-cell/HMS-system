@@ -9,18 +9,27 @@ import { OrderStatusPill, PriorityBadge } from "@/components/radiology/StatusPil
 import { ModalityIcon, modalityLabel } from "@/components/radiology/ModalityIcon";
 import { useRadiology } from "@/lib/radiology-store";
 import { useInvoices } from "@/lib/invoices-store";
+import { findStudy } from "@/lib/mock/radiology-catalog";
 import { cn } from "@/lib/utils";
 
 // ── Payment Modal ─────────────────────────────────────────────────
-function PaymentModal({ orderId, patientUid, patientName, studyName, onClose, onCollect }: {
-  orderId: string; patientUid: string; patientName: string; studyName: string;
-  onClose: () => void; onCollect: (mode: string, amount: number, tpa: boolean) => void;
+function PaymentModal({ orderId, patientUid, patientName, studyName, studyCode, onClose, onCollect }: {
+  orderId: string; patientUid: string; patientName: string; studyName: string; studyCode?: string;
+  onClose: () => void; onCollect: (mode: string, amount: number, tpa: boolean, tpaProvider: string) => void;
 }) {
+  // Auto-fill price from catalog
+  const catalogEntry = studyCode ? findStudy(studyCode) : undefined;
+  const catalogPrice = catalogEntry?.tariff ?? 1500;
+
   const [mode, setMode] = React.useState("cash");
-  const [amount, setAmount] = React.useState("1500");
+  const [amount, setAmount] = React.useState(String(catalogPrice));
   const [isTpa, setIsTpa] = React.useState(false);
   const [tpaProvider, setTpaProvider] = React.useState("");
-  const QUICK = [500, 1000, 1500, 2500, 5000];
+
+  // Quick amounts based on catalog price
+  const QUICK = catalogPrice
+    ? [catalogPrice, Math.round(catalogPrice * 0.8), Math.round(catalogPrice * 1.2)]
+    : [500, 1000, 1500, 2500, 5000];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
@@ -33,41 +42,41 @@ function PaymentModal({ orderId, patientUid, patientName, studyName, onClose, on
         <div className="mb-4 rounded-lg bg-secondary/50 p-3">
           <div className="font-semibold text-sm">{patientName}</div>
           <div className="text-xs text-muted-foreground">{patientUid} · {studyName}</div>
+          {catalogEntry && (
+            <div className="mt-1 text-xs font-semibold text-primary">
+              Standard Tariff: ₹{catalogEntry.tariff.toLocaleString('en-IN')}
+            </div>
+          )}
         </div>
 
         {/* TPA Toggle */}
         <div className="mb-4 flex items-center gap-3 rounded-lg border border-border p-3">
-          <input type="checkbox" id="tpa" checked={isTpa} onChange={(e) => setIsTpa(e.target.checked)}
-            className="h-4 w-4 rounded" />
-          <label htmlFor="tpa" className="text-sm font-medium cursor-pointer">
-            Insurance / TPA Claim
-          </label>
+          <input type="checkbox" id="tpa" checked={isTpa} onChange={(e) => setIsTpa(e.target.checked)} className="h-4 w-4 rounded" />
+          <label htmlFor="tpa" className="text-sm font-medium cursor-pointer">Insurance / TPA Claim</label>
         </div>
 
-        {isTpa && (
+        {isTpa ? (
           <div className="mb-4">
-            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">TPA Provider / Insurance</label>
+            <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">TPA / Insurance Provider</label>
             <Input value={tpaProvider} onChange={(e) => setTpaProvider(e.target.value)}
               placeholder="e.g. Star Health, Medi-Assist, CGHS" className="mt-1" />
-          </div>
-        )}
-
-        {!isTpa && (
-          <>
-            <div className="mb-3">
-              <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick Amount</label>
-              <div className="mt-1.5 grid grid-cols-5 gap-1.5">
-                {QUICK.map((q) => (
-                  <button key={q} onClick={() => setAmount(String(q))}
-                    className={cn("rounded border py-1.5 text-xs font-semibold transition-colors",
-                      amount === String(q) ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary"
-                    )}>₹{q}</button>
-                ))}
-              </div>
+            <div className="mt-2 rounded-lg bg-amber-50 border border-amber-200 p-2 text-xs text-amber-700">
+              Claimed Amount: ₹{catalogPrice.toLocaleString('en-IN')} (catalog tariff)
             </div>
+          </div>
+        ) : (
+          <>
             <div className="mb-3">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount (₹)</label>
               <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="mt-1 text-lg font-bold" />
+              <div className="mt-1.5 flex gap-1.5">
+                {QUICK.map((q) => (
+                  <button key={q} onClick={() => setAmount(String(q))}
+                    className={cn("flex-1 rounded border py-1 text-xs font-semibold transition-colors",
+                      amount === String(q) ? "border-primary bg-primary text-primary-foreground" : "border-border hover:border-primary"
+                    )}>₹{q.toLocaleString('en-IN')}</button>
+                ))}
+              </div>
             </div>
             <div className="mb-4">
               <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Payment Mode</label>
@@ -86,9 +95,9 @@ function PaymentModal({ orderId, patientUid, patientName, studyName, onClose, on
         <div className="flex gap-2">
           <Button variant="outline" className="flex-1" onClick={onClose}>Cancel</Button>
           <Button className="flex-1 bg-status-ok hover:bg-status-ok/90"
-            onClick={() => { onCollect(isTpa ? "tpa" : mode, isTpa ? 0 : Number(amount), isTpa); onClose(); }}>
+            onClick={() => { onCollect(isTpa ? "tpa" : mode, isTpa ? catalogPrice : Number(amount), isTpa, tpaProvider); onClose(); }}>
             <Printer className="mr-1.5 h-4 w-4" />
-            {isTpa ? "Submit TPA Claim" : `Collect & Print ₹${amount}`}
+            {isTpa ? "Submit TPA Claim" : `Collect & Print ₹${Number(amount).toLocaleString('en-IN')}`}
           </Button>
         </div>
       </div>
@@ -112,7 +121,7 @@ function RadiologyOrderDetail() {
     [invoices, id]
   );
 
-  const onCollectPayment = (mode: string, amount: number, isTpa: boolean) => {
+  const onCollectPayment = (mode: string, amount: number, isTpa: boolean, tpaProvider: string) => {
     if (!order) return;
     try {
       const inv = addInvoice({
@@ -144,11 +153,11 @@ function RadiologyOrderDetail() {
         }],
         ...(isTpa ? {
           tpaClaim: {
-            provider: "TPA",
-            tpaName: "TPA",
+            provider: tpaProvider || "TPA",
+            tpaName: tpaProvider || "TPA",
             policyNumber: "",
             claimedAmount: amount,
-            status: "pre-auth",
+            status: "pre-auth" as const,
             lastUpdateAt: new Date().toISOString(),
           }
         } : {})
@@ -179,6 +188,7 @@ function RadiologyOrderDetail() {
           patientUid={order.patientUid}
           patientName={order.patientName}
           studyName={order.studyName}
+          studyCode={order.studyCode}
           onClose={() => setShowPayment(false)}
           onCollect={onCollectPayment}
         />
