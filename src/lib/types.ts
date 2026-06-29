@@ -154,6 +154,19 @@ export interface DiagnosisEntry {
   primary?: boolean;
 }
 
+export interface AdvisedInvestigation {
+  id: string;
+  studyCode: string;
+  studyName: string;
+  modality: string;
+  tariff: number;
+  urgent: boolean;
+  notes?: string;
+  status: "advised" | "paid" | "ordered" | "completed";
+  invoiceId?: string;
+  orderId?: string;
+}
+
 export interface Consultation {
   id: string;
   appointmentId: string;
@@ -175,6 +188,7 @@ export interface Consultation {
   advice?: string;
   followUpDays?: number;
   labOrders?: string;
+  advisedInvestigations?: AdvisedInvestigation[];
   status: "completed";
 }
 

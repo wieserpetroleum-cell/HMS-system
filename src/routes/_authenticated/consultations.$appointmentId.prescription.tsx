@@ -179,7 +179,7 @@ function PrescriptionPreview() {
         </div>
 
         {/* Advice + follow-up */}
-        {(consult.advice || followUpDate || consult.labOrders) && (
+        {(consult.advice || followUpDate || consult.labOrders || (consult.advisedInvestigations ?? []).length > 0) && (
           <div className="mt-5 grid grid-cols-2 gap-5 text-xs">
             {consult.advice && (
               <div>
@@ -192,6 +192,36 @@ function PrescriptionPreview() {
                 <>
                   <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Labs / Imaging</div>
                   <p className="mt-1 whitespace-pre-line">{consult.labOrders}</p>
+                </>
+              )}
+              {(consult.advisedInvestigations ?? []).length > 0 && (
+                <>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-3">Advised Investigations</div>
+                  <table className="mt-1 w-full text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b" style={{ borderColor: "#e2e8f0" }}>
+                        <th style={{ textAlign: "left", padding: "3px 0", fontWeight: 600 }}>Study</th>
+                        <th style={{ textAlign: "left", padding: "3px 0", fontWeight: 600 }}>Type</th>
+                        <th style={{ textAlign: "right", padding: "3px 0", fontWeight: 600 }}>Priority</th>
+                        <th style={{ textAlign: "right", padding: "3px 0", fontWeight: 600 }}>₹ Tariff</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {consult.advisedInvestigations!.map((inv) => (
+                        <tr key={inv.id} style={{ borderBottom: "1px solid #f1f5f9" }}>
+                          <td style={{ padding: "3px 0" }}>{inv.studyName}</td>
+                          <td style={{ padding: "3px 0", textTransform: "uppercase", fontSize: "10px", color: "#94a3b8" }}>{inv.modality}</td>
+                          <td style={{ padding: "3px 0", textAlign: "right", color: inv.urgent ? "#dc2626" : "#64748b", fontWeight: inv.urgent ? 700 : 400 }}>
+                            {inv.urgent ? "URGENT" : "Routine"}
+                          </td>
+                          <td style={{ padding: "3px 0", textAlign: "right", fontWeight: 600 }}>₹{inv.tariff.toLocaleString("en-IN")}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <p style={{ marginTop: "6px", fontSize: "9px", color: "#94a3b8", fontStyle: "italic" }}>
+                    ➤ Present this prescription at the Billing counter for payment, then proceed to Radiology.
+                  </p>
                 </>
               )}
               {followUpDate && (

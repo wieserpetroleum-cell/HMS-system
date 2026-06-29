@@ -3,7 +3,7 @@ import * as React from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Activity, Stethoscope, ClipboardList, FileSearch, Pill, ListChecks,
-  ArrowLeft, Save, CheckCircle2, Plus, Sparkles,
+  ArrowLeft, Save, CheckCircle2, Plus, Sparkles, FlaskConical, X, AlertCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -18,16 +18,18 @@ import { useAppointments } from "@/lib/appointments-store";
 import { useConsultations } from "@/lib/consultations-store";
 import { usePatients } from "@/lib/patients-store";
 import { mockDiagnoses } from "@/lib/mock/diagnoses";
+import { studyCatalog } from "@/lib/mock/radiology-catalog";
 import { calcBmi, flagBp, flagSpo2, flagPulse, flagTemp, type VitalFlag } from "@/lib/vitals";
-import type { DiagnosisEntry, RxItem, Vitals } from "@/lib/types";
+import type { DiagnosisEntry, RxItem, Vitals, AdvisedInvestigation } from "@/lib/types";
 import { cn } from "@/lib/utils";
 const SECTIONS = [
-  { key: "vitals", label: "Vitals", icon: Activity },
-  { key: "complaints", label: "Complaints", icon: ClipboardList },
-  { key: "exam", label: "Examination", icon: Stethoscope },
-  { key: "diagnosis", label: "Diagnosis", icon: FileSearch },
-  { key: "rx", label: "Prescription", icon: Pill },
-  { key: "plan", label: "Plan", icon: ListChecks },
+  { key: "vitals",          label: "Vitals",          icon: Activity },
+  { key: "complaints",      label: "Complaints",      icon: ClipboardList },
+  { key: "exam",            label: "Examination",     icon: Stethoscope },
+  { key: "diagnosis",       label: "Diagnosis",       icon: FileSearch },
+  { key: "rx",              label: "Prescription",    icon: Pill },
+  { key: "investigations",  label: "Investigations",  icon: FlaskConical },
+  { key: "plan",            label: "Plan",            icon: ListChecks },
 ] as const;
 
 type SectionKey = (typeof SECTIONS)[number]["key"];
@@ -62,6 +64,33 @@ function ConsultationWorkspace() {
   const [advice, setAdvice] = React.useState("");
   const [followUp, setFollowUp] = React.useState<number | undefined>();
   const [labOrders, setLabOrders] = React.useState("");
+  const [investigations, setInvestigations] = React.useState<AdvisedInvestigation[]>([]);
+  const [invSearch, setInvSearch] = React.useState("");
+
+  const addInvestigation = (studyCode: string) => {
+    const study = studyCatalog.find((s) => s.code === studyCode);
+    if (!study) return;
+    if (investigations.find((i) => i.studyCode === studyCode)) return; // no duplicates
+    setInvestigations((prev) => [...prev, {
+      id: `inv-${Date.now()}`,
+      studyCode: study.code,
+      studyName: study.name,
+      modality: study.modality,
+      tariff: study.tariff,
+      urgent: false,
+      status: "advised",
+    }]);
+    setInvSearch("");
+  };
+
+  const removeInvestigation = (id: string) => setInvestigations((prev) => prev.filter((i) => i.id !== id));
+  const toggleUrgent = (id: string) => setInvestigations((prev) => prev.map((i) => i.id === id ? { ...i, urgent: !i.urgent } : i));
+
+  const filteredStudies = studyCatalog.filter((s) =>
+    s.name.toLowerCase().includes(invSearch.toLowerCase()) ||
+    s.code.toLowerCase().includes(invSearch.toLowerCase()) ||
+    s.modality.toLowerCase().includes(invSearch.toLowerCase())
+  ).slice(0, 8);
 
   // Auto BMI
   React.useEffect(() => {
@@ -179,6 +208,7 @@ function ConsultationWorkspace() {
       advice,
       followUpDays: followUp,
       labOrders,
+      advisedInvestigations: investigations,
     });
     updateStatus(appt.id, "completed");
     toast.success("Visit completed", { description: "Prescription generated." });
@@ -471,8 +501,80 @@ function ConsultationWorkspace() {
             </Section>
           )}
 
+          {active === "investigations" && (
+            <Section title="06 · Advised Investigations"
+              hint="Add radiology studies, scans, or labs to advise. Patient takes this to the billing counter to pay, then to radiology.">
+              <div className="space-y-4">
+                {/* Search and add */}
+                <div className="relative">
+                  <FlaskConical className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <input
+                    value={invSearch}
+                    onChange={(e) => setInvSearch(e.target.value)}
+                    placeholder="Search study... e.g. CT Head, MRI Knee, USG Abdomen"
+                    className="h-10 w-full rounded-md border border-input bg-background pl-9 pr-4 text-sm outline-none focus:border-primary"
+                  />
+                  {invSearch && (
+                    <div className="absolute z-10 mt-1 w-full rounded-md border border-border bg-card shadow-lg">
+                      {filteredStudies.length === 0 && (
+                        <div className="px-4 py-3 text-sm text-muted-foreground">No studies found</div>
+                      )}
+                      {filteredStudies.map((s) => (
+                        <button key={s.code} onClick={() => addInvestigation(s.code)}
+                          className="flex w-full items-center justify-between px-4 py-2.5 text-sm hover:bg-accent/50 transition-colors">
+                          <div className="text-left">
+                            <div className="font-medium">{s.name}</div>
+                            <div className="text-[11px] uppercase text-muted-foreground">{s.modality} · {s.code}</div>
+                          </div>
+                          <span className="text-xs font-semibold text-primary">₹{s.tariff.toLocaleString('en-IN')}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Added investigations */}
+                {investigations.length === 0 && (
+                  <div className="rounded-lg border-2 border-dashed border-border p-8 text-center text-sm text-muted-foreground">
+                    No investigations advised yet. Search above to add.
+                  </div>
+                )}
+                {investigations.map((inv) => (
+                  <div key={inv.id} className={cn(
+                    "flex items-center gap-3 rounded-lg border p-3",
+                    inv.urgent ? "border-allergy/40 bg-allergy/5" : "border-border bg-card"
+                  )}>
+                    <FlaskConical className={cn("h-4 w-4 shrink-0", inv.urgent ? "text-allergy" : "text-muted-foreground")} />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-sm">{inv.studyName}</div>
+                      <div className="text-[11px] uppercase text-muted-foreground">{inv.modality} · {inv.studyCode}</div>
+                    </div>
+                    <span className="text-sm font-semibold text-primary">₹{inv.tariff.toLocaleString('en-IN')}</span>
+                    <button onClick={() => toggleUrgent(inv.id)}
+                      className={cn("rounded px-2 py-1 text-[10px] font-bold border transition-colors",
+                        inv.urgent ? "border-allergy/40 bg-allergy/10 text-allergy" : "border-border text-muted-foreground hover:border-allergy hover:text-allergy"
+                      )}>
+                      {inv.urgent ? "URGENT" : "Routine"}
+                    </button>
+                    <button onClick={() => removeInvestigation(inv.id)}
+                      className="rounded p-1 text-muted-foreground hover:text-allergy transition-colors">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                ))}
+
+                {investigations.length > 0 && (
+                  <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
+                    <span className="font-semibold text-foreground">Total: ₹{investigations.reduce((s, i) => s + i.tariff, 0).toLocaleString('en-IN')}</span>
+                    {" "}· Patient should take this prescription to the <span className="font-semibold">Billing counter</span> to pay, then to <span className="font-semibold">Radiology</span> for the scan.
+                  </div>
+                )}
+              </div>
+            </Section>
+          )}
+
           {active === "plan" && (
-            <Section title="06 · Plan & Follow-up">
+            <Section title="07 · Plan & Follow-up">
               <div className="space-y-4">
                 <Field label="Advice / lifestyle">
                   <Textarea

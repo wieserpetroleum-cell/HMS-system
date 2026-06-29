@@ -141,6 +141,51 @@ function NewInvoice() {
                   <span className="rounded bg-primary px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-primary-foreground">Use this</span>
                 </button>
               ))}
+              {/* Pending Investigations from consultations */}
+              {(() => {
+                const pendingInvs = opd.flatMap((c) =>
+                  (c.advisedInvestigations ?? [])
+                    .filter((i) => i.status === "advised")
+                    .map((i) => ({ ...i, consultId: c.id, doctor: c.doctor, date: c.date }))
+                );
+                if (pendingInvs.length === 0) return null;
+                return (
+                  <div>
+                    <div className="mt-3 text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
+                      <span className="text-amber-600">⚠️</span> Pending Investigations (Advised, Not Paid)
+                    </div>
+                    <div className="mt-1 space-y-1.5">
+                      {pendingInvs.map((inv) => (
+                        <button key={inv.id} type="button"
+                          onClick={() => create("walkin", inv.consultId, [{
+                            id: `tmp-${Date.now()}`,
+                            category: "radiology" as const,
+                            code: inv.studyCode,
+                            description: `${inv.studyName} — Advised by ${inv.doctor}${inv.urgent ? " [URGENT]" : ""}`,
+                            qty: 1,
+                            unitPrice: inv.tariff,
+                            amount: inv.tariff,
+                            taxable: true,
+                          }])}
+                          className="flex w-full items-center justify-between rounded-lg border border-amber-200 bg-amber-50 px-4 py-2.5 text-left text-xs hover:bg-amber-100 transition-colors">
+                          <div>
+                            <div className="font-semibold text-amber-900">{inv.studyName}</div>
+                            <div className="text-amber-700">
+                              {inv.modality.toUpperCase()} · Advised by {inv.doctor} · {new Date(inv.date).toLocaleDateString('en-IN')}
+                              {inv.urgent && <span className="ml-2 font-bold text-red-600">URGENT</span>}
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="font-bold text-amber-900">₹{inv.tariff.toLocaleString('en-IN')}</div>
+                            <div className="text-amber-600">Bill & Receipt →</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className="mt-3 text-xs font-semibold text-muted-foreground">IPD Admissions</div>
               {ipd.length === 0 && <div className="text-sm text-muted-foreground">No admissions.</div>}
               {ipd.map((a) => {
