@@ -3,6 +3,19 @@
 @tailwind utilities;
 
 /* ─── PRINT STYLES ─────────────────────────────────── */
+
+/* Default page: A4 portrait for prescriptions, reports, discharge summaries */
+@page {
+  size: A4 portrait;
+  margin: 10mm;
+}
+
+/* Invoice/receipt page: A5 landscape (half A4) */
+@page invoice-page {
+  size: A5 landscape;
+  margin: 0;
+}
+
 @media print {
   body * { visibility: hidden; }
   .print-area, .print-area * { visibility: visible; }
@@ -17,10 +30,9 @@
     height: 100%;
   }
 
-  /* Half A4 (A5 landscape) for invoices/receipts */
-  @page {
-    size: A5 landscape;
-    margin: 0;
+  /* Invoice pages use A5 landscape */
+  body.print-invoice {
+    page: invoice-page;
   }
 }
 

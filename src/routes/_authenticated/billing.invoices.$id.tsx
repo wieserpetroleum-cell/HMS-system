@@ -54,7 +54,12 @@ function InvoiceWorkspace() {
       const m = e.metaKey || e.ctrlKey;
       if (!m) return;
       if (e.key.toLowerCase() === "s") { e.preventDefault(); save(); }
-      if (e.key.toLowerCase() === "p") { e.preventDefault(); window.print(); }
+      if (e.key.toLowerCase() === "p") {
+        e.preventDefault();
+        document.body.classList.add("print-invoice");
+        window.print();
+        setTimeout(() => document.body.classList.remove("print-invoice"), 1000);
+      }
       if (e.key === "Enter") { e.preventDefault(); setPayOpen(true); }
       if (["1","2","3","4","5"].includes(e.key)) { e.preventDefault(); setTab(TABS[parseInt(e.key, 10) - 1]); }
     };
@@ -141,7 +146,11 @@ function InvoiceWorkspace() {
             right={
               <div className="flex flex-wrap gap-2">
                 <Button variant="outline" onClick={save}><Save className="mr-1.5 h-4 w-4" /> Save</Button>
-                <Button variant="outline" onClick={() => window.print()}><Printer className="mr-1.5 h-4 w-4" /> Print</Button>
+                <Button variant="outline" onClick={() => {
+                  document.body.classList.add("print-invoice");
+                  window.print();
+                  setTimeout(() => document.body.classList.remove("print-invoice"), 1000);
+                }}><Printer className="mr-1.5 h-4 w-4" /> Print Receipt</Button>
                 <Button onClick={() => setPayOpen(true)} disabled={invoice.balance <= 0 || invoice.status === "cancelled"}>
                   <CreditCard className="mr-1.5 h-4 w-4" /> Collect {money(invoice.balance)}
                 </Button>
