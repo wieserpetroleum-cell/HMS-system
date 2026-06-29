@@ -219,9 +219,7 @@ function PrescriptionPreview() {
                       ))}
                     </tbody>
                   </table>
-                  <p style={{ marginTop: "6px", fontSize: "9px", color: "#475569", fontStyle: "italic" }}>
-                    ➤ Please present this prescription at the <strong>Billing counter</strong> for payment, then proceed to <strong>Radiology</strong> with the payment receipt.
-                  </p>
+
                 </>
               )}
               {followUpDate && (
