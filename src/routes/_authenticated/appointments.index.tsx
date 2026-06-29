@@ -444,6 +444,9 @@ function AppointmentsQueue() {
           )}
         </div>
       </div>
+
+      {/* Pipeline View */}
+      {view === "pipeline" ? (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
           {COLUMNS.map((col) => {
             const items = filtered.filter((a) => a.status === col).sort((a, b) => a.time.localeCompare(b.time));
