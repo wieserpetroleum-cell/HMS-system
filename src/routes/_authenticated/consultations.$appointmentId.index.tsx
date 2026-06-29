@@ -524,9 +524,9 @@ function ConsultationWorkspace() {
                           className="flex w-full items-center justify-between px-4 py-2.5 text-sm hover:bg-accent/50 transition-colors">
                           <div className="text-left">
                             <div className="font-medium">{s.name}</div>
-                            <div className="text-[11px] uppercase text-muted-foreground">{s.modality} · {s.code}</div>
+                            <div className="text-[11px] uppercase text-muted-foreground">{s.modality} · {s.bodyPart}</div>
                           </div>
-                          <span className="text-xs font-semibold text-primary">₹{s.tariff.toLocaleString('en-IN')}</span>
+                          <span className="text-[10px] uppercase font-semibold text-muted-foreground">{s.modality}</span>
                         </button>
                       ))}
                     </div>
@@ -549,7 +549,7 @@ function ConsultationWorkspace() {
                       <div className="font-semibold text-sm">{inv.studyName}</div>
                       <div className="text-[11px] uppercase text-muted-foreground">{inv.modality} · {inv.studyCode}</div>
                     </div>
-                    <span className="text-sm font-semibold text-primary">₹{inv.tariff.toLocaleString('en-IN')}</span>
+
                     <button onClick={() => toggleUrgent(inv.id)}
                       className={cn("rounded px-2 py-1 text-[10px] font-bold border transition-colors",
                         inv.urgent ? "border-allergy/40 bg-allergy/10 text-allergy" : "border-border text-muted-foreground hover:border-allergy hover:text-allergy"
@@ -565,8 +565,8 @@ function ConsultationWorkspace() {
 
                 {investigations.length > 0 && (
                   <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">Total: ₹{investigations.reduce((s, i) => s + i.tariff, 0).toLocaleString('en-IN')}</span>
-                    {" "}· Patient should take this prescription to the <span className="font-semibold">Billing counter</span> to pay, then to <span className="font-semibold">Radiology</span> for the scan.
+                    <span className="font-semibold text-foreground">{investigations.length} investigation(s) advised.</span>
+                    {" "}Patient takes this prescription to the <span className="font-semibold">Billing counter</span>, pays there, then shows the receipt at <span className="font-semibold">Radiology</span>.
                   </div>
                 )}
               </div>
