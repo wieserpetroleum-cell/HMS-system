@@ -36,8 +36,18 @@ export function flagPulse(v?: number): VitalFlag {
 
 export function flagTemp(v?: number): VitalFlag {
   if (v == null) return { level: "ok" };
-  if (v >= 39) return { level: "alert", note: "High fever" };
-  if (v >= 37.8) return { level: "watch", note: "Febrile" };
-  if (v < 35) return { level: "alert", note: "Hypothermia" };
+  // v is in Fahrenheit
+  if (v >= 103) return { level: "alert", note: "High fever" };
+  if (v >= 100.4) return { level: "watch", note: "Febrile" };
+  if (v < 95) return { level: "alert", note: "Hypothermia" };
   return { level: "ok" };
+}
+
+// Conversion helpers
+export function celsiusToFahrenheit(c: number): number {
+  return Math.round(((c * 9) / 5 + 32) * 10) / 10;
+}
+
+export function fahrenheitToCelsius(f: number): number {
+  return Math.round(((f - 32) * 5) / 9 * 10) / 10;
 }

@@ -27,6 +27,7 @@ const STATUSES: { value: RadiologyOrderStatus | "all"; label: string }[] = [
 function Worklist() {
   const { orders, studies, startAcquisition, completeAcquisition, cancelOrder } = useRadiology();
   const { user } = useAuth();
+  const isRadTech = user?.role === "radtech";
   const [search, setSearch] = React.useState("");
   const [status, setStatus] = React.useState<RadiologyOrderStatus | "all">("all");
   const [modality, setModality] = React.useState<Modality | "all">("all");
@@ -156,7 +157,7 @@ function Worklist() {
                           Complete ✓
                         </button>
                       )}
-                      {(o.status === "acquired" || o.status === "reporting") && (
+                      {(o.status === "acquired" || o.status === "reporting") && !isRadTech && (
                         <Link to={`/radiology/studies/${o.id}`}
                           className="rounded bg-condition px-2.5 py-1 text-xs font-semibold text-white hover:bg-condition/90">
                           Write Report →

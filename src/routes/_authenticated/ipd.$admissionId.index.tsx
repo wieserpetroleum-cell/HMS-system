@@ -221,7 +221,7 @@ function WardChart() {
                 {[
                   { label: "BP", value: latestVital?.bp ?? "—" },
                   { label: "Pulse", value: latestVital?.pulse ? `${latestVital.pulse} bpm` : "—" },
-                  { label: "Temp", value: latestVital?.temp ? `${latestVital.temp}°C` : "—" },
+                  { label: "Temp", value: latestVital?.temp ? `${latestVital.temp}°F` : "—" },
                   { label: "SpO₂", value: latestVital?.spo2 ? `${latestVital.spo2}%` : "—" },
                 ].map((v) => (
                   <div key={v.label} className="rounded-md border border-border bg-card p-3">
@@ -275,7 +275,7 @@ function WardChart() {
                       <TableHead>Time</TableHead>
                       <TableHead>BP</TableHead>
                       <TableHead>Pulse</TableHead>
-                      <TableHead>Temp</TableHead>
+                      <TableHead>Temp (°F)</TableHead>
                       <TableHead>SpO₂</TableHead>
                       <TableHead>RR</TableHead>
                       <TableHead>By</TableHead>

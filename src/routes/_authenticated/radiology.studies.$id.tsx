@@ -24,15 +24,77 @@ function StudyWorkspace() {
   const { getOrder, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders } = useRadiology();
   const { patients } = usePatients();
 
+function StudyWorkspace() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { getOrder, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders } = useRadiology();
+  const { patients } = usePatients();
+
+  // Block rad tech from writing reports
+  if (user?.role === "radtech") {
+    return (
+      <div className="flex flex-col items-center justify-center p-16 text-center gap-4">
+        <div className="text-5xl">🚫</div>
+        <h2 className="text-lg font-semibold">Access Restricted</h2>
+        <p className="text-sm text-muted-foreground max-w-sm">
+          Report writing is for Radiologists only. Please use the Worklist to manage acquisitions.
+        </p>
+        <Button variant="outline" onClick={() => navigate("/radiology/worklist")}>
+          <ArrowLeft className="mr-2 h-4 w-4" /> Go to Worklist
+        </Button>
+      </div>
+    );
+  }
+
   const order = getOrder(id);
-  return order
-    ? <Workspace order={order} {...{ navigate, user, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders, patients }} />
-    : (
+
+  if (!order) {
+    return (
       <div className="p-8">
         <div className="rounded-lg border border-border bg-card p-8 text-center">
-          <div className="text-sm text-muted-foreground">Order not found.</div>
-          <Button variant="outline" className="mt-3" onClick={() => navigate("/radiology/worklist")}>
+          <div className="text-lg font-semibold mb-2">Order not found</div>
+          <div className="text-sm text-muted-foreground mb-3">
+            This order may not exist, or the scan has not been acquired yet.
+            Report writing is only available after acquisition is complete.
+          </div>
+          <Button variant="outline" onClick={() => navigate("/radiology/worklist")}>
             <ArrowLeft className="mr-2 h-4 w-4" /> Back to worklist
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  const study = getStudyByOrderId(order.id);  if (!study) {
+    return (
+      <div className="p-8">
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-8 text-center">
+          <div className="text-2xl mb-3">⏳</div>
+          <div className="text-lg font-semibold mb-2">Study not yet acquired</div>
+          <div className="text-sm text-amber-700 mb-1">
+            Order: <span className="font-mono font-bold">{order.orderNo}</span> — {order.studyName}
+          </div>
+          <div className="text-sm text-amber-700 mb-4">
+            Current status: <span className="font-bold capitalize">{order.status}</span>
+            {". "}Report writing is available only after the Rad Tech marks acquisition complete.
+          </div>
+          <div className="flex gap-2 justify-center">
+            {(order.status === "ordered" || order.status === "scheduled") && (
+              <Button onClick={() => { startAcquisition(order.id); navigate("/radiology/worklist"); }}>
+                Start Acquisition Now
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => navigate("/radiology/worklist")}>
+              <ArrowLeft className="mr-2 h-4 w-4" /> Back to Worklist
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <Workspace order={order} {...{ navigate, user, getStudyByOrderId, getReportByStudyId, saveReportDraft, verifyReport, startAcquisition, completeAcquisition, orders, patients }} />;
           </Button>
         </div>
       </div>

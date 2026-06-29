@@ -333,9 +333,10 @@ function ConsultationWorkspace() {
                     className={flag(pulseFlag)}
                   />
                 </Field>
-                <Field label="Temp (°C)" hint={tempFlag.note}>
+                <Field label="Temp (°F)" hint={tempFlag.note}>
                   <Input
-                    type="number" step="0.1" min={30} max={43}
+                    type="number" step="0.1" min={90} max={110}
+                    placeholder="98.6"
                     value={vitals.temp ?? ""}
                     onChange={(e) => setVitals({ ...vitals, temp: e.target.value ? Number(e.target.value) : undefined })}
                     className={flag(tempFlag)}
