@@ -26,7 +26,7 @@ function PatientRegistry() {
   return (
     <div className="space-y-6 p-8">
       <PageHeader
-        eyebrow="Module 03 · Patients"
+        eyebrow="Patient Registry"
         title="Patient Registry"
         description={`${patients.length} records · ${filtered.length} matching filters`}
         right={

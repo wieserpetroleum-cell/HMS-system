@@ -360,7 +360,7 @@ function AppointmentsQueue() {
       )}
 
       <PageHeader
-        eyebrow="Module 04 · OPD"
+        eyebrow="OPD · Appointments"
         title="Appointments Queue"
         description="Live patient pipeline. Check in, collect fee, start consultations."
         right={

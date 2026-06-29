@@ -52,7 +52,7 @@ function AuditPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Audit log"
         description="Immutable trail of every privileged action. Filter, inspect before/after diffs and export."
         right={

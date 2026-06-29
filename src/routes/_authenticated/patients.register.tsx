@@ -163,7 +163,7 @@ function RegisterPatient() {
       </Link>
 
       <PageHeader
-        eyebrow="Module 03 · Screen 08"
+        eyebrow="Patient Registry · Register"
         title="New Patient Registration"
         description="Capture identity, contact, and clinical baselines. Required fields marked with an asterisk."
       />

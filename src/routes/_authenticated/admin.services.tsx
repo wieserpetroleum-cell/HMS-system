@@ -74,7 +74,7 @@ function ServicesPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Service / charge master"
         description="Catalogue of every billable service. HSN/SAC, GST, default rate and radiology metadata."
         right={

@@ -32,7 +32,7 @@ function UsersPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Users & roles"
         description="App users, system roles and a full permission matrix."
         right={

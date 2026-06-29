@@ -24,7 +24,7 @@ function BedsPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Beds & wards"
         description="Wards, bed categories, and configured beds with daily rates."
         right={

@@ -75,7 +75,7 @@ function TemplateManagerPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 9 · Notifications"
+        eyebrow="Notifications"
         title="Template manager"
         description="Govern WhatsApp, SMS and email templates triggered by clinical events."
         right={

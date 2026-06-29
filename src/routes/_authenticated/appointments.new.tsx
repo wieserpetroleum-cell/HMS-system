@@ -127,7 +127,7 @@ function NewAppointment() {
   return (
     <div className="p-8 pb-32">
       <PageHeader
-        eyebrow="Module 04 · Screen 11"
+        eyebrow="OPD · New Appointment"
         title="Book Appointment"
         description="Slot a registered patient with a doctor for OPD or follow-up."
         right={

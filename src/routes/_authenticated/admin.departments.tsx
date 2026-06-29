@@ -34,7 +34,7 @@ function DeptDoctorsPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Departments & doctors"
         description="Manage clinical departments, doctor profiles, schedules and leaves."
         right={

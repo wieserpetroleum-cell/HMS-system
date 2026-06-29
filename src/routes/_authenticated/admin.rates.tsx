@@ -26,7 +26,7 @@ function RatesPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 10 · Configuration"
+        eyebrow="Administration"
         title="Rate plan management"
         description="Per-payer rate negotiations. Edit cells inline, bulk-adjust or copy from another plan."
         right={

@@ -55,7 +55,7 @@ function NotificationLogPage() {
   return (
     <div className="space-y-6 p-6">
       <PageHeader
-        eyebrow="Module 9 · Notifications"
+        eyebrow="Notifications"
         title="Notification log"
         description="Every outbound WhatsApp, SMS and email message — delivered, failed, or pending."
         right={
