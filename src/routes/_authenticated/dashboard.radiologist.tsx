@@ -82,7 +82,7 @@ function RadiologistDashboard() {
                 <div className="flex shrink-0 flex-col items-end gap-2">
                   <OrderStatusPill status={o.status} />
                   <Link
-                    to={study ? `/radiology/studies/${study.id}` : `/radiology/orders/${o.id}`}
+                    to={`/radiology/studies/${o.id}`}
                     className="rounded bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/90"
                   >
                     Write Report →

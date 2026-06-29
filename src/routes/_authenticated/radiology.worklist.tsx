@@ -157,13 +157,13 @@ function Worklist() {
                         </button>
                       )}
                       {(o.status === "acquired" || o.status === "reporting") && (
-                        <Link to={study ? `/radiology/studies/${study.id}` : `/radiology/orders/${o.id}`}
+                        <Link to={`/radiology/studies/${o.id}`}
                           className="rounded bg-condition px-2.5 py-1 text-xs font-semibold text-white hover:bg-condition/90">
                           Write Report →
                         </Link>
                       )}
                       {o.status === "verified" && study && (
-                        <Link to={`/radiology/studies/${study.id}/report`}
+                        <Link to={`/radiology/studies/${o.id}/report`}
                           className="rounded bg-secondary px-2.5 py-1 text-xs font-semibold hover:bg-secondary/80">
                           View Report
                         </Link>
