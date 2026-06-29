@@ -76,13 +76,15 @@ function PatientProfile() {
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" size="sm" onClick={() => toast("Coming in Module 4")}>
+          <Button variant="outline" size="sm" onClick={() => navigate(`/appointments/new?patientUid=${patient.uid}`)}>
             <CalendarPlus className="mr-1.5 h-4 w-4" /> New Appointment
           </Button>
-          <Button variant="outline" size="sm" onClick={() => toast("Coming in Module 5")}>
+          <Button variant="outline" size="sm" onClick={() => navigate(`/ipd/admit?patientUid=${patient.uid}`)}>
             <BedDouble className="mr-1.5 h-4 w-4" /> Admit
           </Button>
-          <Button size="sm" onClick={() => toast("Edit flow ships in the next module")}>
+          <Button size="sm" onClick={() => navigate(`/patients/register?edit=${patient.uid}`)}>
+            <Pencil className="mr-1.5 h-4 w-4" /> Edit
+          </Button>
             <Pencil className="mr-1.5 h-4 w-4" /> Edit
           </Button>
         </div>
@@ -102,7 +104,7 @@ function PatientProfile() {
         <TabsContent value="visits" className="mt-4">
           <PlaceholderPanel
             title="Visit History"
-            body={`Last visit: ${patient.lastVisit ?? "—"}. Detailed encounter timeline arrives with Module 4 (OPD) and Module 5 (IPD).`}
+            body={`Last visit: ${patient.lastVisit ?? "—"}. Full encounter history will be available after backend connection.`}
           />
         </TabsContent>
         <TabsContent value="clinical" className="mt-4">
@@ -111,7 +113,7 @@ function PatientProfile() {
         <TabsContent value="docs" className="mt-4">
           <PlaceholderPanel
             title="Documents"
-            body="Lab reports, imaging, and consent forms will appear here once Module 6 (Radiology) and Module 7 (Lab) are wired in."
+            body="Lab reports, imaging, and consent forms will be available after backend connection."
           />
         </TabsContent>
       </Tabs>

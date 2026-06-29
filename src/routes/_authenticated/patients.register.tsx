@@ -252,7 +252,7 @@ function RegisterPatient() {
                 <Camera className="h-4 w-4" />
               </div>
               <p className="text-xs text-muted-foreground">
-                Patient photo upload — placeholder. File capture ships with Module 6.
+                Patient photo upload — coming soon.
               </p>
             </div>
           </FormSection>

@@ -198,7 +198,7 @@ function WardChart() {
               <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => setTab("rounds")}>
                 <Stethoscope className="mr-2 h-4 w-4" /> New Round
               </Button>
-              <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => toast("Lab orders ship in Module 7")}>
+              <Button variant="ghost" size="sm" className="w-full justify-start" onClick={() => navigate("/radiology/orders/new")}>
                 <FlaskConical className="mr-2 h-4 w-4" /> Order Investigation
               </Button>
             </div>
