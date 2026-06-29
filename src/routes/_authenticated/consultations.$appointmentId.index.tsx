@@ -563,12 +563,7 @@ function ConsultationWorkspace() {
                   </div>
                 ))}
 
-                {investigations.length > 0 && (
-                  <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 text-xs text-muted-foreground">
-                    <span className="font-semibold text-foreground">{investigations.length} investigation(s) advised.</span>
-                    {" "}Patient takes this prescription to the <span className="font-semibold">Billing counter</span>, pays there, then shows the receipt at <span className="font-semibold">Radiology</span>.
-                  </div>
-                )}
+
               </div>
             </Section>
           )}
